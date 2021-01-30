@@ -50,12 +50,17 @@ export const comment_put = [
     if (!errors.isEmpty()) {
       return res.status(500).json({ errors: errors.array(), comment: comment });
     } else {
-      comment.save((err, theresult) => {
-        if (err) return res.status(500).json({ msg: err.mesaage });
-        else {
-          return res.status(200).json(theresult);
+      Comment.findByIdAndUpdate(
+        req.params.commentid,
+        comment,
+        {},
+        (err, theresult) => {
+          if (err) return res.status(500).json({ msg: err.mesaage });
+          else {
+            return res.status(200).json(theresult);
+          }
         }
-      });
+      );
     }
   },
 ];

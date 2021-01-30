@@ -1,5 +1,5 @@
 // const Friend = require("../models/Friend");
-const User = require("../models/Friend");
+const User = require("../models/User");
 const { body, validationResult } = require("express-validator");
 
 export const friend_list_get = (req, res, next) => {
@@ -23,35 +23,32 @@ export const friend_put = [
       friend_list = await User.findById(req.params.userid, "friend");
       isFriend = await friend_list.findById(res.locals.user._id);
     } catch (err) {
-      res.status(500).json({ msg: err.message });
+      return res.status(500).json({ msg: err.message });
     }
 
     //if null then add friend
     if (isFriend != null) {
-      const friend = {
-        friend: [...friend_list, res.locals.user._id],
-      };
-
-      friend_list.findByIdAndUpdate(
-        req.params.userid,
-        friend,
-        (err, theresult) => {
-          if (err) return res.status(500).json({ msg: err.message });
-          else {
-            res.status(200).json(theresult);
-          }
-        }
-      );
+      // const friend = {
+      //   friend: [...friend_list, res.locals.user._id],
+      // };
+      friend_list.push(res.locals.user._id);
     }
     //else unfriend
     else {
       friend_list.findByIdAndRemove(req.params.userid, (err, theresult) => {
         if (err) return res.status(500).json({ msg: err.message });
         else {
-          return res.status(200).json(theresult);
+          res.status(200).json(theresult);
         }
       });
     }
+
+    User.save((err, result) => {
+      if (err) return res.status(500).json({ msg: err.message });
+      else {
+        return res.status(200).json(result);
+      }
+    });
   },
 ];
 

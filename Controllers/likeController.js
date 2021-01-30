@@ -6,17 +6,13 @@ const { body } = require("express-validator");
 export const like_post = [
   body("like").escape(),
   (req, res, next) => {
-    Post.findById(req.params.postid, "like", (err_likeObject, likeObject) => {
-      if (err_likeObject)
-        return res.status(500).json({ msg: err_likeObject.message });
+    Post.findById(req.params.postid, "like", (err1, likeObject) => {
+      if (err1) return res.status(500).json({ msg: err1 });
       else {
         likeObject.people_who_liked_the_post.findById(
           res.locals.user._id,
-          (err_people_who_liked_the_post, isUser) => {
-            if (err_people_who_liked_the_post)
-              return res
-                .status(500)
-                .json({ msg: err_people_who_liked_the_post.message });
+          (err2) => {
+            if (err2) return res.status(500).json({ msg: err2.message });
             else {
               if (isUser != null) {
                 likeObject.no_of_likes += 1;
@@ -26,7 +22,9 @@ export const like_post = [
                 likeObject.no_of_likes -= 1;
                 likeObject.people_who_liked_the_post.findByIdAndRemove(
                   res.local.user._id,
-                  (err3) => res.status(500).json({ msg: err3.message })
+                  (err3) => {
+                    return res.status(500).json({ msg: err3.message });
+                  }
                 );
               }
             }

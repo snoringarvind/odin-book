@@ -57,20 +57,18 @@ export const mypost_put = [
         .status(400)
         .json({ msg: "content and image both cannot be empty" });
     } else {
-      Post.findByIdAndUpdate(
-        req.params.postid,
-        {
-          content: req.body.content,
-          image: req.body.image,
-          _id: req.params.postid,
-        },
-        (err, theresult) => {
-          if (err) return res.status(500).json({ msg: err.message });
-          else {
-            return res.status(200).json(theresult);
-          }
+      const post = new Post({
+        content: req.body.content,
+        image: req.body.image,
+        _id: req.params.postid,
+      });
+
+      Post.findByIdAndUpdate(req.params.postid, post, {}, (err, theresult) => {
+        if (err) return res.status(500).json({ msg: err.message });
+        else {
+          return res.status(200).json(theresult);
         }
-      );
+      });
     }
   },
 ];
@@ -79,7 +77,7 @@ export const mypost_delete = (req, res, next) => {
   async.parallel(
     {
       comment_find: (cb) => Comment.find({ post: req.params.postid }).exec(cb),
-      post_remove: (cb) => Post.findByIdAndRemove(req.params.postid),
+      post_remove: (cb) => Post.findByIdAndRemove(req.params.postid).exec(cb),
     },
     (err, result) => {
       if (err) return res.status(500).json({ msg: err.message });
@@ -88,7 +86,10 @@ export const mypost_delete = (req, res, next) => {
           result.comment_find._id,
           (err, comment_remove) => {
             if (err) return res.status(500).json({ msg: err.message });
-            return res.status(200).json(result.post_remove, comment_remove);
+            return res.status(200).json({
+              removed_post: result.post_remove,
+              removed_comments: comment_remove,
+            });
           }
         );
       }

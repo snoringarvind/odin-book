@@ -56,7 +56,7 @@ router.get("/myprofile", (req, res, next) => {});
 router.put("/myprofile", (req, res, next) => {});
 
 // profile
-//* should also have friends list
+//* should also have friends list on client side
 router.get("/profile/:userid", (req, res, next) => {});
 
 //friend

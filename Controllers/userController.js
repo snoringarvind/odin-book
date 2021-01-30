@@ -1,7 +1,10 @@
 const Profile = require("../models/Profile");
 const User = require("../models/User");
 const Friend = require("../models/Friend");
+const Comment = require("../models/Comment");
 const async = require("async");
+const Post = require("../models/Post");
+const utils = require("../lib/utils");
 
 const { body, validationResult } = require("express-validator");
 
@@ -21,6 +24,9 @@ export const user_post = [
     .isLength({ max: 30 })
     .withMessage("password is too large")
     .escape(),
+
+  utils.hashPassword,
+
   (req, res, next) => {
     const user = new User({
       username: req.body.username,
@@ -36,6 +42,7 @@ export const user_post = [
       user.save((err, theresult) => {
         if (err) return res.status(500).json({ msg: err.message });
         else {
+          //*creating a empty profile
           const profile = new Profile({
             fname: "",
             lname: "",
@@ -72,6 +79,9 @@ export const user_post = [
 export const user_delete = (req, res, next) => {
   async.parallel(
     {
+      comment_remove: (cb) =>
+        Comment.find({ user: req.params.userid }).exec(cb),
+      post_remove: (cb) => Post.find({ user: req.params.userid }).exec(cb),
       profile_remove: (cb) =>
         Profile.findOneAndRemove({ user: req.param.userid }).exec(cb),
       user_remove: (cb) => User.findByIdAndRemove(req.params.userid).exec(cb),

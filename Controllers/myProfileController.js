@@ -1,0 +1,74 @@
+const Profile = require("../models/Profile");
+const { body, validationResult } = require("express-validator");
+
+export const myProfile_get = (req, res, next) => {
+  Profile.findOne({ user: res.locals.user._id }, (err, result) => {
+    if (err) return res.status(500).json({ msg: err.message });
+    else {
+      return res.status(200).json(result);
+    }
+  });
+};
+
+export const myProfile_put = [
+  body("fname").escape(),
+  body("lname").escape(),
+  body("profilePhoto").escape(),
+  body("bannerPhoto").escape(),
+  body("bio").escape(),
+  body("nickname").escape(),
+  body("school").escape(),
+  body("college").escape(),
+  body("working").escape(),
+  body("relationshipStatus").escape(),
+  body("books").escape(),
+  body("food").escape(),
+  body("contact").escape(),
+  body("gender").escape(),
+  //*toDate to cast date string to proper Javascript type.
+  //*checkFaly:true accepts date or null string
+  //*is08601 is the date format
+  body("dob")
+    .optional({ checkFalsy: true })
+    .isISO8601()
+    .withMessage("you have entered an invalid date.")
+    .toDate(),
+
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    const profile = {
+      fname: req.body.fname,
+      lname: req.body.lname,
+      profilePhoto: req.body.profilePhoto,
+      bannerPhoto: req.body.bannerPhoto,
+      bio: req.body.bio,
+      nickName: req.body.nickName,
+      school: req.body.school,
+      college: req.body.college,
+      working: req.body.working,
+      relationshipStatus: req.body.relationshipStatus,
+      book: req.body.book,
+      food: req.body.food,
+      contact: req.body.contact,
+      gender: req.body.gender,
+      dob: req.body.dob,
+      user: res.locals.user._id,
+    };
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array(), profile: profile });
+    } else {
+      Profile.findOneAndUpdate(
+        { user: res.locals.user._id },
+        profile,
+        (err, theresult) => {
+          if (err) res.status(500).json({ msg: err.message });
+          else {
+            res.status(200).json(theresult);
+          }
+        }
+      );
+    }
+  },
+];

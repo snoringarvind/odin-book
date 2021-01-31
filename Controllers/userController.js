@@ -1,6 +1,5 @@
 const Profile = require("../models/Profile");
 const User = require("../models/User");
-const Friend = require("../models/Friend");
 const Comment = require("../models/Comment");
 const async = require("async");
 const Post = require("../models/Post");
@@ -9,7 +8,7 @@ const utils = require("../lib/utils");
 const { body, validationResult } = require("express-validator");
 
 //signup page
-export const user_post = [
+exports.user_post = [
   body("username")
     .trim()
     .isLength({ min: 4 })
@@ -19,8 +18,8 @@ export const user_post = [
     .escape(),
   body("password")
     .trim()
-    .isLength({ min: 8 })
-    .withMessage("password is too shot")
+    .isLength({ min: 6 })
+    .withMessage("password is too short")
     .isLength({ max: 30 })
     .withMessage("password is too large")
     .escape(),
@@ -36,10 +35,11 @@ export const user_post = [
 
     const errors = validationResult(req);
 
+    let profileSaved;
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array(), user: user });
     } else {
-      user.save((err, theresult) => {
+      user.save((err, theuser) => {
         if (err) return res.status(500).json({ msg: err.message });
         else {
           //*creating a empty profile
@@ -65,10 +65,10 @@ export const user_post = [
             if (err_theprofile)
               return res.status(500).json({ msg: err.message });
             else {
-              res.status(200).json(theprofile);
+              profileSaved = theprofile;
             }
           });
-          return res.status(200).json(theresult);
+          return res.status(200).json({ user: theuser, profile: profileSaved });
         }
       });
     }
@@ -76,12 +76,13 @@ export const user_post = [
 ];
 
 //delete user
-export const user_delete = (req, res, next) => {
+exports.user_delete = (req, res, next) => {
   async.parallel(
     {
       comment_remove: (cb) =>
-        Comment.find({ user: req.params.userid }).exec(cb),
-      post_remove: (cb) => Post.find({ user: req.params.userid }).exec(cb),
+        Comment.deleteMany({ user: req.params.userid }).exec(cb),
+      post_remove: (cb) =>
+        Post.deleteMany({ user: req.params.userid }).exec(cb),
       profile_remove: (cb) =>
         Profile.findOneAndRemove({ user: req.param.userid }).exec(cb),
       user_remove: (cb) => User.findByIdAndRemove(req.params.userid).exec(cb),

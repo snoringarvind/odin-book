@@ -2,7 +2,7 @@ const { body, validationResult } = require("express-validator");
 const utils = require("../lib/utils");
 const User = require("../models/User");
 
-export const login_post = [
+exports.login_post = [
   body("username").trim().escape(),
   body("password").trim().escape(),
 
@@ -13,6 +13,7 @@ export const login_post = [
         return res.status(401).json({ msg: "no such user with this username" });
       } else {
         res.locals.hashPassword = result.password;
+        res.locals.user = result;
       }
     });
   },
@@ -20,7 +21,7 @@ export const login_post = [
   (req, res, next) => {
     if (res.locals.isPassword) {
       const jwtData = utils.issueJwt(result);
-      return res.status(200).json({ user: result, jwtData: jwtData });
+      return res.status(200).json({ user: res.locals.user, jwtData: jwtData });
     } else {
       return res.status(403).json({ msg: "wrong password" });
     }

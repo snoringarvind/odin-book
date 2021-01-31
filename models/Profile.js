@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const ProfileSchema = mongoose.Schema({
   fname: { type: String },
   lname: { type: String },
-  profilePhoto: { data: Buffer, contentType: "image/jpg" },
-  bannerPhoto: { data: Buffer, contentType: "image/jpg" },
+  profilePhoto: { data: Buffer, contentType: String },
+  bannerPhoto: { data: Buffer, contentType: String },
   bio: { type: String },
   nickName: { type: String },
   school: { type: String },
@@ -21,6 +21,6 @@ const ProfileSchema = mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
-const ProfileModel = connection.ProfileSchema("Profile", ProfileSchema);
+const ProfileModel = connection.model("Profile", ProfileSchema);
 
 module.exports = ProfileModel;

@@ -1,8 +1,9 @@
 const Post = require("../models/Post");
 const Comment = require("../models/Comment");
 const async = require("async");
+const { body, validationResult } = require("express-validator");
 
-export const myposts_get = (req, res, next) => {
+exports.myposts_get = (req, res, next) => {
   Post.find({ user: res.locals.user._id }, (err, result) => {
     if (err) return res.status(500).json({ msg: err.message });
     else {
@@ -11,7 +12,7 @@ export const myposts_get = (req, res, next) => {
   });
 };
 
-export const myposts_post = (req, res, next) => [
+exports.myposts_post = (req, res, next) => [
   body("content").trim().escape(),
   body("image").escape(),
   body("like.*").escape(),
@@ -46,7 +47,7 @@ export const myposts_post = (req, res, next) => [
   },
 ];
 
-export const mypost_put = [
+exports.mypost_put = [
   body("content").trim().escape(),
   body("image").escape(),
   body("like.*").escape(),
@@ -57,13 +58,12 @@ export const mypost_put = [
         .status(400)
         .json({ msg: "content and image both cannot be empty" });
     } else {
-      const post = new Post({
+      const post = {
         content: req.body.content,
         image: req.body.image,
-        _id: req.params.postid,
-      });
+      };
 
-      Post.findByIdAndUpdate(req.params.postid, post, {}, (err, theresult) => {
+      Post.findByIdAndUpdate(req.params.postid, post, (err, theresult) => {
         if (err) return res.status(500).json({ msg: err.message });
         else {
           return res.status(200).json(theresult);
@@ -73,25 +73,20 @@ export const mypost_put = [
   },
 ];
 
-export const mypost_delete = (req, res, next) => {
+exports.mypost_delete = (req, res, next) => {
   async.parallel(
     {
-      comment_find: (cb) => Comment.find({ post: req.params.postid }).exec(cb),
+      comment_remove: (cb) =>
+        Comment.deleteMany({ post: req.params.postid }).exec(cb),
       post_remove: (cb) => Post.findByIdAndRemove(req.params.postid).exec(cb),
     },
     (err, result) => {
       if (err) return res.status(500).json({ msg: err.message });
       else {
-        Comment.findByIdAndRemove(
-          result.comment_find._id,
-          (err, comment_remove) => {
-            if (err) return res.status(500).json({ msg: err.message });
-            return res.status(200).json({
-              removed_post: result.post_remove,
-              removed_comments: comment_remove,
-            });
-          }
-        );
+        return res.status(200).json({
+          removed_post: result.post_remove,
+          removed_comments: result.comment_remove,
+        });
       }
     }
   );

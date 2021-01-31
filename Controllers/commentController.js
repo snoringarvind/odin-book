@@ -1,7 +1,16 @@
 const Comment = require("../models/Comment");
 const { body, validationResult } = require("express-validator");
 
-export const comment_post = [
+exports.comment_get = (req, res, next) => {
+  Comment.find({ post: req.params.postid }, (err, result) => {
+    if (err) return res.status(500).json({ msg: err.message });
+    else {
+      res.status(200).json(result);
+    }
+  });
+};
+
+exports.comment_post = [
   body("comment")
     .trim()
     .isLength({ min: 1 })
@@ -31,7 +40,7 @@ export const comment_post = [
   },
 ];
 
-export const comment_put = [
+exports.comment_put = [
   body("comment")
     .trim()
     .isLength({ min: 1 })
@@ -65,7 +74,7 @@ export const comment_put = [
   },
 ];
 
-export const comment_delete = (req, res, next) => {
+exports.comment_delete = (req, res, next) => {
   Comment.findByIdAndRemove(req.params.commentid, (err, theresult) => {
     if (err) return res.status(500).json({ msg: err.message });
     else {

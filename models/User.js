@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const UserSchema = mongoose.Schema({
   username: { type: String, required: true },
   password: { type: String, required: true },
+  created: { type: Date, default: Date.now },
 
   // !for now keeping it aside and using friend model
   // let's say xyz(user) , has friends stored in this array

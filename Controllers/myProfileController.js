@@ -1,7 +1,7 @@
 const Profile = require("../models/Profile");
 const { body, validationResult } = require("express-validator");
 
-export const myProfile_get = (req, res, next) => {
+exports.myProfile_get = (req, res, next) => {
   Profile.findOne({ user: res.locals.user._id }, (err, result) => {
     if (err) return res.status(500).json({ msg: err.message });
     else {
@@ -10,7 +10,7 @@ export const myProfile_get = (req, res, next) => {
   });
 };
 
-export const myProfile_put = [
+exports.myProfile_put = [
   body("fname").escape(),
   body("lname").escape(),
   body("profilePhoto").escape(),

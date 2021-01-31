@@ -11,6 +11,7 @@ const PostSchema = mongoose.Schema({
       { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     ],
   },
+  created: { type: Date, default: Date.now },
   //save the user using the login credentials
   //*user who made the post
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },

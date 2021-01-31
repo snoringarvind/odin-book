@@ -12,14 +12,18 @@ exports.myposts_get = (req, res, next) => {
   });
 };
 
-exports.myposts_post = (req, res, next) => [
+exports.myposts_post = [
   body("content").trim().escape(),
   body("image").escape(),
   body("like.*").escape(),
   body("user").escape(),
 
   (req, res, next) => {
-    if (req.body.content == null && req.body.image == null) {
+    console.log("hello");
+    if (
+      req.body.content == (null || undefined || "") &&
+      req.body.image == (null || undefined || "")
+    ) {
       return res
         .status(400)
         .json({ msg: "content and image both cannot be empty" });
@@ -34,13 +38,13 @@ exports.myposts_post = (req, res, next) => [
           no_of_likes: 0,
           people_who_liked_the_post: [],
         },
-        user: res.locals.user._id,
+        user: res.locals.user.sub,
       });
 
       post.save((err, theresult) => {
         if (err) return res.status(500).json({ msg: err.message });
         else {
-          res.status(200).json(theresult);
+          res.status(200).json({ new_post: theresult._id });
         }
       });
     }
@@ -63,10 +67,11 @@ exports.mypost_put = [
         image: req.body.image,
       };
 
-      Post.findByIdAndUpdate(req.params.postid, post, (err, theresult) => {
+      //it is returning the old result because we are having a new schema above
+      Post.findByIdAndUpdate(req.params.postid, post, (err, result) => {
         if (err) return res.status(500).json({ msg: err.message });
         else {
-          return res.status(200).json(theresult);
+          return res.status(200).json({ updated_post: result._id });
         }
       });
     }

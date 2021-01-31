@@ -37,6 +37,7 @@ exports.myProfile_put = [
   (req, res, next) => {
     const errors = validationResult(req);
 
+    // console.log(req.body);
     const profile = {
       fname: req.body.fname,
       lname: req.body.lname,
@@ -53,19 +54,24 @@ exports.myProfile_put = [
       contact: req.body.contact,
       gender: req.body.gender,
       dob: req.body.dob,
-      user: res.locals.user._id,
+
+      user: res.locals.user.sub,
     };
 
+    console.log(res.locals.user.sub);
+    console.log(profile);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array(), profile: profile });
     } else {
       Profile.findOneAndUpdate(
-        { user: res.locals.user._id },
+        { user: res.locals.user.sub },
         profile,
         (err, theresult) => {
+          // console.log(theresult);
           if (err) res.status(500).json({ msg: err.message });
           else {
-            res.status(200).json(theresult);
+            // it will return the old result
+            res.status(200).json({ updated_profile: theresult._id });
           }
         }
       );

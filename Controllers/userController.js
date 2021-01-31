@@ -29,46 +29,56 @@ exports.user_post = [
   (req, res, next) => {
     const user = new User({
       username: req.body.username,
-      password: req.body.password,
+      password: res.locals.hashPassword,
       friend: [],
     });
 
     const errors = validationResult(req);
 
-    let profileSaved;
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array(), user: user });
     } else {
-      user.save((err, theuser) => {
+      User.findOne({ username: req.body.username }, (err, result) => {
         if (err) return res.status(500).json({ msg: err.message });
         else {
-          //*creating a empty profile
-          const profile = new Profile({
-            fname: "",
-            lname: "",
-            profilePhoto: "",
-            bannerPhoto: "",
-            bio: "",
-            nickName: "",
-            school: "",
-            college: "",
-            working: "",
-            relationshipStatus: "",
-            book: "",
-            food: "",
-            contact: "",
-            gender: "",
-            dob: "",
-            user: theresult._id,
-          });
-          profile.save((err_theprofile, theprofile) => {
-            if (err_theprofile)
-              return res.status(500).json({ msg: err.message });
-            else {
-              profileSaved = theprofile;
-            }
-          });
-          return res.status(200).json({ user: theuser, profile: profileSaved });
+          if (result != null) {
+            return res.status(403).json({ msg: "username taken" });
+          } else {
+            const profile = new Profile({
+              fname: "",
+              lname: "",
+              profilePhoto: "",
+              bannerPhoto: "",
+              bio: "",
+              nickName: "",
+              school: "",
+              college: "",
+              working: "",
+              relationshipStatus: "",
+              book: "",
+              food: "",
+              contact: "",
+              gender: "",
+              dob: "",
+              user: user._id,
+            });
+            async.parallel(
+              {
+                saved_user: (cb) => user.save(cb),
+                saved_profile: (cb) => profile.save(cb),
+              },
+              (err, result) => {
+                console.log(result);
+                if (err) return res.status(500).json({ msg: err.message });
+                else {
+                  return res.status(200).json({
+                    user: result.saved_user,
+                    profile: result.saved_profile,
+                  });
+                }
+              }
+            );
+          }
         }
       });
     }

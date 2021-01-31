@@ -51,6 +51,9 @@ router.delete(
 );
 
 //like
+//*get like
+router.get("/post/:postid/like", utils.verifyJwt, likeController.like_get);
+
 //* post like
 router.put("/post/:postid/like", utils.verifyJwt, likeController.like_put);
 

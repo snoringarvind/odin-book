@@ -12,15 +12,17 @@ exports.login_post = [
       if (result == null) {
         return res.status(401).json({ msg: "no such user with this username" });
       } else {
+        console.log("result=lldfld", result);
         res.locals.hashPassword = result.password;
         res.locals.user = result;
+        next();
       }
     });
   },
   utils.decodeHash,
   (req, res, next) => {
     if (res.locals.isPassword) {
-      const jwtData = utils.issueJwt(result);
+      const jwtData = utils.issueJwt(res.locals.user);
       return res.status(200).json({ user: res.locals.user, jwtData: jwtData });
     } else {
       return res.status(403).json({ msg: "wrong password" });

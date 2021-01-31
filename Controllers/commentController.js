@@ -33,7 +33,7 @@ exports.comment_post = [
       comment.save((err, theresult) => {
         if (err) return res.status(500).json({ msg: err.message });
         else {
-          return res.status(200).json(theresult);
+          return res.status(200).json({ new_comment: theresult._id });
         }
       });
     }
@@ -66,7 +66,7 @@ exports.comment_put = [
         (err, theresult) => {
           if (err) return res.status(500).json({ msg: err.mesaage });
           else {
-            return res.status(200).json(theresult);
+            return res.status(200).json({ updated_comment: theresult._id });
           }
         }
       );
@@ -78,7 +78,7 @@ exports.comment_delete = (req, res, next) => {
   Comment.findByIdAndRemove(req.params.commentid, (err, theresult) => {
     if (err) return res.status(500).json({ msg: err.message });
     else {
-      return res.status(200).json(theresult);
+      return res.status(200).json({ deleted_comment: theresult._id });
     }
   });
 };

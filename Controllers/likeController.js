@@ -3,6 +3,20 @@ const Post = require("../models/Post");
 
 const { body } = require("express-validator");
 
+exports.like_get = (req, res, next) => {
+  Post.findById(req.params.userid, "like")
+    .populate("people_who_liked_the_post")
+    .exec((err, result) => {
+      if (err) return res.status(500).json({ msg: err.message });
+      else {
+        return res.status(200).json({
+          no_of_likes: result.no_of_likes,
+          people_who_liked_the_post: result.people_who_liked_the_post,
+        });
+      }
+    });
+};
+
 exports.like_put = [
   body("like").escape(),
   (req, res, next) => {

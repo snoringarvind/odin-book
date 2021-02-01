@@ -14,28 +14,39 @@ exports.comment_post = [
   body("comment")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("Comment cannot be empty")
+    .withMessage("comment cannot be empty")
     .escape(),
-  (req, res, next) => {
+  async (req, res, next) => {
     const errors = validationResult(req);
-
-    const comment = new Comment({
-      comment: req.body.comment,
-      user: res.locals.user._id,
-      post: req.params.postid,
-    });
-
     if (!errors.isEmpty()) {
-      return res
-        .status(4000)
-        .json({ errors: errors.array(), comment: comment });
+      return res.status(400).json(errors.array());
     } else {
-      comment.save((err, theresult) => {
-        if (err) return res.status(500).json({ msg: err.message });
-        else {
-          return res.status(200).json({ new_comment: theresult._id });
-        }
-      });
+      try {
+        let query = await Comment.findOne(
+          { post: req.params.postid },
+          "comment_list"
+        );
+        query = query.comment_list;
+        const comment_detail = {
+          comment: req.body.comment,
+          user: res.locals.user.sub,
+        };
+        query.push(comment_detail);
+        Comment.findOneAndUpdate(
+          { post: req.params.postid },
+          {
+            comment_list: query,
+          },
+          (err, result) => {
+            if (err) return res.status(500).json({ msg: err.message });
+            else {
+              return res.status(200).json({ updated_comment: result._id });
+            }
+          }
+        );
+      } catch (err) {
+        return res.status(500).json({ msg: err.message });
+      }
     }
   },
 ];
@@ -46,30 +57,20 @@ exports.comment_put = [
     .isLength({ min: 1 })
     .withMessage("comment cannot be empty")
     .escape(),
-  (req, res, next) => {
+  async (req, res, next) => {
+    console.log("hello");
     const errors = validationResult(req);
-
-    const comment = new Comment({
-      comment: req.body.comment,
-      user: req.locals.user._id,
-      post: req.params.postid,
-      _id: req.params.commentid,
-    });
-
     if (!errors.isEmpty()) {
-      return res.status(500).json({ errors: errors.array(), comment: comment });
+      return res.status(400).json(errors.array());
     } else {
-      Comment.findByIdAndUpdate(
-        req.params.commentid,
-        comment,
-        {},
-        (err, theresult) => {
-          if (err) return res.status(500).json({ msg: err.mesaage });
-          else {
-            return res.status(200).json({ updated_comment: theresult._id });
-          }
-        }
-      );
+      try {
+        let query = Comment.find({ post: req.params.postid }, "comment_list");
+        query = query.comment_list;
+        console.log(query);
+        res.end();
+      } catch (err) {
+        return res.status(500).json({ msg: err.message });
+      }
     }
   },
 ];

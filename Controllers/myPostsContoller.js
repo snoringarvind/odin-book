@@ -4,12 +4,15 @@ const async = require("async");
 const { body, validationResult } = require("express-validator");
 
 exports.myposts_get = (req, res, next) => {
-  Post.find({ user: res.locals.user._id }, (err, result) => {
-    if (err) return res.status(500).json({ msg: err.message });
-    else {
-      return res.status(200).json(result);
-    }
-  });
+  Post.find({ user: res.locals.user.sub })
+    .select("-like")
+    .populate("user", "username")
+    .exec((err, result) => {
+      if (err) return res.status(500).json({ msg: err.message });
+      else {
+        return res.status(200).json(result);
+      }
+    });
 };
 
 exports.myposts_post = [
@@ -34,19 +37,33 @@ exports.myposts_post = [
           data: req.body.image,
           contentType: "image/jpg",
         },
-        like: {
-          no_of_likes: 0,
-          people_who_liked_the_post: [],
-        },
+        like: [],
         user: res.locals.user.sub,
       });
 
-      post.save((err, theresult) => {
-        if (err) return res.status(500).json({ msg: err.message });
-        else {
-          res.status(200).json({ new_post: theresult._id });
-        }
+      console.log(post);
+      const comment = new Comment({
+        comment_list: [],
+        post: post._id,
+        user: res.locals.user.sub,
       });
+
+      console.log(comment);
+      async.parallel(
+        {
+          save_post: (cb) => post.save(cb),
+          save_comment: (cb) => comment.save(cb),
+        },
+        (err, result) => {
+          if (err) return res.status(500).json({ msg: err.message });
+          else {
+            return res.status(200).json({
+              new_post: result.save_post._id,
+              new_comment_model: result.save_comment._id,
+            });
+          }
+        }
+      );
     }
   },
 ];

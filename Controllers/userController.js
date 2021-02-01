@@ -72,8 +72,8 @@ exports.user_post = [
                 if (err) return res.status(500).json({ msg: err.message });
                 else {
                   return res.status(200).json({
-                    user: result.saved_user,
-                    profile: result.saved_profile,
+                    new_user: result.saved_user._id,
+                    new_profile_model: result.saved_profile._id,
                   });
                 }
               }

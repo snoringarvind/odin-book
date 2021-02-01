@@ -4,14 +4,12 @@ const mongoose = require("mongoose");
 const PostSchema = mongoose.Schema({
   content: { type: String },
   image: { data: Buffer, contentType: String },
-  like: {
-    no_of_likes: { type: Number },
-    //array of users who liked the respective post
-    people_who_liked_the_post: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-    ],
-  },
-  created: { type: Date, default: Date.now },
+
+  //array of user who liked the respective post
+  like: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }],
+
+  created_at: { type: Date, default: Date.now },
+
   //save the user using the login credentials
   //*user who made the post
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },

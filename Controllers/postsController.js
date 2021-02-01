@@ -5,7 +5,7 @@ exports.posts_list_get = async (req, res, next) => {
   //only show post from friends
 
   try {
-    const friend_list = User.findById(res.locals.user._id, "friend");
+    const friend_list = User.findById(res.locals.user.sub, "friend");
     const posts = Post.find({ user: friend_list }, { sort: { created: 1 } });
 
     return res.status(200).json(posts);

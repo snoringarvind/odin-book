@@ -2,7 +2,7 @@ const Profile = require("../models/Profile");
 const { body, validationResult } = require("express-validator");
 
 exports.myProfile_get = (req, res, next) => {
-  Profile.findOne({ user: res.locals.user._id }, (err, result) => {
+  Profile.findOne({ user: res.locals.user.sub }, (err, result) => {
     if (err) return res.status(500).json({ msg: err.message });
     else {
       return res.status(200).json(result);

@@ -86,7 +86,7 @@ router.delete(
 router.get("/myprofile", utils.verifyJwt, myProfileController.myProfile_get);
 
 //*maybe don't create a post route just a put route for profile, beacuse there is only one profile to update, and also since you are not posting or creating anything new, you are onyl updating the profile, so I guess PUT route is enough
-//*can also use for update
+//*!can also use for update
 router.post("/myprofile", utils.verifyJwt, myProfileController.myProfile_post);
 
 // profile

@@ -62,6 +62,7 @@ exports.user_post = [
               dob: "",
               user: user._id,
             });
+
             async.parallel(
               {
                 saved_user: (cb) => user.save(cb),

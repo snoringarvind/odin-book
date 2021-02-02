@@ -3,17 +3,16 @@ const Comment = require("../models/Comment");
 const async = require("async");
 const { body, validationResult } = require("express-validator");
 const multer = require("multer");
-const path = require("path");
 const fs = require("fs");
-const upload = multer({ dest: "postImage/" });
 
 exports.myposts_get = (req, res, next) => {
+  console.log("hello");
   Post.find({ user: res.locals.user.sub })
     .select("-like")
-    .populate("user", "username")
     .exec((err, result) => {
       if (err) return res.status(500).json({ msg: err.message });
       else {
+        console.log(result);
         return res.status(200).json(result);
       }
     });
@@ -25,29 +24,35 @@ exports.myposts_post = [
   body("like.*").escape(),
   body("user").escape(),
 
-  upload.single("content_image"),
   (req, res, next) => {
-    //   const image = fs.readFileSync(),
-    console.log(req.file);
-    console.log(req.body);
-
-    if (
-      req.body.content_text == (null || undefined || "") &&
-      req.file == (null || undefined || "")
-    ) {
+    const upload = multer({ dest: "upload-images/" }).single("content_image");
+    upload(req, res, (err) => {
+      if (err instanceof multer.MulterError) {
+        return res.status(500).json({ msg: err });
+      } else if (err) {
+        return res.status(500).json({ msg: err });
+      } else {
+        return next();
+      }
+    });
+  },
+  (req, res, next) => {
+    if (req.body.content_text == "" && req.file == undefined) {
       return res
         .status(400)
         .json({ msg: "content_text and content_image both cannot be empty" });
     }
 
-    let content_image;
-    let mimeType;
-    try {
-      content_image = fs.readFileSync(req.file.path);
+    let content_image = "";
+    let mimeType = "";
+    if (req.file) {
+      try {
+        content_image = fs.readFileSync(req.file.path);
 
-      mimeType = req.file.mimetype;
-    } catch (err) {
-      return res.status(500).json({ msg: err.message });
+        mimeType = req.file.mimetype;
+      } catch (err) {
+        return res.status(500).json({ msg: err.message });
+      }
     }
 
     const post = new Post({
@@ -60,6 +65,7 @@ exports.myposts_post = [
       user: res.locals.user.sub,
     });
 
+    console.log(post);
     const comment = new Comment({
       comment_list: [],
       post: post._id,
@@ -75,11 +81,13 @@ exports.myposts_post = [
         if (err) return res.status(500).json({ msg: err.message });
         else {
           //delete image file from the disk since it has been already saved on the server
-          try {
-            fs.unlinkSync(req.file.path);
-          } catch (err) {
-            if (err) {
-              return res.status(500).json({ msg: err.message });
+          if (req.file) {
+            try {
+              fs.unlinkSync(req.file.path);
+            } catch (err) {
+              if (err) {
+                return res.status(500).json({ msg: err.message });
+              }
             }
           }
           return res.status(200).json({
@@ -97,13 +105,20 @@ exports.mypost_put = [
   body("content_image").escape(),
   body("like.*").escape(),
   body("user").escape(),
-
-  upload.single("content_image"),
   (req, res, next) => {
-    if (
-      req.body.content_text == (null || undefined || "") &&
-      req.body.content_image == (null || undefined || "")
-    ) {
+    const upload = multer({ dest: "upload-images/" }).single("content_image");
+    upload(req, res, (err) => {
+      if (err instanceof multer.MulterError) {
+        return res.status(500).json({ msg: err });
+      } else if (err) {
+        return res.status(500).json({ msg: err });
+      } else {
+        return next();
+      }
+    });
+  },
+  (req, res, next) => {
+    if (req.body.content_text == "" && req.file == undefined) {
       return res
         .status(400)
         .json({ msg: "content_text and content_image both cannot be empty" });
@@ -111,27 +126,32 @@ exports.mypost_put = [
 
     let content_image;
     let mimeType;
-    try {
-      content_image = fs.readFileSync(req.file.path);
-      mimeType = req.file.mimetype;
-    } catch (err) {
-      return res.status(500).json({ msg: err.message });
+    if (req.file) {
+      try {
+        content_image = fs.readFileSync(req.file.path);
+        mimeType = req.file.mimetype;
+      } catch (err) {
+        return res.status(500).json({ msg: err.message });
+      }
     }
 
     const post = {
       content_text: req.body.content_text,
       content_image: { data: content_image, contentType: mimeType },
     };
+    console.log(post);
 
     //it is returning the old result because we are having a new schema above
     Post.findByIdAndUpdate(req.params.postid, post, (err, result) => {
       if (err) return res.status(500).json({ msg: err.message });
       else {
-        try {
-          fs.unlinkSync(req.file.path);
-        } catch (err) {
-          if (err) {
-            return res.status(500).json({ msg: err.message });
+        if (req.file) {
+          try {
+            fs.unlinkSync(req.file.path);
+          } catch (err) {
+            if (err) {
+              return res.status(500).json({ msg: err.message });
+            }
           }
         }
         return res.status(200).json({ updated_post: result._id });

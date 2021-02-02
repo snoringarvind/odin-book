@@ -11,7 +11,7 @@ exports.login_post = [
   body("password")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("username cannot be empty")
+    .withMessage("password cannot be empty")
     .escape(),
 
   (req, res, next) => {
@@ -37,7 +37,7 @@ exports.login_post = [
   (req, res, next) => {
     if (res.locals.isPassword) {
       const jwtData = utils.issueJwt(res.locals.user);
-      return res.status(200).json({ user: res.locals.user, jwtData: jwtData });
+      return res.status(200).json({ jwtData: jwtData });
     } else {
       return res.status(403).json({ msg: "wrong password" });
     }

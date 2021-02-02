@@ -2,8 +2,8 @@ const connection = require("../config/database");
 const mongoose = require("mongoose");
 
 const PostSchema = mongoose.Schema({
-  content: { type: String },
-  image: { data: Buffer, contentType: String },
+  content_text: { type: String },
+  content_image: { data: Buffer, contentType: String },
 
   //array of user who liked the respective post
   like: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }],

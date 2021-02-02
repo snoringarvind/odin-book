@@ -45,7 +45,7 @@ router.put(
 //* DELETE comment
 //* no need to have postid while deleteing comment.
 router.delete(
-  "/comment/:commentid",
+  "/post/:postid/comment/:commentid",
   utils.verifyJwt,
   commentController.comment_delete
 );
@@ -55,7 +55,7 @@ router.delete(
 router.get("/post/:postid/like", utils.verifyJwt, likeController.like_get);
 
 //* post like
-router.put("/post/:postid/like", utils.verifyJwt, likeController.like_put);
+router.post("/post/:postid/like", utils.verifyJwt, likeController.like_post);
 
 //* delete like
 // router.delete("/post/:postid/like/:likeid", (req, res, next) => {});
@@ -86,7 +86,8 @@ router.delete(
 router.get("/myprofile", utils.verifyJwt, myProfileController.myProfile_get);
 
 //*maybe don't create a post route just a put route for profile, beacuse there is only one profile to update, and also since you are not posting or creating anything new, you are onyl updating the profile, so I guess PUT route is enough
-router.put("/myprofile", utils.verifyJwt, myProfileController.myProfile_put);
+//*can also use for update
+router.post("/myprofile", utils.verifyJwt, myProfileController.myProfile_post);
 
 // profile
 //* should also have friends list on client side
@@ -98,7 +99,7 @@ router.get("/profile/:userid", utils.verifyJwt, profileController.profile_get);
 //* since we can retrive our's username from the login credentials, hence no need to pass our's username in the url
 //*jisko request bhej rahe hain uska userid attach karna hain
 //* we will be creating an empty friend model while creating a user, so now we will be just updating the friend model
-router.put("/friend/:userid", utils.verifyJwt, friendController.friend_put);
+router.post("/friend/:userid", utils.verifyJwt, friendController.friend_post);
 
 //*getting the friend list
 router.get(

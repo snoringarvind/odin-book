@@ -13,7 +13,7 @@ exports.friend_list_get = (req, res, next) => {
     });
 };
 
-exports.friend_put = [
+exports.friend_post = [
   body("friend.*").escape(),
   body("user").escape(),
   async (req, res, next) => {

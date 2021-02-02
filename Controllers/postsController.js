@@ -18,7 +18,7 @@ exports.post_detail_get = (req, res, next) => {
   //populating user so we can show the name of user who posted the post.
 
   Post.findById(req.params.postid)
-    .populate("user")
+    .populate("user", "username")
     .exec((err, result) => {
       if (err) return res.status(500).json({ msg: err.message });
       else {

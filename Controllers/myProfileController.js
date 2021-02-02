@@ -10,7 +10,7 @@ exports.myProfile_get = (req, res, next) => {
   });
 };
 
-exports.myProfile_put = [
+exports.myProfile_post = [
   body("fname").escape(),
   body("lname").escape(),
   body("profilePhoto").escape(),

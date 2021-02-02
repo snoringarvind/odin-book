@@ -40,7 +40,7 @@ exports.comment_post = [
           (err, result) => {
             if (err) return res.status(500).json({ msg: err.message });
             else {
-              return res.status(200).json({ updated_comment: result._id });
+              return res.status(200).json({ new_comment: result._id });
             }
           }
         );
@@ -58,16 +58,35 @@ exports.comment_put = [
     .withMessage("comment cannot be empty")
     .escape(),
   async (req, res, next) => {
-    console.log("hello");
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json(errors.array());
     } else {
       try {
-        let query = Comment.find({ post: req.params.postid }, "comment_list");
+        let query = await Comment.findOne(
+          { post: req.params.postid },
+          "comment_list"
+        );
         query = query.comment_list;
-        console.log(query);
-        res.end();
+        for (let i = 0; i < query.length; i++) {
+          if (query[i]._id == req.params.commentid) {
+            query[i].comment = req.body.comment;
+            Comment.findOneAndUpdate(
+              { post: req.params.postid },
+              { comment_list: query },
+              (err) => {
+                if (err) return res.status(500).json({ msg: err.message });
+                else {
+                  return res
+                    .status(200)
+                    .json({ msg: "comment has been updated" });
+                }
+              }
+            );
+          } else {
+            return res.status(500).json({ msg: "something is wrong" });
+          }
+        }
       } catch (err) {
         return res.status(500).json({ msg: err.message });
       }
@@ -75,11 +94,31 @@ exports.comment_put = [
   },
 ];
 
-exports.comment_delete = (req, res, next) => {
-  Comment.findByIdAndRemove(req.params.commentid, (err, theresult) => {
-    if (err) return res.status(500).json({ msg: err.message });
-    else {
-      return res.status(200).json({ deleted_comment: theresult._id });
+exports.comment_delete = async (req, res, next) => {
+  try {
+    let query = await Comment.findOne(
+      { post: req.params.postid },
+      "comment_list"
+    );
+    query = query.comment_list;
+    for (let i = 0; i < query.length; i++) {
+      if (query[i]._id == req.params.commentid) {
+        query.splice(i, 1);
+        Comment.findOneAndUpdate(
+          { post: req.params.postid },
+          { comment_list: query },
+          (err) => {
+            if (err) return res.status(500).json({ msg: err.message });
+            else {
+              return res.status(200).json({ msg: "comment deleted" });
+            }
+          }
+        );
+      } else {
+        return res.status(500).json({ msg: "something is wrong" });
+      }
     }
-  });
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
 };

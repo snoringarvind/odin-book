@@ -7,7 +7,6 @@ exports.like_get = (req, res, next) => {
   Post.findById(req.params.postid, "like")
     .populate("like", "username")
     .exec((err, result) => {
-      // console.log(result);
       if (err) return res.status(500).json({ msg: err.message });
       else {
         return res.status(200).json(result);
@@ -15,7 +14,7 @@ exports.like_get = (req, res, next) => {
     });
 };
 
-exports.like_put = [
+exports.like_post = [
   body("like").escape(),
   async (req, res, next) => {
     let msg;

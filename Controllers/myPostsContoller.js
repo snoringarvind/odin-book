@@ -6,13 +6,11 @@ const multer = require("multer");
 const fs = require("fs");
 
 exports.myposts_get = (req, res, next) => {
-  console.log("hello");
   Post.find({ user: res.locals.user.sub })
     .select("-like")
     .exec((err, result) => {
       if (err) return res.status(500).json({ msg: err.message });
       else {
-        console.log(result);
         return res.status(200).json(result);
       }
     });
@@ -124,8 +122,8 @@ exports.mypost_put = [
         .json({ msg: "content_text and content_image both cannot be empty" });
     }
 
-    let content_image;
-    let mimeType;
+    let content_image = "";
+    let mimeType = "";
     if (req.file) {
       try {
         content_image = fs.readFileSync(req.file.path);

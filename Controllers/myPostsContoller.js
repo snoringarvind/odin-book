@@ -9,6 +9,7 @@ exports.myposts_get = (req, res, next) => {
   Post.find({ user: res.locals.user.sub })
     .select("-like")
     .exec((err, result) => {
+      console.log(result);
       if (err) return res.status(500).json({ msg: err.message });
       else {
         return res.status(200).json(result);
@@ -35,6 +36,8 @@ exports.myposts_post = [
     });
   },
   (req, res, next) => {
+    console.log(req.file);
+    console.log(req.body);
     if (req.body.content_text == "" && req.file == undefined) {
       return res
         .status(400)
@@ -76,6 +79,7 @@ exports.myposts_post = [
         save_comment: (cb) => comment.save(cb),
       },
       (err, result) => {
+        console.log(result);
         if (err) return res.status(500).json({ msg: err.message });
         else {
           //delete image file from the disk since it has been already saved on the server

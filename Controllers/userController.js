@@ -106,3 +106,7 @@ exports.user_delete = (req, res, next) => {
     }
   );
 };
+
+exports.isUserAuth = (req, res, next) => {
+  return res.status(200).json({ msg: "user is authenticated" });
+};

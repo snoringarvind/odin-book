@@ -1,44 +1,55 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
+import { Redirect, useHistory } from "react-router-dom";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 
 const Login = () => {
-  const { serverUrl } = useContext(OdinBookContext);
+  const { axios_request, isAuthValue } = useContext(OdinBookContext);
   const [state, setState] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState([]);
   const [error, setError] = useState("");
   const [postLoading, setPostLoading] = useState(false);
 
-  const axios_login = async (e) => {
-    e.preventDefault();
+  const [isAuth, setIsAuth] = isAuthValue;
+
+  const login_route = "/login";
+  const login_method = "POST";
+
+  const axios_login = async () => {
     setPostLoading(true);
-    try {
-      const response = await axios({
-        method: "POST",
-        url: `${serverUrl}/login`,
-        data: state,
-      });
-      localStorage.setItem("jwtData", JSON.stringify(response.data.jwtData));
-      setPostLoading(false);
-    } catch (err) {
+
+    const cb_error = (err) => {
       if (err.response) {
-        //if 404 or post-validation errors
-        console.log("setErrors=", err.response.data);
         setErrors(err.response.data);
       } else {
-        //if couldn't connect to server and cannot get any reponse
-        console.log("setError=", err.message);
         setError(err.message);
       }
       setPostLoading(false);
-    }
+    };
+
+    const cb_response = (response) => {
+      localStorage.setItem("jwtData", JSON.stringify(response.data.jwtData));
+
+      setPostLoading(false);
+      setIsAuth(true);
+    };
+
+    axios_request({
+      route: login_route,
+      data: state,
+      method: login_method,
+      axios_error: cb_error,
+      axios_response: cb_response,
+    });
   };
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
   };
+
+  const history = useHistory();
 
   const display_errors = () => {
     let arr = [];
@@ -83,10 +94,10 @@ const Login = () => {
           <div className="login-btn">
             <button
               onClick={(e) => {
+                e.preventDefault();
                 if (!postLoading) {
-                  return axios_login(e);
+                  return axios_login();
                 } else {
-                  e.preventDefault();
                   return;
                 }
               }}
@@ -96,6 +107,7 @@ const Login = () => {
           </div>
         </form>
       )}
+      {!error && isAuth && <Redirect to="/posts" />}
     </div>
   );
 };

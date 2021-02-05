@@ -15,20 +15,21 @@ exports.myProfile_get = (req, res, next) => {
 };
 
 exports.myProfile_post = [
-  body("fname").escape(),
-  body("lname").escape(),
-  body("profilePhoto").escape(),
-  body("bannerPhoto").escape(),
-  body("bio").escape(),
-  body("nickname").escape(),
-  body("school").escape(),
-  body("college").escape(),
-  body("working").escape(),
-  body("relationshipStatus").escape(),
+  body("fname").trim().escape(),
+  body("lname").trim().escape(),
+  // body("profilePhoto").escape(),
+  // body("bannerPhoto").escape(),
+  body("bio").trim().escape(),
+  body("nickname").trim().escape(),
+  body("school").trim().escape(),
+  body("college").trim().escape(),
+  body("working").trim().escape(),
+  body("relationshipStatus").trim().escape(),
   body("books").escape(),
   body("food").escape(),
-  body("contact").escape(),
-  body("gender").escape(),
+  body("phone").trim().escape(),
+  body("email").trim().escape(),
+  body("gender").trim().escape(),
   //*toDate to cast date string to proper Javascript type.
   //*checkFaly:true accepts date or null string
   //*is08601 is the date format
@@ -37,106 +38,108 @@ exports.myProfile_post = [
     .isISO8601()
     .withMessage("you have entered an invalid date.")
     .toDate(),
-  (req, res, next) => {
-    const errors = validationResult(req);
+  //! commenting out unitl s3bucket is figured out.
+  // (req, res, next) => {
+  //   const errors = validationResult(req);
 
-    //since we are not validating if the user has read the file, we can put errors message here
-    if (!errors.isEmpty()) {
-      return res.status(500).json({ msg: err.message });
-    }
+  //   //since we are not validating if the user has read the file, we can put errors message here
+  //   if (!errors.isEmpty()) {
+  //     return res.status(500).json({ msg: err.message });
+  //   }
 
-    const upload = multer({ dest: "upload-images/" }).fields([
-      { name: "bannerPhoto" },
-      { name: "profilePhoto" },
-    ]);
+  //   const upload = multer({ dest: "upload-images/" }).fields([
+  //     { name: "bannerPhoto" },
+  //     { name: "profilePhoto" },
+  //   ]);
 
-    upload(req, res, (err) => {
-      if (err instanceof multer.MulterError) {
-        return res.status(500).json({ msg: err });
-      } else if (err) {
-        return res.status(500).json({ msg: err });
-      } else {
-        console.log("1", req.files);
-        return next();
-      }
-    });
-  },
+  //   upload(req, res, (err) => {
+  //     if (err instanceof multer.MulterError) {
+  //       return res.status(500).json({ msg: err });
+  //     } else if (err) {
+  //       return res.status(500).json({ msg: err });
+  //     } else {
+  //       console.log("1", req.files);
+  //       return next();
+  //     }
+  //   });
+  // },
 
+  //!
   //we are doing this in a separate middle-ware cause async.parallel is an ascynchronous event
-  (req, res, next) => {
-    if (req.files) {
-      async.parallel(
-        {
-          profile_photo_data: (cb) => {
-            if (req.files.profilePhoto) {
-              fs.readFile(req.files.profilePhoto[0].path, cb);
-            }
-          },
-          banner_photo_data: (cb) => {
-            if (req.files.bannerPhoto) {
-              fs.readFile(req.files.bannerPhoto[0].path, cb);
-            }
-          },
-        },
-        (err, result) => {
-          if (err) return res.status(500).json({ msg: err.message });
-          else {
-            console.log(result);
-            if (req.files.profilePhoto) {
-              res.locals.profile_photo_data = result.profile_photo_data;
-              res.locals.profile_photo_mimetype =
-                req.files.profilePhoto[0].mimetype;
-            }
-            if (req.files.bannerPhoto) {
-              res.locals.banner_photo_data = result.banner_photo_data;
-              res.locals.banner_photo_mimetype =
-                req.files.bannerPhoto[0].mimetype;
-            }
-            return next();
-          }
-        }
-      );
-    } else {
-      return next();
-    }
-  },
+  // (req, res, next) => {
+  //   if (req.files) {
+  //     async.parallel(
+  //       {
+  //         profile_photo_data: (cb) => {
+  //           if (req.files.profilePhoto) {
+  //             fs.readFile(req.files.profilePhoto[0].path, cb);
+  //           }
+  //         },
+  //         banner_photo_data: (cb) => {
+  //           if (req.files.bannerPhoto) {
+  //             fs.readFile(req.files.bannerPhoto[0].path, cb);
+  //           }
+  //         },
+  //       },
+  //       (err, result) => {
+  //         if (err) return res.status(500).json({ msg: err.message });
+  //         else {
+  //           console.log(result);
+  //           if (req.files.profilePhoto) {
+  //             res.locals.profile_photo_data = result.profile_photo_data;
+  //             res.locals.profile_photo_mimetype =
+  //               req.files.profilePhoto[0].mimetype;
+  //           }
+  //           if (req.files.bannerPhoto) {
+  //             res.locals.banner_photo_data = result.banner_photo_data;
+  //             res.locals.banner_photo_mimetype =
+  //               req.files.bannerPhoto[0].mimetype;
+  //           }
+  //           return next();
+  //         }
+  //       }
+  //     );
+  //   } else {
+  //     return next();
+  //   }
+  // },
 
   (req, res, next) => {
     //delete the files from the system once after reading.
-    if (req.files) {
-      async.parallel(
-        {
-          empty_profile_disk: (cb) => {
-            if (req.files.profilePhoto) {
-              fs.unlink(req.files.profilePhoto[0].path, cb);
-            }
-          },
+    // if (req.files) {
+    //   async.parallel(
+    //     {
+    //       empty_profile_disk: (cb) => {
+    //         if (req.files.profilePhoto) {
+    //           fs.unlink(req.files.profilePhoto[0].path, cb);
+    //         }
+    //       },
 
-          empty_banner_disk: (cb) => {
-            if (req.files.bannerPhoto) {
-              fs.unlink(req.files.bannerPhoto[0].path, cb);
-            }
-          },
-        },
-        (err) => {
-          if (err) {
-            return res.status(500).json({ msg: err.message });
-          }
-        }
-      );
-    }
+    //       empty_banner_disk: (cb) => {
+    //         if (req.files.bannerPhoto) {
+    //           fs.unlink(req.files.bannerPhoto[0].path, cb);
+    //         }
+    //       },
+    //     },
+    //     (err) => {
+    //       if (err) {
+    //         return res.status(500).json({ msg: err.message });
+    //       }
+    //     }
+    //   );
+    // }
 
     const profile = {
       fname: req.body.fname,
       lname: req.body.lname,
-      profilePhoto: {
-        data: res.locals.profile_photo_data,
-        contentType: res.locals.profile_photo_mimetype,
-      },
-      bannerPhoto: {
-        data: res.locals.banner_photo_data,
-        contentType: res.locals.banner_photo_mimetype,
-      },
+      // profilePhoto: {
+      //   data: res.locals.profile_photo_data,
+      //   contentType: res.locals.profile_photo_mimetype,
+      // },
+      // bannerPhoto: {
+      //   data: res.locals.banner_photo_data,
+      //   contentType: res.locals.banner_photo_mimetype,
+      // },
       bio: req.body.bio,
       nickName: req.body.nickName,
       school: req.body.school,
@@ -145,7 +148,8 @@ exports.myProfile_post = [
       relationshipStatus: req.body.relationshipStatus,
       book: req.body.book,
       food: req.body.food,
-      contact: req.body.contact,
+      phone: req.body.phone,
+      email: req.body.email,
       gender: req.body.gender,
       dob: req.body.dob,
 

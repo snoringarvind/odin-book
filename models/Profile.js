@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const ProfileSchema = mongoose.Schema({
   fname: { type: String },
   lname: { type: String },
-  profilePhoto: { data: Buffer, contentType: String },
-  bannerPhoto: { data: Buffer, contentType: String },
+  // profilePhoto: { data: Buffer, contentType: String },
+  // bannerPhoto: { data: Buffer, contentType: String },
   bio: { type: String },
   nickName: { type: String },
   school: { type: String },
@@ -14,7 +14,8 @@ const ProfileSchema = mongoose.Schema({
   relationshipStatus: { type: String },
   book: { type: String },
   food: { type: String },
-  contact: { type: String },
+  phone: { type: String },
+  email: { type: String },
   gender: { type: String },
   dob: { type: Date },
 

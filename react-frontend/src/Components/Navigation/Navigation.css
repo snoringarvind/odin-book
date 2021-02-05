@@ -1,0 +1,22 @@
+.Navigation {
+  display: flex;
+  justify-content: space-around;
+  background-color: blue;
+}
+
+.Navigation .nav-links {
+  flex-basis: 33.33%;
+}
+.Navigation .nav-links a {
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  height: 7vh;
+
+  justify-content: center;
+}
+
+.Navigation .nav-links.active a {
+  background-color: black;
+}

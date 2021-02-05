@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 const OdinBookContext = createContext();
 
@@ -7,54 +7,91 @@ const OdinBookProvider = ({ children }) => {
   // ex. http://localhost:3000/odinbook
   const [serverUrl] = useState("http://localhost:3000/odinbook");
 
-  //global isAuth for get-routes
-  const axios_GET = async (route, error, response) => {
-    const token = JSON.parse(localStorage.getItem("jwtData")).token;
-    console.log(token);
-    if (token) {
-      try {
-        const headers = { authorization: `Bearer ${token}` };
-        const response_data = await axios({
-          url: `${serverUrl}${route}`,
-          method: "GET",
-          headers: headers,
-        });
-        response(response_data);
-      } catch (err) {
-        error(err);
-      }
-    }
-  };
+  const [isAuth, setIsAuth] = useState(null);
 
-  const axios_POST = async (route, data, axios_error, axios_response) => {
-    const token = JSON.parse(localStorage.getItem("jwtData")).token;
-    console.log(token);
-    if (token) {
+  const [loading, setLoading] = useState(true);
+
+  //global isAuth for route requests
+  const axios_request = async ({
+    route,
+    data,
+    method,
+    axios_error,
+    axios_response,
+  }) => {
+    const jwtData = JSON.parse(localStorage.getItem("jwtData"));
+    console.log(route);
+
+    if (jwtData !== null || route === "/login") {
       try {
-        const headers = { authorization: `Bearer ${token}` };
+        let token;
+        let headers;
+        if (route !== "/login") {
+          token = jwtData.token;
+          headers = { authorization: `Bearer ${token}` };
+        }
+
         const response_data = await axios({
           url: `${serverUrl}${route}`,
-          method: "POST",
-          headers: headers,
+          method: method,
+          headers: headers || "",
           data: data,
         });
         axios_response(response_data);
       } catch (err) {
-        console.log(err.response.data);
+        console.log(err.message);
         axios_error(err);
       }
     }
   };
 
+  const check_if_user_isAuthenticated = async () => {
+    const jwtData = JSON.parse(localStorage.getItem("jwtData"));
+
+    if (jwtData !== null) {
+      try {
+        let token;
+        let headers;
+        token = jwtData.token;
+        headers = { authorization: `Bearer ${token}` };
+
+        await axios({
+          url: `${serverUrl}/isUserAuth`,
+          method: "POST",
+          headers: headers || "",
+        });
+        setIsAuth(true);
+        setLoading(false);
+      } catch (err) {
+        if (err.response) {
+          console.log(err.response.data);
+        } else {
+          console.log(err.message);
+        }
+        setIsAuth(false);
+        setLoading(false);
+      }
+    } else {
+      setIsAuth(false);
+      setLoading(false);
+    }
+
+    console.log(isAuth);
+  };
+
+  useEffect(() => {
+    check_if_user_isAuthenticated();
+  }, []);
+
   return (
     <OdinBookContext.Provider
       value={{
-        serverUrl: serverUrl,
-        axios_GET: axios_GET,
-        axios_POST: axios_POST,
+        axios_request: axios_request,
+        isAuthValue: [isAuth, setIsAuth],
       }}
     >
-      {children}
+      {loading && "loading...."}
+      {!loading && children}
     </OdinBookContext.Provider>
   );
 };

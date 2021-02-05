@@ -124,4 +124,6 @@ router.delete("/user/:userid", utils.verifyJwt, userController.user_delete);
 //login
 router.post("/login", loginController.login_post);
 
+router.post("/isUserAuth", utils.verifyJwt, userController.isUserAuth);
+
 module.exports = router;

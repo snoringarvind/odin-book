@@ -7,8 +7,6 @@ const OdinBookProvider = ({ children }) => {
   // ex. http://localhost:3000/odinbook
   const [serverUrl] = useState("http://localhost:3000/odinbook");
 
-  const [isAuth, setIsAuth] = useState(null);
-
   const [loading, setLoading] = useState(true);
 
   //global isAuth for route requests
@@ -45,49 +43,10 @@ const OdinBookProvider = ({ children }) => {
     }
   };
 
-  const check_if_user_isAuthenticated = async () => {
-    const jwtData = JSON.parse(localStorage.getItem("jwtData"));
-
-    if (jwtData !== null) {
-      try {
-        let token;
-        let headers;
-        token = jwtData.token;
-        headers = { authorization: `Bearer ${token}` };
-
-        await axios({
-          url: `${serverUrl}/isUserAuth`,
-          method: "POST",
-          headers: headers || "",
-        });
-        setIsAuth(true);
-        setLoading(false);
-      } catch (err) {
-        if (err.response) {
-          console.log(err.response.data);
-        } else {
-          console.log(err.message);
-        }
-        setIsAuth(false);
-        setLoading(false);
-      }
-    } else {
-      setIsAuth(false);
-      setLoading(false);
-    }
-
-    console.log(isAuth);
-  };
-
-  useEffect(() => {
-    check_if_user_isAuthenticated();
-  }, []);
-
   return (
     <OdinBookContext.Provider
       value={{
         axios_request: axios_request,
-        isAuthValue: [isAuth, setIsAuth],
       }}
     >
       {loading && "loading...."}

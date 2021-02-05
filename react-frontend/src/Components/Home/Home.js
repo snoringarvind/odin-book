@@ -19,60 +19,50 @@ const Home = () => {
   let location = useLocation();
   let background = location.state && location.state.background;
 
-  const { isAuthValue } = useContext(OdinBookContext);
-  const [isAuth, setIsAuth] = isAuthValue;
-
-  console.log(isAuth);
   return (
     <div className="Home">
       <AuthButton />
 
-      {isAuth && (
-        <div className="Navigation">
-          <Navigation to="/posts" label="Posts" />
-          <Navigation to="/friends" label="Friends" />
-          <Navigation to="/account" label="Account" />
-          <Navigation to="/logout" label="Logout" />
-        </div>
-      )}
+      <div className="Navigation">
+        <Navigation to="/posts" label="Posts" />
+        <Navigation to="/friends" label="Friends" />
+        <Navigation to="/account" label="Account" />
+        {/* <Navigation to="/logout" label="Logout" /> */}
+      </div>
 
       <Switch location={background || location}>
-        {isAuth ? (
-          <>
-            <Route path="/myposts">
-              <MyPostList />
-            </Route>
-            <Route path="/mypost/update/:id">
-              <MyPostUpdate />
-            </Route>
-            <Route exact path="/mypost/:id">
-              <MyPostDetail />
-            </Route>
-            <Route path="/create-post">
-              <MyPostCreate />
-            </Route>
-            <Route path="/post/:id">
-              <PostDetail />
-            </Route>
-            <Route path="/posts">
-              <PostList />
-            </Route>
-            <Route path="/logout">
-              <Logout />
-            </Route>
-          </>
-        ) : (
-          <Route path="/login">
-            <Login />
+        <>
+          <Route path="/myposts">
+            <MyPostList />
           </Route>
-        )}
+          <Route path="/mypost/update/:id">
+            <MyPostUpdate />
+          </Route>
+          <Route exact path="/mypost/:id">
+            <MyPostDetail />
+          </Route>
+          <Route path="/create-post">
+            <MyPostCreate />
+          </Route>
+          <Route path="/post/:id">
+            <PostDetail />
+          </Route>
+          <Route path="/posts">
+            <PostList />
+          </Route>
+          <Route path="/logout">
+            <Logout />
+          </Route>
+        </>
+
+        {/* <Route path="/login">
+            <Login />
+          </Route> */}
       </Switch>
 
-      {isAuth && background && (
-        <Route path="/mypost/delete/:id">
-          <MyPostDelete />
-        </Route>
-      )}
+      <Route path="/mypost/delete/:id">
+        <MyPostDelete />
+      </Route>
     </div>
   );
 };

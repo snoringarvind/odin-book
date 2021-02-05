@@ -3,8 +3,6 @@ import { Redirect } from "react-router-dom";
 import { OdinBookContext } from "./Context";
 
 const Logout = () => {
-  // const { isAuthValue } = useContext(OdinBookContext);
-
   return (
     <div className="Logout">
       {localStorage.clear()}

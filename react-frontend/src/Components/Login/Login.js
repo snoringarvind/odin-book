@@ -5,13 +5,11 @@ import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 
 const Login = () => {
-  const { axios_request, isAuthValue } = useContext(OdinBookContext);
+  const { axios_request } = useContext(OdinBookContext);
   const [state, setState] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState([]);
   const [error, setError] = useState("");
   const [postLoading, setPostLoading] = useState(false);
-
-  const [isAuth, setIsAuth] = isAuthValue;
 
   const login_route = "/login";
   const login_method = "POST";
@@ -32,7 +30,6 @@ const Login = () => {
       localStorage.setItem("jwtData", JSON.stringify(response.data.jwtData));
 
       setPostLoading(false);
-      setIsAuth(true);
     };
 
     axios_request({
@@ -107,7 +104,6 @@ const Login = () => {
           </div>
         </form>
       )}
-      {!error && isAuth && <Redirect to="/posts" />}
     </div>
   );
 };

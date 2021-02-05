@@ -1,5 +1,4 @@
-import React, { useContext } from "react";
-import Login from "../Login/Login";
+import React from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
 import MyPostUpdate from "../MyPosts/MyPostUpdate";
 import MyPostList from "../MyPosts/MyPostList";
@@ -10,9 +9,7 @@ import PostList from "../Posts/PostList";
 import PostDetail from "../Posts/PostDetail";
 import "./Home.css";
 import Navigation from "../Navigation/Navigation";
-import Logout from "../Logout";
-import axios from "axios";
-import { OdinBookContext } from "../Context";
+
 import AuthButton from "../AuthButton";
 
 const Home = () => {
@@ -27,7 +24,6 @@ const Home = () => {
         <Navigation to="/posts" label="Posts" />
         <Navigation to="/friends" label="Friends" />
         <Navigation to="/account" label="Account" />
-        {/* <Navigation to="/logout" label="Logout" /> */}
       </div>
 
       <Switch location={background || location}>
@@ -50,14 +46,7 @@ const Home = () => {
           <Route path="/posts">
             <PostList />
           </Route>
-          <Route path="/logout">
-            <Logout />
-          </Route>
         </>
-
-        {/* <Route path="/login">
-            <Login />
-          </Route> */}
       </Switch>
 
       <Route path="/mypost/delete/:id">

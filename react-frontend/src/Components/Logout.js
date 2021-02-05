@@ -1,6 +1,4 @@
-import React, { useContext, useEffect } from "react";
-import { Redirect } from "react-router-dom";
-import { OdinBookContext } from "./Context";
+import React from "react";
 
 const Logout = () => {
   return (

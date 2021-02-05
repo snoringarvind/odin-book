@@ -1,13 +1,11 @@
 import axios from "axios";
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
 
 const OdinBookContext = createContext();
 
 const OdinBookProvider = ({ children }) => {
   // ex. http://localhost:3000/odinbook
   const [serverUrl] = useState("http://localhost:3000/odinbook");
-
-  const [loading, setLoading] = useState(true);
 
   //global isAuth for route requests
   const axios_request = async ({
@@ -49,8 +47,7 @@ const OdinBookProvider = ({ children }) => {
         axios_request: axios_request,
       }}
     >
-      {loading && "loading...."}
-      {!loading && children}
+      {children}
     </OdinBookContext.Provider>
   );
 };

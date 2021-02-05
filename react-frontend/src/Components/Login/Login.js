@@ -1,6 +1,4 @@
 import React, { useContext, useState } from "react";
-import axios from "axios";
-import { Redirect, useHistory } from "react-router-dom";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 
@@ -45,8 +43,6 @@ const Login = () => {
     const { name, value } = e.target;
     setState({ ...state, [name]: value });
   };
-
-  const history = useHistory();
 
   const display_errors = () => {
     let arr = [];

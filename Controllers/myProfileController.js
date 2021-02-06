@@ -3,7 +3,6 @@ const { body, validationResult } = require("express-validator");
 const fs = require("fs");
 const multer = require("multer");
 const async = require("async");
-const { RequestTimeout } = require("http-errors");
 
 exports.myProfile_get = (req, res, next) => {
   Profile.findOne({ user: res.locals.user.sub }, (err, result) => {
@@ -15,8 +14,16 @@ exports.myProfile_get = (req, res, next) => {
 };
 
 exports.myProfile_post = [
-  body("fname").trim().escape(),
-  body("lname").trim().escape(),
+  body("fname")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("First name cannot be empty")
+    .escape(),
+  body("lname")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("Last message cannot be empty")
+    .escape(),
   // body("profilePhoto").escape(),
   // body("bannerPhoto").escape(),
   body("bio").trim().escape(),

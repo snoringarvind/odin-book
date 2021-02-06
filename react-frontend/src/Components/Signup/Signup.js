@@ -2,19 +2,24 @@ import React, { useContext, useState } from "react";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 
-const Login = () => {
+const Signup = () => {
   const { axios_request } = useContext(OdinBookContext);
-  const [state, setState] = useState({ username: "", password: "" });
-  const [errors, setErrors] = useState([]);
+
   const [error, setError] = useState("");
+  const [errors, setErrors] = useState([]);
   const [postLoading, setPostLoading] = useState(false);
 
-  const login_route = "/login";
-  const login_method = "POST";
+  const [state, setState] = useState({
+    fname: "",
+    lname: "",
+    username: "",
+    password: "",
+  });
+  const signup_route = "/signup";
+  const signup_method = "POST";
 
-  const axios_login = async () => {
+  const axios_signup = () => {
     setPostLoading(true);
-
     const cb_error = (err) => {
       if (err.response) {
         setErrors(err.response.data);
@@ -25,14 +30,15 @@ const Login = () => {
     };
 
     const cb_response = (response) => {
-      localStorage.setItem("jwtData", JSON.stringify(response.data.jwtData));
       setPostLoading(false);
+      setErrors([]);
+      setError("");
     };
 
     axios_request({
-      route: login_route,
+      route: signup_route,
       data: state,
-      method: login_method,
+      method: signup_method,
       axios_error: cb_error,
       axios_response: cb_response,
     });
@@ -58,10 +64,32 @@ const Login = () => {
   };
 
   return (
-    <div className="Login">
+    <div className="Signup">
       {error && <div className="error">{error}</div>}
       {!error && (
         <form>
+          <div className="form-group">
+            <label htmlFor="fname">First Name:</label>
+            <input
+              type="text"
+              name="fname"
+              id="fname"
+              placeholder="Enter your First Name"
+              onChange={changeHandler}
+              value={state.fname}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="lname">Last Name:</label>
+            <input
+              type="text"
+              name="lname"
+              id="lname"
+              placeholder="Enter your Last Name"
+              onChange={changeHandler}
+              value={state.lname}
+            />
+          </div>
           <div className="form-group">
             <label htmlFor="username">Username:</label>
             <input
@@ -90,13 +118,13 @@ const Login = () => {
               onClick={(e) => {
                 e.preventDefault();
                 if (!postLoading) {
-                  return axios_login();
+                  return axios_signup();
                 } else {
                   return;
                 }
               }}
             >
-              {postLoading ? "Logging-in" : "Log-in"}
+              {postLoading ? "signing-in" : "Sign-up"}
             </button>
           </div>
         </form>
@@ -105,4 +133,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

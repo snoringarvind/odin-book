@@ -19,18 +19,21 @@ exports.login_post = [
     if (!errors.isEmpty()) {
       return res.status(400).json(errors.array());
     } else {
-      User.findOne({ username: req.body.username }, async (err, result) => {
-        if (err) return res.status(500).json({ msg: err.message });
-        if (result == null) {
-          return res
-            .status(401)
-            .json({ msg: "no such user with this username" });
-        } else {
-          res.locals.hashPassword = result.password;
-          res.locals.user = result;
-          next();
+      User.findOne(
+        { username: "@" + req.body.username },
+        async (err, result) => {
+          if (err) return res.status(500).json({ msg: err.message });
+          if (result == null) {
+            return res
+              .status(401)
+              .json({ msg: "no such user with this username" });
+          } else {
+            res.locals.hashPassword = result.password;
+            res.locals.user = result;
+            next();
+          }
         }
-      });
+      );
     }
   },
   utils.decodeHash,

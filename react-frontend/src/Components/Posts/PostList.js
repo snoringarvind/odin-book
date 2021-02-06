@@ -7,7 +7,7 @@ const PostList = () => {
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(true);
 
-  const [post, setPost] = useState("");
+  const [posts, setPosts] = useState("");
 
   const post_list_route = "/posts";
   const post_list_method = "GET";
@@ -23,8 +23,9 @@ const PostList = () => {
     };
 
     const cb_response = (response) => {
-      setPost(response.data);
+      setPosts(response.data);
       setGetLoading(false);
+      console.log(response.data);
     };
 
     axios_request({
@@ -36,19 +37,23 @@ const PostList = () => {
     });
   };
 
-  const display_post = () => {
-    return (
-      <>
-        <div className="title">{post.title}</div>
-        <div className="content_text">{post.content_text}</div>
-      </>
-    );
+  const display_posts = () => {
+    let arr = [];
+    for (let i = 0; i < posts.length; i++) {
+      arr.push(
+        <div className="card">
+          <div className="title">{posts[i].title}</div>
+          <div className="content_text">{posts[i].content_text}</div>
+        </div>
+      );
+    }
   };
+
   return (
     <div className="PostList">
       {getLoading && "loading..."}
       {!getLoading && (
-        <>{error ? <div className="error">{error}</div> : display_post()}</>
+        <>{error ? <div className="error">{error}</div> : display_posts()}</>
       )}
     </div>
   );

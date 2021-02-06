@@ -7,6 +7,12 @@ const OdinBookProvider = ({ children }) => {
   // ex. http://localhost:3000/odinbook
   const [serverUrl] = useState("http://localhost:3000/odinbook");
 
+  //to render the searchresult page if the user hits enter
+  const [searchValueChange, setSearchValueChange] = useState(false);
+
+  //to prefill the search bar if there is a value in the url
+  const [searchBarState, setSearchBarState] = useState({ search: "" });
+
   //global isAuth for route requests
   const axios_request = async ({
     route,
@@ -15,18 +21,23 @@ const OdinBookProvider = ({ children }) => {
     axios_error,
     axios_response,
   }) => {
-    const jwtData = JSON.parse(localStorage.getItem("jwtData"));
     console.log(route);
+    const jwtData = JSON.parse(localStorage.getItem("jwtData"));
 
-    if (jwtData !== null || route === "/login") {
+    console.log(jwtData);
+    if (jwtData !== null || route === "/login" || route === "/signup") {
+      console.log("helllo");
       try {
         let token;
         let headers;
-        if (route !== "/login") {
+        if (route !== "/login" && route !== "/signup") {
           token = jwtData.token;
           headers = { authorization: `Bearer ${token}` };
         }
 
+        console.log(data);
+        console.log(method);
+        console.log(route);
         const response_data = await axios({
           url: `${serverUrl}${route}`,
           method: method,
@@ -35,9 +46,15 @@ const OdinBookProvider = ({ children }) => {
         });
         axios_response(response_data);
       } catch (err) {
-        console.log(err.message);
+        if (err.response) {
+          console.log("Context Error", err.response.data);
+        } else {
+          console.log("Context Error", err.message);
+        }
         axios_error(err);
       }
+    } else {
+      console.log("Context Error= NO JWT TOKEN");
     }
   };
 
@@ -45,6 +62,8 @@ const OdinBookProvider = ({ children }) => {
     <OdinBookContext.Provider
       value={{
         axios_request: axios_request,
+        searchValue: [searchValueChange, setSearchValueChange],
+        searchBarStateValue: [searchBarState, setSearchBarState],
       }}
     >
       {children}

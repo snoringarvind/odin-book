@@ -15,10 +15,13 @@ const utils = require("../lib/utils");
 // posts
 //*home page, newsfeed, post list
 //* show only friends posts , not all posts from the database
-router.get("/posts", utils.verifyJwt, postsController.posts_list_get);
+router.get("/news-feed", utils.verifyJwt, postsController.newsfeed);
 
-//* post-detail/ also show comments
-router.get("/post/:postid", utils.verifyJwt, postsController.post_detail_get);
+// * post-detail/ also show comments
+// router.get("/post/:postid", utils.verifyJwt, postsController.post_detail_get);
+
+//* show user's post
+router.get("/post/userid", utils.verifyJwt, postsController.post_list_get);
 
 //comment
 //*Get comment
@@ -114,7 +117,13 @@ router.get(
 
 //user
 //*creating a new user
-router.post("/user", userController.user_post);
+router.post("/signup", userController.user_signup);
+
+//get user-search-list
+router.get("/user/search/:name", userController.user_get_search_list);
+
+//get user-detail
+router.get("/user/:userid", userController.user_get_detail);
 
 //*no need to create a new route to update the user details, since you are alreay doing it in the profile PUT route above
 

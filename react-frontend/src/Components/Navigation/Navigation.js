@@ -5,8 +5,17 @@ import "./Navigation.css";
 const Navigation = ({ to, label }) => {
   // console.log(to);
   // console.log(label);
-  const match = useRouteMatch({ path: to });
+  let match = useRouteMatch({ path: to });
 
+  if (match != null) {
+    match = match.isExact ? true : false;
+  } else {
+    match = false;
+  }
+
+  console.log(to);
+  // console.log(match, label, to);
+  // console.log(match, label);
   return (
     <div className={match ? "active nav-links" : "nav-links"}>
       <Link to={to}>{label}</Link>

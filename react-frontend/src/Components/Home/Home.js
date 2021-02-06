@@ -7,10 +7,14 @@ import MyPostDetail from "../MyPosts/MyPostDetail";
 import MyPostDelete from "../MyPosts/MyPostDelete";
 import PostList from "../Posts/PostList";
 import PostDetail from "../Posts/PostDetail";
-import "./Home.css";
 import Navigation from "../Navigation/Navigation";
-
-import AuthButton from "../AuthButton";
+import Login from "../Login/Login";
+import Logout from "../Logout";
+import Signup from "../Signup/Signup";
+import "./Home.css";
+import SearchBar from "../Search/SearchBar";
+import SearchResult from "../Search/SearchResult";
+import UserDetail from "../UserDetail/UserDetail";
 
 const Home = () => {
   let location = useLocation();
@@ -18,38 +22,62 @@ const Home = () => {
 
   return (
     <div className="Home">
-      <AuthButton />
-
       <div className="Navigation">
-        <Navigation to="/posts" label="Posts" />
+        <Navigation to="/" label="NewsFeed" />
         <Navigation to="/friends" label="Friends" />
         <Navigation to="/account" label="Account" />
+        <SearchBar />
       </div>
 
       <Switch location={background || location}>
-        <>
-          <Route path="/myposts">
-            <MyPostList />
-          </Route>
-          <Route path="/mypost/update/:id">
-            <MyPostUpdate />
-          </Route>
-          <Route exact path="/mypost/:id">
-            <MyPostDetail />
-          </Route>
-          <Route path="/create-post">
-            <MyPostCreate />
-          </Route>
-          <Route path="/post/:id">
-            <PostDetail />
-          </Route>
-          <Route path="/posts">
-            <PostList />
-          </Route>
-        </>
+        <Route exact path="/">
+          <PostList />
+        </Route>
+        {/* user's friends */}
+        <Route path="/user/:username">
+          <UserDetail />
+        </Route>
+        <Route path="/user/:username/:">
+          <UserDetail />
+        </Route>
+        <Route path="/myposts">
+          <MyPostList />
+        </Route>
+        <Route path="/update-post/:mypostid">
+          <MyPostUpdate />
+        </Route>
+        <Route exact path="/mypost/:mypostid">
+          <MyPostDetail />
+        </Route>
+        <Route path="/create-post">
+          <MyPostCreate />
+        </Route>
+        <Route path="/news-feed/:postid">
+          <PostDetail />
+        </Route>
+        <Route path="/login">
+          <Login />
+        </Route>
+        <Route path="/logout">
+          <Logout />
+        </Route>
+        <Route path="/signup">
+          <Signup />
+        </Route>
+
+        <Route exact path="/friends">
+          my-Friends
+        </Route>
+        <Route exact path="/account">
+          my-Account
+        </Route>
+        {/* &&&&&& */}
+        <Route path="/search/:name">
+          <SearchResult />
+        </Route>
       </Switch>
 
-      <Route path="/mypost/delete/:id">
+      <Route path="/delete-post/mypost:id">
         <MyPostDelete />
       </Route>
     </div>

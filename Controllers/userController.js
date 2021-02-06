@@ -8,7 +8,17 @@ const utils = require("../lib/utils");
 const { body, validationResult } = require("express-validator");
 
 //signup page
-exports.user_post = [
+exports.user_signup = [
+  body("fname")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("First name cannot be empty")
+    .escape(),
+  body("lname")
+    .trim()
+    .isLength({ min: 1 })
+    .withMessage("Last name cannot be empty")
+    .escape(),
   body("username")
     .trim()
     .isLength({ min: 4 })
@@ -24,65 +34,72 @@ exports.user_post = [
     .withMessage("password is too large")
     .escape(),
 
+  (req, res, next) => {
+    console.log(req.body);
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return res.status(400).json(errors.array());
+    } else {
+      return next();
+    }
+  },
+
   utils.hashPassword,
 
   (req, res, next) => {
     const user = new User({
-      username: req.body.username,
+      fname: req.body.fname,
+      lname: req.body.lname,
+      username: "@" + req.body.username,
       password: res.locals.hashPassword,
       friend: [],
     });
 
-    const errors = validationResult(req);
+    User.findOne({ username: "@" + req.body.username }, (err, result) => {
+      if (err) return res.status(500).json({ msg: err.message });
+      else {
+        if (result != null) {
+          return res.status(403).json({ msg: "username taken" });
+        } else {
+          const profile = new Profile({
+            fname: req.body.fname,
+            lname: req.body.lname,
+            profilePhoto: "",
+            bannerPhoto: "",
+            bio: "",
+            nickName: "",
+            school: "",
+            college: "",
+            working: "",
+            relationshipStatus: "",
+            book: "",
+            food: "",
+            contact: "",
+            gender: "",
+            dob: "",
+            user: user._id,
+          });
 
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array(), user: user });
-    } else {
-      User.findOne({ username: req.body.username }, (err, result) => {
-        if (err) return res.status(500).json({ msg: err.message });
-        else {
-          if (result != null) {
-            return res.status(403).json({ msg: "username taken" });
-          } else {
-            const profile = new Profile({
-              fname: "",
-              lname: "",
-              profilePhoto: "",
-              bannerPhoto: "",
-              bio: "",
-              nickName: "",
-              school: "",
-              college: "",
-              working: "",
-              relationshipStatus: "",
-              book: "",
-              food: "",
-              contact: "",
-              gender: "",
-              dob: "",
-              user: user._id,
-            });
-
-            async.parallel(
-              {
-                saved_user: (cb) => user.save(cb),
-                saved_profile: (cb) => profile.save(cb),
-              },
-              (err, result) => {
-                console.log(result);
-                if (err) return res.status(500).json({ msg: err.message });
-                else {
-                  return res.status(200).json({
-                    new_user: result.saved_user._id,
-                    new_profile_model: result.saved_profile._id,
-                  });
-                }
+          async.parallel(
+            {
+              saved_user: (cb) => user.save(cb),
+              saved_profile: (cb) => profile.save(cb),
+            },
+            (err, result) => {
+              console.log(result);
+              if (err) return res.status(500).json({ msg: err.message });
+              else {
+                return res.status(200).json({
+                  new_user: result.saved_user._id,
+                  new_profile_model: result.saved_profile._id,
+                });
               }
-            );
-          }
+            }
+          );
         }
-      });
-    }
+      }
+    });
   },
 ];
 
@@ -106,6 +123,65 @@ exports.user_delete = (req, res, next) => {
     }
   );
 };
+
+exports.user_get_search_list = (req, res, next) => {
+  const x = req.params.name;
+  const y = x.split(" ");
+  let fname;
+  let lname;
+  if (y.length >= 2) {
+    fname = y[0];
+    lname = y[1];
+
+    User.find({ fname: fname, lname: lname })
+      .select("-password")
+      .exec((err, result) => {
+        if (err) return res.status(500).json({ msg: err.message });
+        else {
+          if (result.length == 0) {
+            return res.status(200).json([]);
+          } else {
+            return res.status(200).json(result);
+          }
+        }
+      });
+  } else if (y.length == 1) {
+    let fname = y[0];
+    console.log("hello");
+    console.log(fname);
+    const u = [...fname];
+    console.log(u);
+    if (u[0] === "@") {
+      User.findOne({ username: fname })
+        .select("-password")
+        .exec((err, result) => {
+          if (err) return res.status(500).json({ msg: err.message });
+          else {
+            if (result == null) {
+              return res.status(200).json([]);
+            } else {
+              return res.status(200).json(result);
+            }
+          }
+        });
+    } else {
+      User.find({ fname: fname })
+        .select("-password")
+        .exec((err, result) => {
+          if (err) return res.status(500).json({ msg: err.message });
+          else {
+            if (result.length == 0) {
+              return res.status(200).json([]);
+            } else {
+              return res.status(200).json(result);
+            }
+          }
+        });
+    }
+  }
+};
+
+exports.user_get_detail = (req, res, next) => {};
 
 exports.isUserAuth = (req, res, next) => {
   return res.status(200).json({ msg: "user is authenticated" });

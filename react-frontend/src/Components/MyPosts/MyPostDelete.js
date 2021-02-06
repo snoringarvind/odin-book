@@ -8,7 +8,7 @@ const MyPostDelete = () => {
   const params = useParams();
   console.log(params);
 
-  const mypost_delete_route = `/mypost/${params.id}`;
+  const mypost_delete_route = `/mypost/${params.mypostid}`;
   const mypost_delete_method = "DELETE";
 
   const [postLoading, setPostLoading] = useState(false);

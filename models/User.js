@@ -2,6 +2,9 @@ const connection = require("../config/database");
 const mongoose = require("mongoose");
 
 const UserSchema = mongoose.Schema({
+  fname: { type: String, required: true },
+  lname: { type: String, required: true },
+
   username: { type: String, required: true },
   password: { type: String, required: true },
   created_at: { type: Date, default: Date.now },

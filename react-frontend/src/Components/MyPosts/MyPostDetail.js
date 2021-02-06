@@ -13,7 +13,7 @@ const MyPostDetail = () => {
 
   const [post, setPost] = useState("");
 
-  const post_detail_route = `/post/${params.id}`;
+  const post_detail_route = `/post/${params.mypostid}`;
   const post_detail_method = `GET`;
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const MyPostDetail = () => {
         <div className="title">{post.title}</div>
         <div className="content_text">{post.content_text}</div>
         <div className="edit-btn">
-          <Link to={`/mypost/update/${post._id}`}>
+          <Link to={`/update-post/${post._id}`}>
             <button>Edit</button>
           </Link>
         </div>
@@ -57,7 +57,7 @@ const MyPostDetail = () => {
             replace
             key={post._id}
             to={{
-              pathname: `/mypost/delete/${post._id}`,
+              pathname: `/delete-post/${post._id}`,
               state: { background: location },
             }}
           >

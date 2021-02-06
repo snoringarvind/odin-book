@@ -1,0 +1,14 @@
+.UserDetail .user-banner {
+  height: 30vh;
+  width: 100%;
+  /* border: 1px solid; */
+  border-radius: 0 0 15px 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(247, 185, 255);
+  font-size: 2.5rem;
+  font-weight: 450;
+  text-shadow: 0.3px 0.3px 5px black;
+  background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+}

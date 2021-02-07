@@ -13,12 +13,14 @@ const Navigation = ({ to, label }) => {
     match = false;
   }
 
-  console.log(to);
+  // console.log(to);
   // console.log(match, label, to);
   // console.log(match, label);
   return (
     <div className={match ? "active nav-links" : "nav-links"}>
-      <Link to={to}>{label}</Link>
+      <Link to={to}>
+        <i className="fas">{label}</i>
+      </Link>
     </div>
   );
 };

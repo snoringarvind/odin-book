@@ -1,26 +1,72 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { OdinBookContext } from "../Context";
+import uniqid from "uniqid";
+import { Result } from "express-validator";
 
 const UserPost = () => {
   const { axios_request } = useContext(OdinBookContext);
   const [error, setError] = useState("");
-  const [getLoading, setGetLoading] = useState(false);
-  const [posts, setPosts] = useState([]);
+  const [getLoading, setGetLoading] = useState(true);
+  const [result, setResult] = useState([]);
 
-  const post_route = "/posts";
+  const location = useLocation();
+  const userid = location.state;
+  const post_list_route = `/post/${userid}`;
+  const post_list_method = "GET";
 
   const make_server_request = () => {
     const cb_error = (err) => {
       setError(err.mesage);
+      setGetLoading(false);
     };
     const cb_response = (response) => {
-      setPosts(response);
+      setResult(response.data);
+      setGetLoading(false);
     };
 
-    axios_request({});
+    axios_request({
+      route: post_list_route,
+      data: "",
+      method: post_list_method,
+      axios_error: cb_error,
+      axios_response: cb_response,
+    });
   };
 
-  return <div className="UserPost">UserPost</div>;
+  useEffect(() => {
+    make_server_request();
+  }, []);
+
+  const display_posts = () => {
+    let arr = [];
+    console.log(result.length);
+    if (result.length === 0) {
+      return <div className="empty">No posts to show.</div>;
+    } else {
+      for (let i = 0; i < result.length; i++) {
+        arr.push(
+          <div className="card" key={uniqid()}>
+            <div className="title-container">
+              <div className="title">{result[i].title}</div>
+              <div className="date">{result[i].created_at}</div>
+            </div>
+            <div className="content_text">{result[i].content_text}</div>
+            <div className="like">{result[i].like.length}</div>
+          </div>
+        );
+      }
+      return arr;
+    }
+  };
+
+  return (
+    <div className="UserPost">
+      {getLoading && "loading..."}
+      {!getLoading &&
+        (error ? <div className="error">{error}</div> : display_posts())}
+    </div>
+  );
 };
 
 export default UserPost;

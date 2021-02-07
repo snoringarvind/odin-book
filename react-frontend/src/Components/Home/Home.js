@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Switch, useLocation } from "react-router-dom";
 import MyPostUpdate from "../MyPosts/MyPostUpdate";
 import MyPostList from "../MyPosts/MyPostList";
@@ -15,18 +15,74 @@ import "./Home.css";
 import SearchBar from "../Search/SearchBar";
 import SearchResult from "../Search/SearchResult";
 import UserDetail from "../UserDetail/UserDetail";
+import Hamburger from "../MyPosts/Hamburger/Hamburger";
 
 const Home = () => {
   let location = useLocation();
   let background = location.state && location.state.background;
+  const [isClick, setIsclick] = useState(false);
 
+  useEffect(() => {
+    const x = window;
+    x.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      let arr = e.target.classList;
+
+      for (let i = 0; i < arr.length; i++) {
+        const p = document.querySelector(`.${arr[i]}`).classList;
+        if (
+          p[i].toString() !== "drop-btn" &&
+          p[i] !== null &&
+          p[i] !== "ham-icon" &&
+          p[i] !== "close-icon"
+        ) {
+          console.log(p[i]);
+          const c = document.querySelector(".active");
+          if (c != null) {
+            c.classList.remove("active");
+            setIsclick(false);
+            return;
+          }
+        }
+        arr = [];
+      }
+
+      arr = [];
+    });
+  }, []);
   return (
     <div className="Home">
       <div className="Navigation">
-        <Navigation to="/" label="NewsFeed" />
-        <Navigation to="/friends" label="Friends" />
-        <Navigation to="/account" label="Account" />
         <SearchBar />
+        <Navigation to="/" label="&#xf015;" />
+        <Navigation to="/friends" label="&#xf500;" />
+
+        <div
+          className="drop-btn"
+          onClick={(e) => {
+            const x = document.querySelector(".drop-btn");
+            x.classList.add("active");
+            setIsclick(!isClick);
+            if (isClick) {
+              x.classList.remove("active");
+            }
+          }}
+          onBlur={(e) => {
+            console.log(e);
+            console.log("hello blur");
+          }}
+        >
+          {isClick ? (
+            <div className="close-icon">&#10006;</div>
+          ) : (
+            <div className="ham-icon">&#x2630;</div>
+          )}
+        </div>
+
+        <div className="content">
+          <Hamburger />
+        </div>
       </div>
 
       <Switch location={background || location}>

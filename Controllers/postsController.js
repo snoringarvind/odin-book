@@ -38,5 +38,13 @@ exports.newsfeed = async (req, res, next) => {
 //     });
 // };
 
-//this is user post
-exports.post_list_get = (req, res, next) => {};
+//this is for user detail
+exports.post_list_get = (req, res, next) => {
+  console.log("hello");
+  Post.find({ user: req.params.userid }, (err, result) => {
+    if (err) return res.status(500).json({ msg: err.message });
+    else {
+      return res.status(200).json(result);
+    }
+  });
+};

@@ -44,6 +44,7 @@ const OdinBookProvider = ({ children }) => {
           headers: headers || "",
           data: data,
         });
+        console.log("Context Response=", response_data);
         axios_response(response_data);
       } catch (err) {
         if (err.response) {

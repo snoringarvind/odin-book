@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { OdinBookContext } from "../Context";
@@ -71,7 +70,7 @@ const UserAbout = () => {
         )}
         {about.working && (
           <div>
-            <span className="title">Working:</span>
+            <span className="title">Work:</span>
             {about.working}
           </div>
         )}
@@ -87,7 +86,7 @@ const UserAbout = () => {
             {about.book}
           </div>
         )}
-        {about.Food && (
+        {about.food && (
           <div>
             <span className="title">Food:</span>
             {about.food}
@@ -123,8 +122,9 @@ const UserAbout = () => {
 
   return (
     <div className="UserAbout">
-      {error && <div className="error">{error}</div>}
-      {!error && <>{getLoading ? "loading..." : display_about()}</>}
+      {getLoading && "loading..."}
+      {!getLoading &&
+        (error ? <div className="error">{error}</div> : display_about())}
     </div>
   );
 };

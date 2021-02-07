@@ -20,8 +20,8 @@ router.get("/news-feed", utils.verifyJwt, postsController.newsfeed);
 // * post-detail/ also show comments
 // router.get("/post/:postid", utils.verifyJwt, postsController.post_detail_get);
 
-//* show user's post
-router.get("/post/userid", utils.verifyJwt, postsController.post_list_get);
+//* show user's post for detail
+router.get("/post/:userid", utils.verifyJwt, postsController.post_list_get);
 
 //comment
 //*Get comment

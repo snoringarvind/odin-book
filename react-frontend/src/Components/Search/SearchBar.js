@@ -2,6 +2,7 @@ import { concatSeries } from "async";
 import React, { useContext, useState } from "react";
 import { Link, Redirect, useHistory, useParams } from "react-router-dom";
 import { OdinBookContext } from "../Context";
+import "./SearchBar.css";
 
 const SearchBar = () => {
   const { searchBarStateValue, searchValue } = useContext(OdinBookContext);
@@ -30,6 +31,7 @@ const SearchBar = () => {
           name="search"
           onChange={changeHandler}
           value={searchBarState.search}
+          placeholder="Search Odinbook"
         />
       </form>
     </div>

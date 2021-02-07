@@ -4,7 +4,7 @@ const { body, validationResult } = require("express-validator");
 
 exports.friend_list_get = (req, res, next) => {
   User.findById(req.params.userid, "friend")
-    .populate("friend", "username")
+    .populate("friend")
     .exec((err, result) => {
       if (err) return res.status(500).json({ msg: err.message });
       else {

@@ -2,10 +2,11 @@
   display: flex;
   justify-content: space-around;
   background-color: blue;
+  position: relative;
 }
 
 .Navigation .nav-links {
-  flex-basis: 33.33%;
+  flex-basis: 25%;
 }
 .Navigation .nav-links a {
   color: white;
@@ -19,4 +20,58 @@
 
 .Navigation .nav-links.active a {
   background-color: black;
+}
+
+/* ******* */
+
+.Navigation .content {
+  display: none;
+  position: absolute;
+  top: 7vh;
+  right: 0;
+  width: 25%;
+  box-shadow: 1px 1px 5px black;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.Navigation .drop-btn {
+  cursor: pointer;
+  width: 25%;
+  border: 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.drop-btn.active {
+  background-color: lightgray;
+}
+
+.close-icon {
+  font-size: 2rem;
+  color: red;
+}
+.drop-btn.active + .content {
+  display: block;
+}
+
+.Hamburger .nav-link-container {
+  margin: 10px;
+  padding: 10px;
+  border-radius: 4px;
+}
+.Hamburger .nav-link-container a {
+  font-size: 1.1rem;
+  color: black;
+  text-decoration: none;
+}
+
+.Hamburger .nav-link-desc {
+  font-size: 0.7rem;
+  color: rgb(180, 180, 180);
+}
+
+.nav-link-container:hover {
+  background-color: lightgray;
 }

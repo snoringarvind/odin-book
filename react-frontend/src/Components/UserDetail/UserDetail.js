@@ -14,10 +14,10 @@ import "./UserDetail.css";
 
 const UserDetail = () => {
   const params = useParams();
-  console.log(params);
+  // console.log(params);
 
   const location = useLocation();
-  console.log(location);
+  // console.log(location);
   return (
     <div className="UserDetail">
       <Router>

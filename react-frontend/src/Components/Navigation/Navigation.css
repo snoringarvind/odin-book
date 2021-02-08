@@ -44,34 +44,15 @@
   align-items: center;
 }
 
-.drop-btn.active {
+.Navigation .drop-btn.drop-btn-active {
   background-color: lightgray;
 }
 
-.close-icon {
+.Navigation .close-icon {
   font-size: 2rem;
   color: red;
 }
-.drop-btn.active + .content {
+
+.Navigation .drop-btn.drop-btn-active + .content {
   display: block;
-}
-
-.Hamburger .nav-link-container {
-  margin: 10px;
-  padding: 10px;
-  border-radius: 4px;
-}
-.Hamburger .nav-link-container a {
-  font-size: 1.1rem;
-  color: black;
-  text-decoration: none;
-}
-
-.Hamburger .nav-link-desc {
-  font-size: 0.7rem;
-  color: rgb(180, 180, 180);
-}
-
-.nav-link-container:hover {
-  background-color: lightgray;
 }

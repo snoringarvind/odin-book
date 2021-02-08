@@ -6,6 +6,7 @@ exports.friend_list_get = (req, res, next) => {
   User.findById(req.params.userid, "friend")
     .populate("friend")
     .exec((err, result) => {
+      console.log(result);
       if (err) return res.status(500).json({ msg: err.message });
       else {
         res.status(200).json(result);

@@ -1,4 +1,4 @@
-.SearchResult .card {
+.UserFriend .card {
   display: flex;
   align-items: center;
   padding: 20px;
@@ -6,11 +6,11 @@
   /* border: 1px solid; */
 }
 
-.SearchResult .people {
+.UserFriend .people {
   font-size: 1.1rem;
   font-weight: bold;
 }
-.SearchResult {
+.UserFriend {
   margin: 5vh 5vh;
   background-color: white;
   border-radius: 5px;
@@ -18,7 +18,7 @@
   border: 1px solid lightgray;
   padding: 20px;
 }
-.SearchResult .profile-picture {
+.UserFriend .profile-picture {
   /* border: 1px solid; */
   height: 3rem;
   width: 3rem;
@@ -32,10 +32,10 @@
   margin-right: 30px;
 }
 
-.SearchResult .name-container {
+.UserFriend .name-container {
   margin-right: 30px;
 }
-.SearchResult .name-container .name {
+.UserFriend .name-container .name {
   /* border: 1px solid; */
   font-size: 1.3rem;
 
@@ -43,10 +43,10 @@
   font-family: "Times New Roman", Times, serif;
 }
 
-.SearchResult .username {
+.UserFriend .username {
   color: darkgray;
 }
 
-.SearchResult .add-btn button {
+.UserFriend .add-btn button {
   cursor: pointer;
 }

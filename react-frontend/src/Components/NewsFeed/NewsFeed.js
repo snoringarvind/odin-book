@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import { OdinBookContext } from "../Context";
 
-const PostList = () => {
+const NewsFeed = () => {
   const { axios_request } = useContext(OdinBookContext);
 
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(true);
 
-  const [posts, setPosts] = useState("");
+  const [result, setResult] = useState("");
 
-  const post_list_route = "/posts";
+  const post_list_route = "/news-feed";
   const post_list_method = "GET";
 
   useEffect(() => {
@@ -23,7 +23,7 @@ const PostList = () => {
     };
 
     const cb_response = (response) => {
-      setPosts(response.data);
+      setResult(response.data);
       setGetLoading(false);
       console.log(response.data);
     };
@@ -39,18 +39,22 @@ const PostList = () => {
 
   const display_posts = () => {
     let arr = [];
-    for (let i = 0; i < posts.length; i++) {
-      arr.push(
-        <div className="card">
-          <div className="title">{posts[i].title}</div>
-          <div className="content_text">{posts[i].content_text}</div>
-        </div>
-      );
+    if (result.length === 0) {
+      return <div className="empty">No Posts to show</div>;
+    } else {
+      for (let i = 0; i < result.length; i++) {
+        arr.push(
+          <div className="card">
+            <div className="title">{result[i].title}</div>
+            <div className="content_text">{result[i].content_text}</div>
+          </div>
+        );
+      }
     }
   };
 
   return (
-    <div className="PostList">
+    <div className="NewsFeed">
       {getLoading && "loading..."}
       {!getLoading && (
         <>{error ? <div className="error">{error}</div> : display_posts()}</>
@@ -59,4 +63,4 @@ const PostList = () => {
   );
 };
 
-export default PostList;
+export default NewsFeed;

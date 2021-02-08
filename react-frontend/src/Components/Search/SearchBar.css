@@ -1,14 +1,15 @@
 .SearchBar {
-  border: 1px solid red;
+  /* border: 1px solid red; */
   width: 25%;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .SearchBar input {
-  font-size: 0.9rem;
+  font-size: 1.3vw;
   padding: 5px 10px;
-  width: 100%;
+  width: 95%;
   display: block;
   border-radius: 10px;
   border: none;

@@ -4,14 +4,19 @@ import "./Hamburger.css";
 
 const Hamburger = () => {
   const jwtData = JSON.parse(localStorage.getItem("jwtData"));
-  const user = jwtData.user;
+  let username;
+  let userid;
+  if (jwtData) {
+    username = jwtData.user;
+    userid = jwtData.sub;
+  }
   return (
     <div className="Hamburger">
       <div className="account">
         <div className="profile-picture"></div>
         <div className="nav-link-container">
-          <Link to="/account">
-            <div className="user">{user}</div>
+          <Link to={{ pathname: `/user/${username}`, state: userid }}>
+            <div className="user">{username}</div>
             <div className="nav-link-desc">See your profile</div>
           </Link>
         </div>

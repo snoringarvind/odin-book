@@ -3,10 +3,10 @@ import { Route, Switch, useLocation } from "react-router-dom";
 import MyPostUpdate from "../MyPosts/MyPostUpdate";
 import MyPostList from "../MyPosts/MyPostList";
 import MyPostCreate from "../MyPosts/MyPostCreate";
-import MyPostDetail from "../MyPosts/MyPostDetail";
+// import MyPostDetail from "../MyPosts/MyPostDetail";
 import MyPostDelete from "../MyPosts/MyPostDelete";
-import PostList from "../Posts/PostList";
-import PostDetail from "../Posts/PostDetail";
+import NewsFeed from "../NewsFeed/NewsFeed";
+import PostDetail from "../NewsFeed/PostDetail";
 import Navigation from "../Navigation/Navigation";
 import Login from "../Login/Login";
 import Logout from "../Logout";
@@ -16,6 +16,7 @@ import SearchBar from "../Search/SearchBar";
 import SearchResult from "../Search/SearchResult";
 import UserDetail from "../UserDetail/UserDetail";
 import Hamburger from "../MyPosts/Hamburger/Hamburger";
+import MyFriends from "./MyFriends/MyFriends";
 
 const Home = () => {
   let location = useLocation();
@@ -37,10 +38,9 @@ const Home = () => {
           p[i] !== "ham-icon" &&
           p[i] !== "close-icon"
         ) {
-          console.log(p[i]);
-          const c = document.querySelector(".active");
-          if (c != null) {
-            c.classList.remove("active");
+          const c = document.querySelector(".drop-btn-active");
+          if (c) {
+            c.classList.remove("drop-btn-active");
             setIsclick(false);
             return;
           }
@@ -62,10 +62,10 @@ const Home = () => {
           className="drop-btn"
           onClick={(e) => {
             const x = document.querySelector(".drop-btn");
-            x.classList.add("active");
+            x.classList.add("drop-btn-active");
             setIsclick(!isClick);
             if (isClick) {
-              x.classList.remove("active");
+              x.classList.remove("drop-btn-active");
             }
           }}
           onBlur={(e) => {
@@ -87,24 +87,24 @@ const Home = () => {
 
       <Switch location={background || location}>
         <Route exact path="/">
-          <PostList />
+          <NewsFeed />
         </Route>
         {/* user's friends */}
         <Route path="/user/:username">
           <UserDetail />
         </Route>
-        <Route path="/user/:username/:">
+        {/* <Route path="/user/:username/:">
           <UserDetail />
-        </Route>
+        </Route> */}
         <Route path="/myposts">
           <MyPostList />
         </Route>
         <Route path="/update-post/:mypostid">
           <MyPostUpdate />
         </Route>
-        <Route exact path="/mypost/:mypostid">
+        {/* <Route exact path="/mypost/:mypostid">
           <MyPostDetail />
-        </Route>
+        </Route> */}
         <Route path="/create-post">
           <MyPostCreate />
         </Route>
@@ -122,11 +122,12 @@ const Home = () => {
         </Route>
 
         <Route exact path="/friends">
-          my-Friends
+          <MyFriends />
         </Route>
-        <Route exact path="/account">
+        {/* <Route exact path="/account">
           my-Account
-        </Route>
+        </Route> */}
+
         {/* &&&&&& */}
         <Route path="/search/:name">
           <SearchResult />

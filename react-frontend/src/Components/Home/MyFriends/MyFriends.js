@@ -1,36 +1,34 @@
-import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation, Link } from "react-router-dom";
-import { OdinBookContext } from "../Context";
+import { Link } from "react-router-dom";
+import { OdinBookContext } from "../../Context";
 import uniqid from "uniqid";
-import "./UserFriend.css";
+import "./MyFriends.css";
 
-const UserFriend = () => {
+const MyFriends = () => {
   const { axios_request } = useContext(OdinBookContext);
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(true);
   const [result, setResult] = useState([]);
 
-  const location = useLocation();
-  const userid = location.state;
-  const friend_list_route = `/friend/${userid}`;
-  const friend_list_method = "GET";
+  const jwtData = JSON.parse(localStorage.getItem("jwtData"));
+  const userid = jwtData.sub;
+  const myfriend_list_route = `/friend/${userid}`;
+  const myfriend_list_method = "GET";
 
   const make_server_request = () => {
     const cb_error = (err) => {
       setError(err.message);
       setGetLoading(false);
     };
-
     const cb_response = (response) => {
-      setGetLoading(false);
       setResult(response.data.friend);
+      setGetLoading(false);
     };
 
     axios_request({
-      route: friend_list_route,
+      route: myfriend_list_route,
       data: "",
-      method: friend_list_method,
+      method: myfriend_list_method,
       axios_error: cb_error,
       axios_response: cb_response,
     });
@@ -41,10 +39,10 @@ const UserFriend = () => {
   }, []);
 
   const display_friends = () => {
+    console.log(result[0].fname);
     let arr = [];
-    console.log(result.length);
     if (result.length === 0) {
-      return <div className="empty">No friends to show.</div>;
+      return <div className="empty">No Friends to show.</div>;
     } else {
       for (let i = 0; i < result.length; i++) {
         arr.push(
@@ -72,14 +70,21 @@ const UserFriend = () => {
       return arr;
     }
   };
-
   return (
-    <div className="UserFriend">
-      {getLoading && "loading.."}
+    <div className="MyFriends">
+      {" "}
+      {getLoading && "loading..."}
       {!getLoading &&
-        (error ? <div className="error">{error}</div> : display_friends())}
+        (error ? (
+          <div className="error">{error}</div>
+        ) : (
+          <>
+            {result.length !== 0 && <div className="friends">Friends</div>}
+            {display_friends()}
+          </>
+        ))}
     </div>
   );
 };
 
-export default UserFriend;
+export default MyFriends;

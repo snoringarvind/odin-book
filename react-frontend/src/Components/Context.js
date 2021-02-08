@@ -21,12 +21,12 @@ const OdinBookProvider = ({ children }) => {
     axios_error,
     axios_response,
   }) => {
-    console.log(route);
+    // console.log(route);
     const jwtData = JSON.parse(localStorage.getItem("jwtData"));
 
-    console.log(jwtData);
+    // console.log(jwtData);
     if (jwtData !== null || route === "/login" || route === "/signup") {
-      console.log("helllo");
+      // console.log("helllo");
       try {
         let token;
         let headers;
@@ -35,9 +35,9 @@ const OdinBookProvider = ({ children }) => {
           headers = { authorization: `Bearer ${token}` };
         }
 
-        console.log(data);
-        console.log(method);
-        console.log(route);
+        // console.log(data);
+        // console.log(method);
+        // console.log(route);
         const response_data = await axios({
           url: `${serverUrl}${route}`,
           method: method,

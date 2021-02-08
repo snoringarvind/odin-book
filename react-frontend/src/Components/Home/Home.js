@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Route, Switch, useLocation } from "react-router-dom";
+import { Route, Switch, useLocation, useParams } from "react-router-dom";
 import MyPostUpdate from "../MyPosts/MyPostUpdate";
 import MyPostList from "../MyPosts/MyPostList";
 import MyPostCreate from "../MyPosts/MyPostCreate";
@@ -22,6 +22,10 @@ const Home = () => {
   let location = useLocation();
   let background = location.state && location.state.background;
   const [isClick, setIsclick] = useState(false);
+
+  console.log(location);
+  const params = useParams();
+  console.log(params);
 
   useEffect(() => {
     const x = window;
@@ -90,7 +94,7 @@ const Home = () => {
           <NewsFeed />
         </Route>
         {/* user's friends */}
-        <Route path="/user/:username">
+        <Route exect path="/user/:username">
           <UserDetail />
         </Route>
         {/* <Route path="/user/:username/:">

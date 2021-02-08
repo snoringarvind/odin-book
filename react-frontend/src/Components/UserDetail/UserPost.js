@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams, useHistory } from "react-router-dom";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 import { Result } from "express-validator";
@@ -14,6 +14,11 @@ const UserPost = () => {
   const userid = location.state;
   const post_list_route = `/post/${userid}`;
   const post_list_method = "GET";
+
+  // const params = useParams();
+  // console.log("params", params);
+  // const history = useHistory();
+  // console.log("histroy", history);
 
   const make_server_request = () => {
     const cb_error = (err) => {
@@ -36,6 +41,9 @@ const UserPost = () => {
 
   useEffect(() => {
     make_server_request();
+    // console.log(paramsChanged);
+
+    // console.log(paramsChanged);
   }, []);
 
   const display_posts = () => {

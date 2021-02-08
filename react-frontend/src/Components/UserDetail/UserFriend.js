@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation, Link, useParams, useHistory } from "react-router-dom";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 import "./UserFriend.css";
+import UserFriendCard from "./UserFriendCard";
+import async from "async";
 
 const UserFriend = () => {
   const { axios_request } = useContext(OdinBookContext);
@@ -11,10 +13,18 @@ const UserFriend = () => {
   const [getLoading, setGetLoading] = useState(true);
   const [result, setResult] = useState([]);
 
+  const [myFriendList, setMyFriendList] = useState([]);
+
+  const [isChanged, setIschanged] = useState(false);
   const location = useLocation();
   const userid = location.state;
   const friend_list_route = `/friend/${userid}`;
   const friend_list_method = "GET";
+
+  // const params = useParams();
+  // console.log("params", params);
+  // const history = useHistory();
+  // console.log("histroy", history);
 
   const make_server_request = () => {
     const cb_error = (err) => {
@@ -24,7 +34,8 @@ const UserFriend = () => {
 
     const cb_response = (response) => {
       setGetLoading(false);
-      setResult(response.data.friend);
+      setResult(response.data);
+      // console.log(response);
     };
 
     axios_request({
@@ -36,48 +47,73 @@ const UserFriend = () => {
     });
   };
 
-  useEffect(() => {
-    make_server_request();
-  }, []);
-
-  const display_friends = () => {
-    let arr = [];
-    console.log(result.length);
-    if (result.length === 0) {
-      return <div className="empty">No friends to show.</div>;
-    } else {
-      for (let i = 0; i < result.length; i++) {
-        arr.push(
-          <div className="card" key={uniqid()}>
-            <div className="profile-picture">
-              {[...result[i].fname[0].toLowerCase()]}
-            </div>
-            <div className="name-container">
-              <Link
-                to={{
-                  pathname: `/user/${result[i].username}`,
-                  state: result[i]._id,
-                }}
-              >
-                <div className="name">
-                  <span>{result[i].fname}</span>
-                  <span>{result[i].lname}</span>
-                </div>
-              </Link>
-              <div className="username">{result[i].username}</div>
-            </div>
-          </div>
-        );
-      }
-      return arr;
+  const get_my_friend_list = () => {
+    //this is the owner id
+    const jwtData = JSON.parse(localStorage.getItem("jwtData"));
+    let username;
+    let userid;
+    if (jwtData) {
+      username = jwtData.user;
+      userid = jwtData.sub;
     }
+
+    const route = `/friend/${userid}`;
+    const method = "GET";
+
+    const cb_error = (err) => {
+      setError(err.message);
+    };
+
+    const cb_response = (response) => {
+      setMyFriendList(response.data);
+    };
+
+    axios_request({
+      route: route,
+      data: "",
+      method: method,
+      axios_error: cb_error,
+      axios_response: cb_response,
+    });
   };
 
+  useEffect(() => {
+    make_server_request();
+    get_my_friend_list();
+  }, []);
+
+  useEffect(() => {
+    // setTempResult(result);
+    // console.log(result);
+    setResult(result);
+
+    //here change result won't work because the result is set later(takes time since it is await), and so it can't detect any change in the result, but if it was not await there was no need for "[isChanged]", we could have done "[result]" in the useEffect
+  }, [isChanged]);
+
+  // console.log(myFriendList);
   return (
     <div className="UserFriend">
       {getLoading && "loading.."}
       {!getLoading &&
-        (error ? <div className="error">{error}</div> : display_friends())}
+        (error ? (
+          <div className="error">{error}</div>
+        ) : (
+          result.map((value, index) => {
+            return (
+              <UserFriendCard
+                value={value}
+                index={index}
+                setResult={setResult}
+                result={result}
+                setError={setError}
+                key={uniqid()}
+                isChanged={isChanged}
+                setIschanged={setIschanged}
+                myFriendList={myFriendList}
+              />
+            );
+          })
+        ))}
     </div>
   );
 };

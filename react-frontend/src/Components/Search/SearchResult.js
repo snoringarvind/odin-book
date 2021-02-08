@@ -85,6 +85,7 @@ const SearchResult = () => {
   const display_users = () => {
     let arr = [];
     let isFriend;
+    console.log(result);
     if (result.length === 0) {
       return <div className="no-users">No users found with this query :(</div>;
     } else {

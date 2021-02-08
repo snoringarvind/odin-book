@@ -4,12 +4,11 @@ const { body, validationResult } = require("express-validator");
 
 exports.friend_list_get = (req, res, next) => {
   User.findById(req.params.userid, "friend")
-    .populate("friend")
+    .populate("friend", "-password")
     .exec((err, result) => {
-      console.log(result);
       if (err) return res.status(500).json({ msg: err.message });
       else {
-        res.status(200).json(result);
+        return res.status(200).json(result.friend);
       }
     });
 };
@@ -18,6 +17,9 @@ exports.friend_post = [
   body("friend.*").escape(),
   body("user").escape(),
   async (req, res, next) => {
+    console.log("helllllllllloooooooooo");
+    console.log(req.params.userid);
+    console.log(res.locals.user.sub);
     let msg;
     try {
       if (res.locals.user.sub === req.params.userid) {
@@ -26,26 +28,31 @@ exports.friend_post = [
           .json({ msg: "you cannot add yourself as friend" });
       }
 
-      let query = await User.findById(req.params.userid, "friend");
+      let query = await User.findById(res.locals.user.sub, "friend");
+      console.log(query);
       query = query.friend;
 
-      const isContain = query.includes(res.locals.user.sub);
+      const isContain = query.includes(req.params.userid);
       if (!isContain) {
-        query.push(res.locals.user.sub);
-        msg = "friend added";
-        User.findByIdAndUpdate(req.params.userid, { friend: query }, (err) => {
-          if (err) return res.status(500).json({ msg: err.message });
-          else {
-            return res.status(200).json({ msg });
+        query.push(req.params.userid);
+        msg = "friend added to your friend-list";
+        User.findByIdAndUpdate(
+          res.locals.user.sub,
+          { friend: query },
+          (err) => {
+            if (err) return res.status(500).json({ msg: err.message });
+            else {
+              return res.status(200).json({ msg });
+            }
           }
-        });
+        );
       } else {
         for (let i = 0; i < query.length; i++) {
-          if (query[i] == res.locals.user.sub) {
+          if (query[i] == req.params.userid) {
             query.splice(i, 1);
             msg = "friend removed";
             User.findByIdAndUpdate(
-              req.params.userid,
+              res.locals.user.sub,
               { friend: query },
               (err) => {
                 if (err) return res.status(500).json({ msg: err.message });

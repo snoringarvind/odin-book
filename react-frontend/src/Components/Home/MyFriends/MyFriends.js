@@ -21,7 +21,7 @@ const MyFriends = () => {
       setGetLoading(false);
     };
     const cb_response = (response) => {
-      setResult(response.data.friend);
+      setResult(response.data);
       setGetLoading(false);
     };
 
@@ -39,7 +39,6 @@ const MyFriends = () => {
   }, []);
 
   const display_friends = () => {
-    console.log(result[0].fname);
     let arr = [];
     if (result.length === 0) {
       return <div className="empty">No Friends to show.</div>;

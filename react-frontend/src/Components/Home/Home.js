@@ -97,6 +97,7 @@ const Home = () => {
         <Route exect path="/user/:username">
           <UserDetail />
         </Route>
+
         {/* <Route path="/user/:username/:">
           <UserDetail />
         </Route> */}

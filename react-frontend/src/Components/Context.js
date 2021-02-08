@@ -1,6 +1,5 @@
 import axios from "axios";
 import React, { createContext, useState } from "react";
-import { useParams } from "react-router-dom";
 
 const OdinBookContext = createContext();
 
@@ -13,9 +12,6 @@ const OdinBookProvider = ({ children }) => {
 
   //to prefill the search bar if there is a value in the url
   const [searchBarState, setSearchBarState] = useState({ search: "" });
-
-  //params for userdetail
-  // const [params, setParams] = useState("");
 
   //global isAuth for route requests
   const axios_request = async ({
@@ -69,7 +65,6 @@ const OdinBookProvider = ({ children }) => {
         axios_request: axios_request,
         searchValue: [searchValueChange, setSearchValueChange],
         searchBarStateValue: [searchBarState, setSearchBarState],
-        // paramsValue: [params, setParams],
       }}
     >
       {children}

@@ -1,25 +1,9 @@
+import { Result } from "express-validator";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { OdinBookContext } from "../Context";
 
-const UserFriendCard = ({
-  value,
-  index,
-  setResult,
-  result,
-  setError,
-  isChanged,
-  setIschanged,
-  myFriendList,
-}) => {
-  // const params = useParams();
-  // console.log("params", params);
-  // const history = useHistory();
-  // console.log("histroy", history);
-
-  const location = useLocation();
-  const personid = location.state;
-
+const SearchResultCard = ({ value, index, setError, myFriendList }) => {
   const [btnValue, setBtnValue] = useState(null);
 
   const [btnLoading, setBtnLoading] = useState(false);
@@ -35,15 +19,12 @@ const UserFriendCard = ({
   const [isClicked, setIsClicked] = useState(true);
 
   const { axios_request } = useContext(OdinBookContext);
+
   //removes friend
   const clickHandler = () => {
-    // if i don't do this it show 'cannot update state after the component is unmounted'
-    //becoz you are not waiting for the response and directly deleting the user from the sreen
-    if (personid.toString() !== userid.toString()) {
-      setBtnLoading(true);
-      setIsClicked(!isClicked);
-    }
-
+    setIsClicked(!isClicked);
+    setBtnLoading(true);
+    console.log(value._id);
     const route = `/friend/${value._id}`;
     const method = "POST";
 
@@ -65,24 +46,13 @@ const UserFriendCard = ({
       axios_error: cb_error,
       axios_response: cb_response,
     });
-
-    // only do this for the owner,,, bcoz it deletes the user from the screen
-    if (personid.toString() === userid.toString()) {
-      result.splice(index, 1);
-      setIschanged(!isChanged);
-    }
   };
 
   const display = () => {
     // console.log("hahahahha");
 
-    //if you have searched yourself you can remove the friend from the screen.
-    if (personid.toString() === userid.toString()) {
-      return <button onClick={clickHandler}>Remove</button>;
-    }
-
     if (myFriendList.length == 0) {
-      if (value._id === userid) {
+      if (value._id.toString() === userid.toString()) {
         return;
       } else {
         return (
@@ -102,7 +72,7 @@ const UserFriendCard = ({
       }
     } else {
       for (let i = 0; i < myFriendList.length; i++) {
-        if (value._id === myFriendList[i]._id) {
+        if (value._id.toString() === myFriendList[i]._id.toString()) {
           return (
             <button
               onClick={() => {
@@ -143,8 +113,7 @@ const UserFriendCard = ({
   }, []);
 
   return (
-    <div className="UserFriendCard">
-      {" "}
+    <div className="SearchResultCard">
       <div className="profile-picture">{[...value.fname[0].toLowerCase()]}</div>
       <div className="name-container">
         <Link
@@ -165,4 +134,4 @@ const UserFriendCard = ({
   );
 };
 
-export default UserFriendCard;
+export default SearchResultCard;

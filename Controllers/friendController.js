@@ -48,22 +48,23 @@ exports.friend_post = [
         );
       } else {
         for (let i = 0; i < query.length; i++) {
-          if (query[i] == req.params.userid) {
-            query.splice(i, 1);
-            msg = "friend removed";
-            User.findByIdAndUpdate(
-              res.locals.user.sub,
-              { friend: query },
-              (err) => {
-                if (err) return res.status(500).json({ msg: err.message });
-                else {
-                  return res.status(200).json({ msg });
+          try {
+            if (query[i] == req.params.userid) {
+              query.splice(i, 1);
+              msg = "friend removed";
+              User.findByIdAndUpdate(
+                res.locals.user.sub,
+                { friend: query },
+                (err) => {
+                  if (err) return res.status(500).json({ msg: err.message });
+                  else {
+                    return res.status(200).json({ msg });
+                  }
                 }
-              }
-            );
-          } else {
-            //just a backup if something goes wrong idk.
-            return res.status(500).json({ msg: "something is wrong" });
+              );
+            }
+          } catch (err) {
+            return res.status(500).json({ msg: err.message });
           }
         }
       }

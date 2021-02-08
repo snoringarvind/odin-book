@@ -123,7 +123,7 @@ const SearchResultCard = ({ value, index, setError, myFriendList }) => {
           }}
         >
           <div className="name">
-            <span>{value.fname}</span>
+            <span>{value.fname} </span>
             <span>{value.lname}</span>
           </div>
         </Link>

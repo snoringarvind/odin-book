@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { OdinBookContext } from "../../Context";
 import uniqid from "uniqid";
+import MyFriendsCard from "./MyFriendsCard";
 import "./MyFriends.css";
 
 const MyFriends = () => {
@@ -14,6 +15,8 @@ const MyFriends = () => {
   const userid = jwtData.sub;
   const myfriend_list_route = `/friend/${userid}`;
   const myfriend_list_method = "GET";
+
+  const [isChanged, setIschanged] = useState(false);
 
   const make_server_request = () => {
     const cb_error = (err) => {
@@ -38,37 +41,6 @@ const MyFriends = () => {
     make_server_request();
   }, []);
 
-  const display_friends = () => {
-    let arr = [];
-    if (result.length === 0) {
-      return <div className="empty">No Friends to show.</div>;
-    } else {
-      for (let i = 0; i < result.length; i++) {
-        arr.push(
-          <div className="card" key={uniqid()}>
-            <div className="profile-picture">
-              {[...result[i].fname[0].toLowerCase()]}
-            </div>
-            <div className="name-container">
-              <Link
-                to={{
-                  pathname: `/user/${result[i].username}`,
-                  state: result[i]._id,
-                }}
-              >
-                <div className="name">
-                  <span>{result[i].fname}</span>
-                  <span>{result[i].lname}</span>
-                </div>
-              </Link>
-              <div className="username">{result[i].username}</div>
-            </div>
-          </div>
-        );
-      }
-      return arr;
-    }
-  };
   return (
     <div className="MyFriends">
       {" "}
@@ -77,10 +49,19 @@ const MyFriends = () => {
         (error ? (
           <div className="error">{error}</div>
         ) : (
-          <>
-            {result.length !== 0 && <div className="friends">Friends</div>}
-            {display_friends()}
-          </>
+          result.map((value, index) => {
+            return (
+              <MyFriendsCard
+                value={value}
+                index={index}
+                result={result}
+                setError={setError}
+                key={uniqid()}
+                isChanged={isChanged}
+                setIschanged={setIschanged}
+              />
+            );
+          })
         ))}
     </div>
   );

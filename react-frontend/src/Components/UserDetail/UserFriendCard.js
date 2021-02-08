@@ -154,7 +154,7 @@ const UserFriendCard = ({
           }}
         >
           <div className="name">
-            <span>{value.fname}</span>
+            <span>{value.fname} </span>
             <span>{value.lname}</span>
           </div>
         </Link>

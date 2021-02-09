@@ -3,11 +3,17 @@ import MyPostForm from "./MyPostForm";
 import { OdinBookContext } from "../Context";
 import { useParams } from "react-router-dom";
 
-const MyPostUpdate = ({ postid, updateClick, setUpdateClick, updateData }) => {
-  const { axios_request } = useContext(OdinBookContext);
-  const [post, setPost] = useState("");
-  const [error, setError] = useState("");
-  const [getLoading, setGetLoading] = useState(true);
+const MyPostUpdate = ({
+  postid,
+  updateClick,
+  setUpdateClick,
+  updateData,
+  user_post_response,
+}) => {
+  // const { axios_request } = useContext(OdinBookContext);
+  // const [post, setPost] = useState("");
+  // const [error, setError] = useState("");
+  // const [getLoading, setGetLoading] = useState(true);
   // const [formBtnClicked, setFormBtnClicked] = useState(true);
 
   // const params = useParams();
@@ -47,19 +53,16 @@ const MyPostUpdate = ({ postid, updateClick, setUpdateClick, updateData }) => {
 
   return (
     <div className="MyPostUpdate">
-      {error ? (
-        <div className="error">{error}</div>
-      ) : (
-        updateClick && (
-          <MyPostForm
-            route={mypost_update_route}
-            update_value={updateData}
-            method={mypost_update_method}
-            setFormBtnClicked={setUpdateClick}
-            formBtnClicked={updateClick}
-            formTitle="Update Post"
-          />
-        )
+      {updateClick && (
+        <MyPostForm
+          route={mypost_update_route}
+          update_value={updateData}
+          method={mypost_update_method}
+          createClick={updateClick}
+          setCreateClick={setUpdateClick}
+          formTitle="Update Post"
+          user_post_response={user_post_response}
+        />
       )}
     </div>
   );

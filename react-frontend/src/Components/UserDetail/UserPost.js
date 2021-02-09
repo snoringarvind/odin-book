@@ -6,16 +6,17 @@ import MypostCreate from "../MyPosts/MyPostCreate";
 import moment from "moment";
 import "./UserPost.css";
 import MyPostUpdate from "../MyPosts/MyPostUpdate";
+import UserPostCard from "./UserPostCard";
 
 const UserPost = () => {
-  const { axios_request, userPostResultValue } = useContext(OdinBookContext);
+  const { axios_request } = useContext(OdinBookContext);
 
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(true);
-  // const [result, setResult] = useState([]);
+  const [result, setResult] = useState([]);
   const [isOwner, setIsOwner] = useState(false);
   const [updateClick, setUpdateClick] = useState(false);
-  const [userPostResult, setUserPostResult] = userPostResultValue;
+  const [createClick, setCreateClick] = useState(false);
 
   const [newPost, setNewPost] = useState("");
 
@@ -23,6 +24,8 @@ const UserPost = () => {
   const [updateData, setUpdateData] = useState("");
 
   const [postid, setPostid] = useState("");
+
+  const [updateIndex, setUpdateIndex] = useState("");
 
   const location = useLocation();
   const userid = location.state;
@@ -38,8 +41,7 @@ const UserPost = () => {
       setGetLoading(false);
     };
     const cb_response = (response) => {
-      // setResult(response.data);
-      setUserPostResult(response.data);
+      setResult(response.data);
       setGetLoading(false);
     };
 
@@ -68,65 +70,22 @@ const UserPost = () => {
     //and the userid is of the person we are browing which will be in the url
   }, []);
 
-  const cb_error = (err) => {};
+  const post_create_response = (response) => {
+    // setNewPost([...result, response.data.save_post]);
+    // console.log(response.data.save_post);
+    // console.log(result);
 
-  const user_post_response = (response) => {
-    setNewPost(response);
-    console.log(response);
+    setResult([response.data].concat(result));
+    console.log([response.data].concat(result));
+
     // result.unshift(response.data);
   };
 
-  const display_posts = () => {
-    let arr = [];
-
-    if (userPostResult.length === 0) {
-      return <div className="empty">No posts to show.</div>;
-    } else {
-      for (let i = 0; i < userPostResult.length; i++) {
-        arr.push(
-          <div className="card" key={uniqid()}>
-            <div className="head">
-              <div className="profile-picture">
-                {[...userPostResult[i].user.fname[0].toLowerCase()]}
-              </div>
-              <div className="name-container">
-                <div className="name">
-                  <span>{userPostResult[i].user.fname} </span>
-                  <span>{userPostResult[i].user.lname}</span>
-                </div>
-
-                <div className="username">
-                  {userPostResult[i].user.username}
-                </div>
-              </div>
-              <div
-                className="options-icon fas fa-ellipsis-v"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPostid(userPostResult[i]._id);
-                  setUpdateClick(true);
-                  setUpdateData(userPostResult[i]);
-                }}
-              ></div>
-            </div>
-            <div className="post-content-container">
-              <div className="post-title">{userPostResult[i].title}</div>
-              <div className="post-content">
-                {userPostResult[i].content_text}
-              </div>
-            </div>
-            <div className="card-footer">
-              <div className="far fa-thumbs-up"></div>
-              <div className="far fa-comment-alt"></div>
-              <div className="far fa-share-square"></div>
-            </div>
-          </div>
-        );
-      }
-      return arr;
-    }
+  const post_update_response = (response) => {
+    result[updateIndex] = response.data;
+    setResult(result);
   };
-
+  // console.log(newPost);
   return (
     <div className="UserPost">
       {getLoading && "loading..."}
@@ -137,7 +96,11 @@ const UserPost = () => {
           <>
             {isOwner && (
               <div>
-                <MypostCreate user_post_response={user_post_response} />
+                <MypostCreate
+                  user_post_response={post_create_response}
+                  createClick={createClick}
+                  setCreateClick={setCreateClick}
+                />
               </div>
             )}
             {updateClick && (
@@ -147,10 +110,26 @@ const UserPost = () => {
                   updateClick={updateClick}
                   setUpdateClick={setUpdateClick}
                   updateData={updateData}
+                  // createClick={createClick}
+                  // setCreateClick={setCreateClick}
+                  user_post_response={post_update_response}
                 />
               </div>
             )}
-            {display_posts()}
+            {result.map((value, index) => {
+              return (
+                <UserPostCard
+                  key={uniqid()}
+                  value={value}
+                  index={index}
+                  result={result}
+                  setPostid={setPostid}
+                  setUpdateClick={setUpdateClick}
+                  setUpdateData={setUpdateData}
+                  setUpdateIndex={setUpdateIndex}
+                />
+              );
+            })}
           </>
         ))}
     </div>

@@ -8,10 +8,12 @@ const MyPostForm = ({
   route,
   update_value,
   method,
-  setFormBtnClicked,
-  formBtnClicked,
   formTitle,
   user_post_response,
+  createClick,
+  setCreateClick,
+  updateClick,
+  setUpdateClick,
 }) => {
   const [state, setState] = useState({
     title: update_value ? update_value.title : "",
@@ -51,8 +53,9 @@ const MyPostForm = ({
       console.log(response);
       setErrors([]);
       setPostLoading(false);
-      // setFormBtnClicked(false);
       user_post_response(response);
+      setCreateClick(false);
+      // setUpdateClick(false);
     };
 
     axios_request({
@@ -85,7 +88,12 @@ const MyPostForm = ({
 
   return (
     <div className="MyPostForm">
-      {error && <div className="error">{error}</div>}
+      {error && (
+        <div className="error">
+          <div>{error} </div>
+          <div>Please try refreshing the page</div>
+        </div>
+      )}
       {!error && (
         <div className="form-container">
           <div className="form-head">
@@ -94,7 +102,7 @@ const MyPostForm = ({
               className="form-close-btn fas fa-times-circle"
               onClick={(e) => {
                 e.preventDefault();
-                setFormBtnClicked(false);
+                setCreateClick(false);
               }}
             ></div>
           </div>

@@ -5,6 +5,8 @@ const { body, validationResult } = require("express-validator");
 const multer = require("multer");
 const fs = require("fs");
 
+const User = require("../models/User");
+
 exports.myposts_get = (req, res, next) => {
   Post.find({ user: res.locals.user.sub })
     .populate("user")
@@ -95,22 +97,40 @@ exports.myposts_post = [
         save_comment: (cb) => comment.save(cb),
       },
       (err, result) => {
-        console.log(result);
+        // console.log(result);
+
         if (err) return res.status(500).json({ msg: err.message });
         else {
-          //!
-          //delete image file from the disk since it has been already saved on the server
-          // if (req.file) {
-          //   try {
-          //     fs.unlinkSync(req.file.path);
-          //   } catch (err) {
-          //     if (err) {
-          //       return res.status(500).json({ msg: err.message });
-          //     }
-          //   }
-          // }
-          return res.status(200).json(result);
+          User.populate(
+            result.save_post,
+            { path: "user", model: "User" },
+            (err2, result2) => {
+              // console.log("result", result);
+              // console.log("result222", result2);
+              if (err2) return res.status(500).json({ msg: err.message });
+              else {
+                return res.status(200).json(result.save_post);
+              }
+            }
+          );
         }
+
+        // console.log(result);
+        // if (err) return res.status(500).json({ msg: err.message });
+        // else {
+        //!
+        //delete image file from the disk since it has been already saved on the server
+        // if (req.file) {
+        //   try {
+        //     fs.unlinkSync(req.file.path);
+        //   } catch (err) {
+        //     if (err) {
+        //       return res.status(500).json({ msg: err.message });
+        //     }
+        //   }
+        // }
+        // return res.status(200).json(result);
+        // }
       }
     );
   },
@@ -174,22 +194,25 @@ exports.mypost_put = [
     // console.log(post);
 
     //it is returning the old result because we are having a new schema above
-    Post.findByIdAndUpdate(req.params.postid, post, (err, result) => {
-      if (err) return res.status(500).json({ msg: err.message });
-      else {
-        //!
-        // if (req.file) {
-        //   try {
-        //     fs.unlinkSync(req.file.path);
-        //   } catch (err) {
-        //     if (err) {
-        //       return res.status(500).json({ msg: err.message });
-        //     }
-        //   }
-        // }
-        return res.status(200).json({ id: result._id });
-      }
-    });
+    Post.findByIdAndUpdate(req.params.postid, post, { new: true })
+      .populate("user")
+      .exec((err, result) => {
+        if (err) return res.status(500).json({ msg: err.message });
+        else {
+          //!
+          // if (req.file) {
+          //   try {
+          //     fs.unlinkSync(req.file.path);
+          //   } catch (err) {
+          //     if (err) {
+          //       return res.status(500).json({ msg: err.message });
+          //     }
+          //   }
+          // }
+          console.log(result);
+          return res.status(200).json(result);
+        }
+      });
   },
 ];
 

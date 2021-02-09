@@ -11,6 +11,7 @@ const MyPostForm = ({
   setFormBtnClicked,
   formBtnClicked,
   formTitle,
+  user_post_response,
 }) => {
   const [state, setState] = useState({
     title: update_value ? update_value.title : "",
@@ -50,7 +51,8 @@ const MyPostForm = ({
       console.log(response);
       setErrors([]);
       setPostLoading(false);
-      setFormBtnClicked(false);
+      // setFormBtnClicked(false);
+      user_post_response(response);
     };
 
     axios_request({

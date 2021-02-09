@@ -38,7 +38,7 @@ exports.post_detail_get = (req, res, next) => {
     });
 };
 
-//this is for user detail
+//this is for user list posts
 exports.post_list_get = (req, res, next) => {
   console.log("hello");
   Post.find({ user: req.params.userid })

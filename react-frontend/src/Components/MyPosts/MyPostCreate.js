@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MyPostForm from "./MyPostForm";
 import "./MyPostCreate.css";
 
-const MypostCreate = () => {
+const MypostCreate = ({ user_post_response }) => {
   const [formBtnClicked, setFormBtnClicked] = useState(false);
 
   const mypost_create_route = "/myposts";
@@ -29,6 +29,7 @@ const MypostCreate = () => {
             setFormBtnClicked={setFormBtnClicked}
             formBtnClicked={formBtnClicked}
             formTitle="Create Post"
+            user_post_response={user_post_response}
           />
         )}
       </>

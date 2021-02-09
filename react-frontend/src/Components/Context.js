@@ -13,6 +13,9 @@ const OdinBookProvider = ({ children }) => {
   //to prefill the search bar if there is a value in the url
   const [searchBarState, setSearchBarState] = useState({ search: "" });
 
+  //for  form
+  const [userPostResult, setUserPostResult] = useState([]);
+
   //global isAuth for route requests
   const axios_request = async ({
     route,
@@ -65,6 +68,7 @@ const OdinBookProvider = ({ children }) => {
         axios_request: axios_request,
         searchValue: [searchValueChange, setSearchValueChange],
         searchBarStateValue: [searchBarState, setSearchBarState],
+        userPostResultValue: [userPostResult, setUserPostResult],
       }}
     >
       {children}

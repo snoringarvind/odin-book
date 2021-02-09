@@ -109,9 +109,7 @@ exports.myposts_post = [
           //     }
           //   }
           // }
-          return res.status(200).json({
-            id: result.save_post._id,
-          });
+          return res.status(200).json(result);
         }
       }
     );

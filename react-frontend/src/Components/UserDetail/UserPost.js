@@ -2,19 +2,22 @@ import React, { useContext, useEffect, useState } from "react";
 import { useLocation, useParams, useHistory } from "react-router-dom";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
-import { Result } from "express-validator";
 import MypostCreate from "../MyPosts/MyPostCreate";
 import moment from "moment";
 import "./UserPost.css";
 import MyPostUpdate from "../MyPosts/MyPostUpdate";
 
 const UserPost = () => {
-  const { axios_request } = useContext(OdinBookContext);
+  const { axios_request, userPostResultValue } = useContext(OdinBookContext);
+
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(true);
-  const [result, setResult] = useState([]);
+  // const [result, setResult] = useState([]);
   const [isOwner, setIsOwner] = useState(false);
   const [updateClick, setUpdateClick] = useState(false);
+  const [userPostResult, setUserPostResult] = userPostResultValue;
+
+  const [newPost, setNewPost] = useState("");
 
   //this is so we don't have to make request to the server to prefill the update form.
   const [updateData, setUpdateData] = useState("");
@@ -35,7 +38,8 @@ const UserPost = () => {
       setGetLoading(false);
     };
     const cb_response = (response) => {
-      setResult(response.data);
+      // setResult(response.data);
+      setUserPostResult(response.data);
       setGetLoading(false);
     };
 
@@ -64,40 +68,52 @@ const UserPost = () => {
     //and the userid is of the person we are browing which will be in the url
   }, []);
 
+  const cb_error = (err) => {};
+
+  const user_post_response = (response) => {
+    setNewPost(response);
+    console.log(response);
+    // result.unshift(response.data);
+  };
+
   const display_posts = () => {
     let arr = [];
 
-    if (result.length === 0) {
+    if (userPostResult.length === 0) {
       return <div className="empty">No posts to show.</div>;
     } else {
-      for (let i = 0; i < result.length; i++) {
+      for (let i = 0; i < userPostResult.length; i++) {
         arr.push(
           <div className="card" key={uniqid()}>
             <div className="head">
               <div className="profile-picture">
-                {[...result[i].user.fname[0].toLowerCase()]}
+                {[...userPostResult[i].user.fname[0].toLowerCase()]}
               </div>
               <div className="name-container">
                 <div className="name">
-                  <span>{result[i].user.fname} </span>
-                  <span>{result[i].user.lname}</span>
+                  <span>{userPostResult[i].user.fname} </span>
+                  <span>{userPostResult[i].user.lname}</span>
                 </div>
 
-                <div className="username">{result[i].user.username}</div>
+                <div className="username">
+                  {userPostResult[i].user.username}
+                </div>
               </div>
               <div
                 className="options-icon fas fa-ellipsis-v"
                 onClick={(e) => {
                   e.preventDefault();
-                  setPostid(result[i]._id);
+                  setPostid(userPostResult[i]._id);
                   setUpdateClick(true);
-                  setUpdateData(result[i]);
+                  setUpdateData(userPostResult[i]);
                 }}
               ></div>
             </div>
             <div className="post-content-container">
-              <div className="post-title">{result[i].title}</div>
-              <div className="post-content">{result[i].content_text}</div>
+              <div className="post-title">{userPostResult[i].title}</div>
+              <div className="post-content">
+                {userPostResult[i].content_text}
+              </div>
             </div>
             <div className="card-footer">
               <div className="far fa-thumbs-up"></div>
@@ -121,7 +137,7 @@ const UserPost = () => {
           <>
             {isOwner && (
               <div>
-                <MypostCreate />
+                <MypostCreate user_post_response={user_post_response} />
               </div>
             )}
             {updateClick && (

@@ -1,0 +1,96 @@
+.UserPost .head {
+  display: flex;
+  align-items: center;
+  /* padding: 20px; */
+  padding-bottom: 10px;
+  border-bottom: 1px solid lightgray;
+}
+
+.UserPost .card {
+  border: 1px solid;
+  margin: 20px;
+  background-color: white;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+.UserPost .profile-picture {
+  /* border: 1px solid; */
+  height: 3rem;
+  min-width: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: lightpink;
+  font-size: 1.5rem;
+
+  margin-right: 30px;
+}
+
+.UserPost .name-container {
+  margin-right: 30px;
+  /* border: 1px solid; */
+  flex-basis: 100%;
+}
+.UserPost .name-container .name {
+  /* border: 1px solid; */
+  font-size: 1.3rem;
+
+  font-weight: 430;
+  font-family: "Times New Roman", Times, serif;
+}
+
+.UserPost .username {
+  color: darkgray;
+}
+
+.UserPost .post-title {
+  border: 1px solid;
+  font-weight: bold;
+  font-family: cursive;
+}
+
+.UserPost .post-content {
+  margin-top: 1px;
+  border: 1px solid;
+  color: rgb(61, 61, 61);
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.UserPost .post-content::first-line {
+  text-indent: 5%;
+}
+
+.UserPost .post-content-container {
+  margin-top: 10px;
+  /* border: 1px solid red; */
+  padding-bottom: 20px;
+  border-bottom: 1px solid darkgray;
+}
+
+.UserPost .card-footer {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px 0 0 0;
+
+  /* border: 1px solid; */
+  font-size: 1.4rem;
+}
+
+.UserPost .card-footer div {
+  cursor: pointer;
+}
+.UserPost .card-footer div:hover {
+  transform: scale(1.1);
+}
+
+.UserPost .options-icon {
+  /* border: 1px solid; */
+  /* font-size: 1rem; */
+  transform: scale(1.3);
+  padding: 5px;
+  color: darkgray;
+  cursor: pointer;
+  z-index: 1;
+}

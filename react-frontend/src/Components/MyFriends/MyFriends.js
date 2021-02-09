@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { OdinBookContext } from "../../Context";
+import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 import MyFriendsCard from "./MyFriendsCard";
 import "./MyFriends.css";

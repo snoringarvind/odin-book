@@ -7,7 +7,7 @@ const fs = require("fs");
 
 exports.myposts_get = (req, res, next) => {
   Post.find({ user: res.locals.user.sub })
-    .select("-like")
+    .populate("user")
     .exec((err, result) => {
       console.log(result);
       if (err) return res.status(500).json({ msg: err.message });

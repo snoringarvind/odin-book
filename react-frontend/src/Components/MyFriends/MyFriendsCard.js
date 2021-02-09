@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
-import { OdinBookContext } from "../../Context";
+import { OdinBookContext } from "../Context";
 
 const MyFriendsCard = ({
   value,

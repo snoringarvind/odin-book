@@ -1,9 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
+import "./MyPostForm.css";
 
-const MyPostForm = ({ route, update_value, method }) => {
+const MyPostForm = ({
+  route,
+  update_value,
+  method,
+  setFormBtnClicked,
+  formBtnClicked,
+  formTitle,
+}) => {
   const [state, setState] = useState({
     title: update_value ? update_value.title : "",
     content_text: update_value ? update_value.content_text : "",
@@ -40,7 +48,9 @@ const MyPostForm = ({ route, update_value, method }) => {
 
     const axios_response = (response) => {
       console.log(response);
-      history.push(`/mypost/${response.data.id}`);
+      setErrors([]);
+      setPostLoading(false);
+      setFormBtnClicked(false);
     };
 
     axios_request({
@@ -66,50 +76,68 @@ const MyPostForm = ({ route, update_value, method }) => {
     return <ul className="errors">{arr}</ul>;
   };
 
+  const location = useLocation();
+  console.log(location.state);
+  const params = useParams();
+  console.log(params);
+
   return (
     <div className="MyPostForm">
       {error && <div className="error">{error}</div>}
       {!error && (
-        <form>
-          <div className="form-group">
-            <label htmlFor="title">Title:</label>
-            <input
-              id="title"
-              type="text"
-              placeholder="Enter your post title"
-              name="title"
-              value={state.title}
-              onChange={changeHandler}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="content_text">Text</label>
-            <textarea
-              type="text"
-              id="content_text"
-              name="content_text"
-              placeholder="Add text"
-              value={state.content_text}
-              onChange={changeHandler}
-            />
-          </div>
-          {display_errors()}
-          <div className="submit-btn">
-            <button
+        <div className="form-container">
+          <div className="form-head">
+            <div className="form-title">{formTitle}</div>
+            <div
+              className="form-close-btn fas fa-times-circle"
               onClick={(e) => {
                 e.preventDefault();
-                //to prevent multiple clicks
-                if (!postLoading) {
-                  submitHandler(e);
-                } else {
-                  return;
-                }
+                setFormBtnClicked(false);
               }}
-            >
-              {!postLoading ? "Submit" : "Submitting..."}
-            </button>
+            ></div>
           </div>
-        </form>
+
+          <form>
+            <div className="form-group">
+              <label htmlFor="title">Title</label>
+              <input
+                id="title"
+                type="text"
+                placeholder="Enter your post title"
+                name="title"
+                value={state.title}
+                onChange={changeHandler}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="content_text">Text</label>
+              <textarea
+                type="text"
+                id="content_text"
+                name="content_text"
+                placeholder="Add text"
+                value={state.content_text}
+                onChange={changeHandler}
+              />
+            </div>
+            {display_errors()}
+            <div className="submit-btn">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  //to prevent multiple clicks
+                  if (!postLoading) {
+                    submitHandler(e);
+                  } else {
+                    return;
+                  }
+                }}
+              >
+                {!postLoading ? "Submit" : "Submitting..."}
+              </button>
+            </div>
+          </form>
+        </div>
       )}
     </div>
   );

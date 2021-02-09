@@ -15,44 +15,57 @@ import "./Home.css";
 import SearchBar from "../Search/SearchBar";
 import SearchResult from "../Search/SearchResult";
 import UserDetail from "../UserDetail/UserDetail";
-import Hamburger from "../MyPosts/Hamburger/Hamburger";
-import MyFriends from "./MyFriends/MyFriends";
+import Hamburger from "../Hamburger/Hamburger";
+import MyFriends from "../MyFriends/MyFriends";
 
 const Home = () => {
   let location = useLocation();
   let background = location.state && location.state.background;
   const [isClick, setIsclick] = useState(false);
 
-  console.log(location);
-  const params = useParams();
-  console.log(params);
+  // console.log(location);
+  // const params = useParams();
+  // console.log(params);
 
   useEffect(() => {
     const x = window;
     x.addEventListener("click", (e) => {
-      e.stopPropagation();
-      e.preventDefault();
-      let arr = e.target.classList;
+      //maybe if something goes wrong ..putting this in a try,catch block
+      try {
+        e.stopPropagation();
+        e.preventDefault();
+        let arr = e.target.classList;
 
-      for (let i = 0; i < arr.length; i++) {
-        const p = document.querySelector(`.${arr[i]}`).classList;
-        if (
-          p[i].toString() !== "drop-btn" &&
-          p[i] !== null &&
-          p[i] !== "ham-icon" &&
-          p[i] !== "close-icon"
-        ) {
-          const c = document.querySelector(".drop-btn-active");
-          if (c) {
-            c.classList.remove("drop-btn-active");
-            setIsclick(false);
+        for (let i = 0; i < arr.length; i++) {
+          let element = document.querySelector(`.${arr[i]}`);
+
+          // doing this 'if(element==null)' so if the form-btn is clicked cancel this function shouldn't be affected.
+          //since the form-btn will be null when it is closed, so to prevent the error
+          if (element == null) {
             return;
           }
-        }
-        arr = [];
-      }
 
-      arr = [];
+          let p = element.classList;
+          if (
+            p[i].toString() !== "drop-btn" &&
+            p[i] !== null &&
+            p[i] !== "ham-icon" &&
+            p[i] !== "close-icon"
+          ) {
+            const c = document.querySelector(".drop-btn-active");
+            if (c) {
+              c.classList.remove("drop-btn-active");
+              setIsclick(false);
+              return;
+            }
+          }
+          arr = [];
+        }
+
+        arr = [];
+      } catch (err) {
+        console.log(err.message);
+      }
     });
   }, []);
   return (

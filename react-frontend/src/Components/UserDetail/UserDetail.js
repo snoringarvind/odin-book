@@ -1,6 +1,12 @@
 import React from "react";
 import UserNav from "./UserNav";
-import { Route, Switch, useParams, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useParams,
+  useLocation,
+} from "react-router-dom";
 import UserAbout from "./UserAbout";
 import UserPost from "./UserPost";
 import UserFriend from "./UserFriend";
@@ -9,6 +15,8 @@ import "./UserDetail.css";
 const UserDetail = () => {
   const location = useLocation();
   let params = useParams();
+  console.log(params);
+  console.log(location.state);
 
   return (
     <div className="UserDetail">

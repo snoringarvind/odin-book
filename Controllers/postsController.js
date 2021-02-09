@@ -10,12 +10,12 @@ exports.newsfeed = async (req, res, next) => {
   try {
     console.log(res.locals.user.sub);
     let friend_list = await User.findById(res.locals.user.sub, "friend");
-    console.log(friend_list);
+    // console.log(friend_list);
     friend_list = friend_list.friend;
     console.log(friend_list);
-    const posts = await Post.find(
-      { user: friend_list },
-      { sort: { created: 1 } }
+    const posts = await Post.find({ user: friend_list }).populate(
+      "user",
+      "-password"
     );
 
     console.log(posts);
@@ -25,26 +25,28 @@ exports.newsfeed = async (req, res, next) => {
   }
 };
 
-// exports.post_detail_get = (req, res, next) => {
-//   //populating user so we can show the name of user who posted the post.
+exports.post_detail_get = (req, res, next) => {
+  //populating user so we can show the name of user who posted the post.
 
-//   Post.findById(req.params.postid)
-//     .populate("user", "username")
-//     .exec((err, result) => {
-//       if (err) return res.status(500).json({ msg: err.message });
-//       else {
-//         return res.status(200).json(result);
-//       }
-//     });
-// };
+  Post.findById(req.params.postid)
+    .populate("user", "username")
+    .exec((err, result) => {
+      if (err) return res.status(500).json({ msg: err.message });
+      else {
+        return res.status(200).json(result);
+      }
+    });
+};
 
 //this is for user detail
 exports.post_list_get = (req, res, next) => {
   console.log("hello");
-  Post.find({ user: req.params.userid }, (err, result) => {
-    if (err) return res.status(500).json({ msg: err.message });
-    else {
-      return res.status(200).json(result);
-    }
-  });
+  Post.find({ user: req.params.userid })
+    .populate("user", "-password")
+    .exec((err, result) => {
+      if (err) return res.status(500).json({ msg: err.message });
+      else {
+        return res.status(200).json(result);
+      }
+    });
 };

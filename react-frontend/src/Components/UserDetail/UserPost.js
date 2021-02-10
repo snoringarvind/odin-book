@@ -15,10 +15,8 @@ const UserPost = () => {
   const [getLoading, setGetLoading] = useState(true);
   const [result, setResult] = useState([]);
   const [isOwner, setIsOwner] = useState(false);
-  const [updateClick, setUpdateClick] = useState(false);
+  const [updateClick, setUpdateClick] = useState("");
   const [createClick, setCreateClick] = useState(false);
-
-  const [newPost, setNewPost] = useState("");
 
   //this is so we don't have to make request to the server to prefill the update form.
   const [updateData, setUpdateData] = useState("");
@@ -26,6 +24,8 @@ const UserPost = () => {
   const [postid, setPostid] = useState("");
 
   const [updateIndex, setUpdateIndex] = useState("");
+
+  const [indexOfCardClicked, setindexOfCardClicked] = useState(null);
 
   const location = useLocation();
   const userid = location.state;
@@ -70,6 +70,10 @@ const UserPost = () => {
     //and the userid is of the person we are browing which will be in the url
   }, []);
 
+  // useEffect(() => {
+  //   if(indexOfCardClicked)
+  // }, [optionClick]);
+
   const post_create_response = (response) => {
     // setNewPost([...result, response.data.save_post]);
     // console.log(response.data.save_post);
@@ -85,7 +89,7 @@ const UserPost = () => {
     result[updateIndex] = response.data;
     setResult(result);
   };
-  // console.log(newPost);
+
   return (
     <div className="UserPost">
       {getLoading && "loading..."}
@@ -122,11 +126,12 @@ const UserPost = () => {
                   key={uniqid()}
                   value={value}
                   index={index}
-                  result={result}
                   setPostid={setPostid}
                   setUpdateClick={setUpdateClick}
                   setUpdateData={setUpdateData}
                   setUpdateIndex={setUpdateIndex}
+                  indexOfCardClicked={indexOfCardClicked}
+                  setindexOfCardClicked={setindexOfCardClicked}
                 />
               );
             })}

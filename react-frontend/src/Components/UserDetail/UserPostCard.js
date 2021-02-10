@@ -1,5 +1,4 @@
-import React from "react";
-import uniqid from "uniqid";
+import React, { useEffect, useState } from "react";
 
 const UserPostCard = ({
   value,
@@ -7,44 +6,63 @@ const UserPostCard = ({
   setPostid,
   setUpdateClick,
   setUpdateData,
-  result,
   setUpdateIndex,
+  indexOfCardClicked,
+  setindexOfCardClicked,
 }) => {
-  // console.log(result);
   return (
     <div className="UserPostCard">
-      <div className="card">
-        <div className="head">
-          <div className="profile-picture">
-            {[...value.user.fname[0].toLowerCase()]}
+      <div className="head">
+        <div className="profile-picture">
+          {[...value.user.fname[0].toLowerCase()]}
+        </div>
+        <div className="name-container">
+          <div className="name">
+            <span>{value.user.fname} </span>
+            <span>{value.user.lname}</span>
           </div>
-          <div className="name-container">
-            <div className="name">
-              <span>{value.user.fname} </span>
-              <span>{value.user.lname}</span>
-            </div>
 
-            <div className="username">{value.user.username}</div>
-          </div>
-          <div
-            className="options-icon fas fa-ellipsis-v"
-            onClick={(e) => {
-              e.preventDefault();
-              setPostid(value._id);
-              setUpdateClick(true);
-              setUpdateData(value);
-              setUpdateIndex(index);
-            }}
-          ></div>
+          <div className="username">{value.user.username}</div>
         </div>
-        <div className="post-content-container">
-          <div className="post-title">{value.title}</div>
-          <div className="post-content">{value.content_text}</div>
-        </div>
-        <div className="card-footer">
-          <div className="far fa-thumbs-up"></div>
-          <div className="far fa-comment-alt"></div>
-          <div className="far fa-share-square"></div>
+        <div
+          className="option-btn"
+          onClick={(e) => {
+            // console.log(e.target);
+
+            e.preventDefault();
+            // console.log(indexOfCardClicked, index);
+            if (indexOfCardClicked == index) {
+              setindexOfCardClicked(null);
+            } else {
+              setindexOfCardClicked(index);
+            }
+            // console.log(indexOfCardClicked, index);
+          }}
+        >
+          <div className="btn">&#8942;</div>
+          {indexOfCardClicked == index && (
+            <div className="hamburger-menu">
+              <div
+                className="menu-btn"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setindexOfCardClicked(null);
+                  setUpdateClick(true);
+                  setUpdateData(value);
+                  setPostid(value._id);
+                  setUpdateIndex(index);
+                }}
+              >
+                <span className="far fa-edit icon"></span>
+                <span className="label">Edit post</span>
+              </div>
+              <div className="menu-btn">
+                <span className="far fa-trash-alt icon"></span>
+                <span className="label">Delete post</span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

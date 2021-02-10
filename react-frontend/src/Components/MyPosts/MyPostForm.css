@@ -1,7 +1,7 @@
 .MyPostForm {
   height: 100vh;
   width: 100%;
-  /* border: 1px solid red; */
+  border: 1px solid red;
   position: fixed;
   top: 0;
   right: 0;
@@ -12,6 +12,7 @@
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1;
 }
 
 /* .MyPostForm .form-background {

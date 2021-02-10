@@ -7,6 +7,7 @@ import moment from "moment";
 import "./UserPost.css";
 import MyPostUpdate from "../MyPosts/MyPostUpdate";
 import UserPostCard from "./UserPostCard";
+import MyPostDelete from "../MyPosts/MyPostDelete";
 
 const UserPost = () => {
   const { axios_request } = useContext(OdinBookContext);
@@ -17,6 +18,7 @@ const UserPost = () => {
   const [isOwner, setIsOwner] = useState(false);
   const [updateClick, setUpdateClick] = useState("");
   const [createClick, setCreateClick] = useState(false);
+  const [deleteClick, setDeleteClick] = useState(false);
 
   //this is so we don't have to make request to the server to prefill the update form.
   const [updateData, setUpdateData] = useState("");
@@ -78,7 +80,7 @@ const UserPost = () => {
     // setNewPost([...result, response.data.save_post]);
     // console.log(response.data.save_post);
     // console.log(result);
-
+    console.log(response);
     setResult([response.data].concat(result));
     console.log([response.data].concat(result));
 
@@ -86,8 +88,24 @@ const UserPost = () => {
   };
 
   const post_update_response = (response) => {
+    console.log(response);
     result[updateIndex] = response.data;
     setResult(result);
+  };
+
+  //uding updateindex for update and delete same
+  const post_delete_repsonse = (response) => {
+    console.log(response);
+    //as soon as we get the response delete the post from the screen
+
+    console.log(result);
+    result.splice(updateIndex, 1);
+    setResult(result);
+
+    //we are doing this here bcoz jab tak child component mein value change nahi hota parent component re-render nahi hoga.
+    //MyPostDelete meinn setDelteClick mein same component mein hi deleteClick value change karna pad raha tha isliye UserPost re-render nahi ho raha tha.
+    //but postupdate and postcreate ka click-value child compoenent postform mein change ho raha tha isliye userpost re-render ho raha tha.
+    setDeleteClick(false);
   };
 
   return (
@@ -120,6 +138,14 @@ const UserPost = () => {
                 />
               </div>
             )}
+            {deleteClick && (
+              <MyPostDelete
+                setDeleteClick={setDeleteClick}
+                deleteClick={deleteClick}
+                user_delete_response={post_delete_repsonse}
+                postid={postid}
+              />
+            )}
             {result.map((value, index) => {
               return (
                 <UserPostCard
@@ -132,6 +158,9 @@ const UserPost = () => {
                   setUpdateIndex={setUpdateIndex}
                   indexOfCardClicked={indexOfCardClicked}
                   setindexOfCardClicked={setindexOfCardClicked}
+                  isOwner={isOwner}
+                  setDeleteClick={setDeleteClick}
+                  deleteClick={deleteClick}
                 />
               );
             })}

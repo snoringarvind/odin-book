@@ -7,7 +7,7 @@
   border-radius: 4px;
 }
 
-.UserPost .UserPostCard .profile-picture {
+.UserPost .UserPostCard .head .profile-picture {
   border: 1px solid;
   min-height: 3rem;
   min-width: 3rem;
@@ -21,12 +21,12 @@
   margin-right: 30px;
 }
 
-.UserPost .UserPostCard .name-container {
+.UserPost .UserPostCard .head .name-container {
   margin-right: 30px;
   border: 1px solid;
   flex-basis: 100%;
 }
-.UserPost .UserPostCard .name-container .name {
+.UserPost .UserPostCard .head .name-container .name {
   /* border: 1px solid; */
   font-size: 1.3rem;
 
@@ -34,7 +34,7 @@
   font-family: "Times New Roman", Times, serif;
 }
 
-.UserPost .UserPostCard .username {
+.UserPost .UserPostCard .head .username {
   color: darkgray;
 }
 
@@ -43,7 +43,7 @@
   border: 1px solid;
 }
 
-.UserPost .UserPostCard .option-btn {
+.UserPost .UserPostCard .head .option-btn {
   /* border: 1px solid; */
   font-size: 1.2rem;
   font-weight: bold;
@@ -53,7 +53,7 @@
   position: relative;
 }
 
-.UserPost .UserPostCard .hamburger-menu {
+.UserPost .UserPostCard .head .hamburger-menu {
   position: absolute;
   top: 100%;
   /* border: 1px solid; */
@@ -68,7 +68,7 @@
   box-shadow: 0.3px 0.3px 4px darkgray, -0.3px -0.3px 4px darkgray;
 }
 
-.UserPost .UserPostCard .menu-btn {
+.UserPost .UserPostCard .head .menu-btn {
   /* border: 1px solid; */
   /* padding: 10px; */
   /* height: 5vh; */
@@ -76,31 +76,70 @@
   align-items: center;
   padding: 8px;
 }
-.UserPost .UserPostCard .menu-btn .icon {
+.UserPost .UserPostCard .head .menu-btn .icon {
   border: 1px solid;
   min-width: 40px;
   font-size: 1.4rem;
   /* text-align: center; */
 }
 
-.UserPost .UserPostCard .menu-btn .label {
+.UserPost .UserPostCard .head .menu-btn .label {
   border: 1px solid red;
 }
 
-.UserPost .UserPostCard .option-btn .btn {
+.UserPost .UserPostCard .head .option-btn .btn {
   border: 1px solid;
   height: 100%;
   display: flex;
   align-items: center;
 }
 
-.UserPost .UserPostCard .option-btn .btn:hover {
+.UserPost .UserPostCard .head .option-btn .btn:hover {
   background-color: darkgray;
   cursor: pointer;
   border-radius: 4px;
 }
 
-.UserPost .UserPostCard .menu-btn:hover {
+.UserPost .UserPostCard .head .menu-btn:hover {
   background-color: lightgray;
   cursor: pointer;
+}
+
+.UserPost .post-title {
+  border: 1px solid;
+  font-weight: bold;
+  font-family: cursive;
+}
+
+.UserPost .post-content {
+  margin-top: 1px;
+  border: 1px solid;
+  color: rgb(61, 61, 61);
+  font-family: Georgia, "Times New Roman", Times, serif;
+}
+
+.UserPost .post-content::first-line {
+  text-indent: 5%;
+}
+
+.UserPost .post-content-container {
+  margin-top: 10px;
+  /* border: 1px solid red; */
+  padding-bottom: 20px;
+  border-bottom: 1px solid darkgray;
+}
+
+.UserPost .card-footer {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px 0 0 0;
+
+  /* border: 1px solid; */
+  font-size: 1.3rem;
+}
+
+.UserPost .card-footer div:hover {
+  transform: scale(1.1);
+  cursor: pointer;
+  color: blue;
 }

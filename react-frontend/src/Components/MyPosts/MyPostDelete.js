@@ -1,23 +1,24 @@
 import React, { useContext, useState } from "react";
 import { Redirect, useHistory, useParams } from "react-router-dom";
 import { OdinBookContext } from "../Context";
+import "./MyPostDelete.css";
 
-const MyPostDelete = () => {
+const MyPostDelete = ({
+  deleteClick,
+  setDeleteClick,
+  user_delete_response,
+  postid,
+}) => {
   const { axios_request } = useContext(OdinBookContext);
 
-  const params = useParams();
-  console.log(params);
+  console.log(postid);
 
-  const mypost_delete_route = `/mypost/${params.mypostid}`;
+  const mypost_delete_route = `/mypost/${postid}`;
   const mypost_delete_method = "DELETE";
 
   const [postLoading, setPostLoading] = useState(false);
 
   const [error, setError] = useState("");
-
-  const [isDeleted, setIsDeleted] = useState(false);
-
-  const history = useHistory();
 
   const make_server_request = () => {
     const cb_error = (err) => {
@@ -27,8 +28,8 @@ const MyPostDelete = () => {
 
     const cb_response = (response) => {
       setPostLoading(false);
-      // console.log(response);
-      setIsDeleted(true);
+      // setDeleteClick(false);
+      user_delete_response(response);
     };
 
     axios_request({
@@ -40,24 +41,24 @@ const MyPostDelete = () => {
     });
   };
 
-  console.log(mypost_delete_route);
-  console.log(mypost_delete_method);
   const deleteHandler = () => {
     make_server_request();
   };
 
-  const cancelHandler = () => {
-    history.goBack();
-  };
-
-  console.log("delete");
   return (
     <div className="MyPostDelete">
-      {error && <div className="error">{error}</div>}
+      {error && (
+        <div className="error">
+          <div>{error}</div>
+          <div>Please try refreshing the Page</div>
+        </div>
+      )}
       {!error && (
-        <>
-          <div className="dlt-btn">
+        <div className="dialog-box">
+          <p className="confitm-msg">Are you sure want to delete this post?</p>
+          <div className="btn">
             <button
+              className="dlt-btn"
               onClick={(e) => {
                 e.preventDefault();
                 if (!postLoading) {
@@ -70,12 +71,18 @@ const MyPostDelete = () => {
             >
               {!postLoading ? "Delete" : "Deleting post...."}
             </button>
+
+            <button
+              className="cancel-btn"
+              onClick={(e) => {
+                e.preventDefault();
+                setDeleteClick(false);
+              }}
+            >
+              Cancel
+            </button>
           </div>
-          <div className="cancel-btn">
-            <button onClick={cancelHandler}>Cancel</button>
-          </div>
-          {isDeleted && <Redirect to="/myposts" />}
-        </>
+        </div>
       )}
     </div>
   );

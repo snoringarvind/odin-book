@@ -1,8 +1,7 @@
 import React from "react";
 import "./CommentCard.css";
 
-const CommentCard = ({ value, index }) => {
-  console.log(value.user);
+const CommentCard = ({ value, index, postIndex }) => {
   return (
     <div className="CommentCard">
       <div className="profile-picture">

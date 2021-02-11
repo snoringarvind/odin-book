@@ -7,7 +7,7 @@ const CommentForm = ({
   profile_picture,
   postid,
   setComments,
-
+  postIndex,
   setNewCommentLoading,
 }) => {
   const [state, setState] = useState({ comment: "" });
@@ -17,6 +17,11 @@ const CommentForm = ({
   const post_comment = (e) => {
     e.preventDefault();
 
+    let element = document.querySelector(`#post-${postIndex}`);
+    const remove_empty = element.querySelector(".empty");
+    if (remove_empty) {
+      remove_empty.style.display = "none";
+    }
     setNewCommentLoading(true);
 
     const comments_route = `/post/${postid}/comment`;
@@ -38,7 +43,7 @@ const CommentForm = ({
       // console.log(comments);
       console.log(response.data);
       setComments(response.data);
-      const element = document.querySelector(".comment-list");
+
       const height = element.scrollHeight;
       console.log(height);
       element.scrollTop = height;

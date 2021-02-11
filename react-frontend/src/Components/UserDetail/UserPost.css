@@ -151,7 +151,7 @@
 }
 
 .UserPost .UserPostCard .comment-list {
-  border: 1px solid lightgray;
+  border: 1px solid red;
   max-height: 60vh;
   overflow: auto;
   border-radius: 4px;

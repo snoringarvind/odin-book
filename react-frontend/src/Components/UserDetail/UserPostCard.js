@@ -19,6 +19,7 @@ const UserPostCard = ({
   logged_in_userid,
   // likeLength,
   // setLikeLength,
+  setPostIndex,
 }) => {
   const [cardError, setCardError] = useState("");
   const [commentError, setCommentError] = useState("");
@@ -155,9 +156,11 @@ const UserPostCard = ({
         <div className="post-content">{value.content_text}</div>
       </div>
       <div className="no-like">
-        <span>{likeLength || value.like.length} </span>
+        <span>{likeLength === "" ? value.like.length : likeLength} </span>
         <span>
-          {(likeLength || value.like.length) === 1 ? "  like" : "  likes"}
+          {(likeLength === "" ? value.like.length : likeLength) === 1
+            ? "  like"
+            : "  likes"}
         </span>
       </div>
       <div className="card-footer">
@@ -171,39 +174,22 @@ const UserPostCard = ({
           onClick={(e) => {
             e.preventDefault();
             like_post(value._id);
-            if (g == true) {
-              setLikeClick(false);
-              g = null;
-              return;
-            } else if (g == false) {
-              setLikeClick(true);
-              g = null;
-              return;
-            }
-            if (g == null) {
+            if (likeClick == null) {
+              if (g) {
+                setLikeClick(false);
+                setLikeLength(value.like.length - 1);
+              } else {
+                setLikeClick(true);
+                setLikeLength(value.like.length + 1);
+              }
+            } else {
+              if (likeClick) {
+                setLikeLength(likeLength - 1);
+              } else {
+                setLikeLength(likeLength + 1);
+              }
               setLikeClick(!likeClick);
             }
-            // console.log(value.like.length, likeClick);
-
-            // console.log(likeClick);
-            // console.log("likeCLick=", likeClick, "g=", g, value.like.length);
-
-            // } else {
-            //   if (likeClick == true) {
-            //     setLikeLength(Number(likeLength) - 1);
-            //   } else {
-            //     setLikeLength(Number(likeLength) + 1);
-            //   }
-            //   setLikeClick(!likeClick);
-            // }
-            // console.log(likeClick, value.like.length);
-
-            // if (g) {
-            //   setLikeLength(value.like.length - 1);
-            //   setLikeClick(false);
-            // } else {
-            //   setLikeLength(value.like.length + 1);
-            // }
           }}
         ></div>
         <div
@@ -220,37 +206,36 @@ const UserPostCard = ({
         ></div>
         <div className="share-icon far fa-share-square"></div>
       </div>
-      <div className="comment-list">
-        <div>
-          {commentIconClicked && commentError && (
-            <div className="error">{commentError}</div>
-          )}
-          {commentIconClicked &&
-            !commentError &&
-            commentsLoading &&
-            "loading..."}
-          {commentIconClicked &&
-            !commentError &&
-            !commentsLoading &&
-            commentIconClicked &&
-            (comments.comment_list.length == 0 ? (
-              <div className="empty">This post has no comments.</div>
-            ) : (
-              <>
-                <div className="no-comment">
-                  <span>{comments.comment_list.length} </span>
-                  <span>
-                    {comments.comment_list.length == 1
-                      ? " Comment"
-                      : " Comments"}
-                  </span>
-                </div>
-                {comments.comment_list.map((value, index) => (
-                  <CommentCard value={value} key={uniqid()} index={index} />
-                ))}
-              </>
-            ))}
-        </div>
+      <div className="comment-list" id={`post-${index}`}>
+        {commentIconClicked && commentError && (
+          <div className="error">{commentError}</div>
+        )}
+        {commentIconClicked && !commentError && commentsLoading && "loading..."}
+        {commentIconClicked &&
+          !commentError &&
+          !commentsLoading &&
+          commentIconClicked &&
+          (comments.comment_list.length == 0 ? (
+            <div className="empty">This post has no comments.</div>
+          ) : (
+            <>
+              <div className="no-comment">
+                <span>{comments.comment_list.length} </span>
+                <span>
+                  {comments.comment_list.length == 1 ? " Comment" : " Comments"}
+                </span>
+              </div>
+              {comments.comment_list.map((value, index) => (
+                <CommentCard
+                  value={value}
+                  key={uniqid()}
+                  index={index}
+                  postIndex={index}
+                />
+              ))}
+            </>
+          ))}
+
         <div>{newCommentLoading && "loading..."}</div>
       </div>
       {commentIconClicked && (
@@ -260,6 +245,7 @@ const UserPostCard = ({
           key={uniqid()}
           setComments={setComments}
           setNewCommentLoading={setNewCommentLoading}
+          postIndex={index}
         />
       )}
     </div>

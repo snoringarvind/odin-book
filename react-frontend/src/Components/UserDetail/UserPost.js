@@ -8,17 +8,24 @@ import "./UserPost.css";
 import MyPostUpdate from "../MyPosts/MyPostUpdate";
 import UserPostCard from "./UserPostCard";
 import MyPostDelete from "../MyPosts/MyPostDelete";
+import { axios_request } from "../Utils";
 
 const UserPost = () => {
-  const { axios_request } = useContext(OdinBookContext);
+  // const { axios_request } = useContext(OdinBookContext);
 
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(true);
+
+  //herer result is the post list
   const [result, setResult] = useState([]);
+
   const [isOwner, setIsOwner] = useState(false);
   const [updateClick, setUpdateClick] = useState("");
   const [createClick, setCreateClick] = useState(false);
   const [deleteClick, setDeleteClick] = useState(false);
+  const [likeLength, setLikeLength] = useState(false);
+
+  // const [commentLength, setCommentLength] = useState([]);
 
   //this is so we don't have to make request to the server to prefill the update form.
   const [updateData, setUpdateData] = useState("");
@@ -31,13 +38,13 @@ const UserPost = () => {
 
   const location = useLocation();
   const userid = location.state;
-  const post_list_route = `/posts/${userid}`;
-  const post_list_method = "GET";
 
   const params = useParams();
   console.log("params", params);
 
-  const make_server_request = () => {
+  const get_posts = () => {
+    const post_list_route = `/posts/${userid}`;
+    const post_list_method = "GET";
     const cb_error = (err) => {
       setError(err.mesage);
       setGetLoading(false);
@@ -56,16 +63,17 @@ const UserPost = () => {
     });
   };
 
+  const jwtData = JSON.parse(localStorage.getItem("jwtData"));
+  let logged_in_userid;
+  if (jwtData) {
+    logged_in_userid = jwtData.sub;
+  }
   useEffect(() => {
-    const jwtData = JSON.parse(localStorage.getItem("jwtData"));
-
-    if (jwtData) {
-      const logged_in_userid = jwtData.sub;
-      if (logged_in_userid.toString() === userid.toString()) {
-        setIsOwner(true);
-      }
+    if (logged_in_userid.toString() === userid.toString()) {
+      setIsOwner(true);
     }
-    make_server_request();
+
+    get_posts();
 
     //if the owner then show the post form
     //here owner is the logged in user
@@ -161,6 +169,9 @@ const UserPost = () => {
                   isOwner={isOwner}
                   setDeleteClick={setDeleteClick}
                   deleteClick={deleteClick}
+                  logged_in_userid={logged_in_userid}
+                  likeLength={likeLength}
+                  setLikeLength={setLikeLength}
                 />
               );
             })}

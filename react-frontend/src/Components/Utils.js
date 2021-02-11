@@ -31,19 +31,20 @@ const axios_request = async ({
         headers: headers || "",
         data: data,
       });
-      console.log("Context Response=", response_data);
+      console.log("Utils Response=", response_data);
       axios_response(response_data);
     } catch (err) {
       if (err.response) {
-        console.log("Context Error", err.response.data);
+        console.log("Utils Error", err.response.data);
       } else {
-        console.log("Context Error", err.message);
+        console.log("Utils Error", err.message);
       }
       axios_error(err);
     }
   } else {
-    console.log("Context Error= NO JWT TOKEN");
+    console.log("Utils Error= NO JWT TOKEN");
   }
 };
 
-export default axios_request;
+export default "";
+export { axios_request };

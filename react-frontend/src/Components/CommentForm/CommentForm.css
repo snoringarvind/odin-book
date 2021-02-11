@@ -1,0 +1,39 @@
+.CommentForm {
+  /* border: 1px solid; */
+  display: flex;
+  /* margin: 10px 0; */
+  padding: 5px;
+  /* width: 80vw; */
+  box-sizing: border-box;
+  align-items: center;
+  height: 9vh;
+  border-top: 1px solid lightgray;
+  border-bottom: 1px solid lightgray;
+}
+
+.CommentForm .profile-picture {
+  border: 1px solid;
+  min-width: 2.3rem;
+  height: 2.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.CommentForm form input {
+  border: 1px solid;
+  display: block;
+  background-color: rgb(243, 243, 243);
+  border-radius: 8px;
+  padding: 8px;
+  height: 2.3rem;
+  /* width: 400px; */
+
+  /* width: 80- */
+  /* width: 75vw; */
+  width: 100%;
+
+  margin-right: 5px;
+}

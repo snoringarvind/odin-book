@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
-import axios_request from "../Utils";
+import { axios_request } from "../Utils";
 
 const NewsFeed = () => {
   // const { axios_request } = useContext(OdinBookContext);

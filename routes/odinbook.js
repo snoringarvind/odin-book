@@ -38,6 +38,13 @@ router.post(
   commentController.comment_post
 );
 
+// //*!for now getting comment list length manually
+// router.get(
+//   "/post/:postid/comment-length",
+//   utils.verifyJwt,
+//   commentController.comment_length_get
+// );
+
 //* PUT comment
 router.put(
   "/post/:postid/comment/:commentid",

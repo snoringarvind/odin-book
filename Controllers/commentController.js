@@ -2,13 +2,28 @@ const Comment = require("../models/Comment");
 const { body, validationResult } = require("express-validator");
 
 exports.comment_get = (req, res, next) => {
-  Comment.find({ post: req.params.postid }, (err, result) => {
-    if (err) return res.status(500).json({ msg: err.message });
-    else {
-      res.status(200).json(result);
-    }
-  });
+  Comment.findOne({ post: req.params.postid })
+    .populate("comment_list.user", "-comment_list.user.password")
+    .exec((err, result) => {
+      // console.log(err);
+      if (err) return res.status(500).json({ msg: err.message });
+      else {
+        // console.log(result);
+        res.status(200).json(result);
+      }
+    });
 };
+
+//!tooks kind of stupid to do this
+// exports.comment_length_get = (req, res, next) => {
+//   Comment.findOne({ post: req.params.postid }).exec((err, result) => {
+//     if (err) return res.status(500).json({ msg: err.message });
+//     else {
+//       console.log(result);
+//       // return res.status(200).json(result);
+//     }
+//   });
+// };
 
 exports.comment_post = [
   body("comment")
@@ -37,13 +52,16 @@ exports.comment_post = [
           {
             comment_list: query,
           },
-          (err, result) => {
+          { new: true }
+        )
+          .populate("comment_list.user")
+          .exec((err, result) => {
+            console.log(result);
             if (err) return res.status(500).json({ msg: err.message });
             else {
-              return res.status(200).json({ new_comment: result._id });
+              return res.status(200).json(result);
             }
-          }
-        );
+          });
       } catch (err) {
         return res.status(500).json({ msg: err.message });
       }

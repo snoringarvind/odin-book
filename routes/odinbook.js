@@ -127,10 +127,14 @@ router.get(
 router.post("/signup", userController.user_signup);
 
 //get user-search-list
-router.get("/user/search/:name", userController.user_get_search_list);
+router.get(
+  "/user/search/:name",
+  utils.verifyJwt,
+  userController.user_get_search_list
+);
 
 //get user-detail
-router.get("/user/:userid", userController.user_get_detail);
+router.get("/user/:userid", utils.verifyJwt, userController.user_get_detail);
 
 //*no need to create a new route to update the user details, since you are alreay doing it in the profile PUT route above
 

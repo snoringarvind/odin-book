@@ -27,47 +27,47 @@ const Home = () => {
   // const params = useParams();
   // console.log(params);
 
-  useEffect(() => {
-    const x = window;
-    x.addEventListener("click", (e) => {
-      //maybe if something goes wrong ..putting this in a try,catch block
-      try {
-        e.stopPropagation();
-        e.preventDefault();
-        let arr = e.target.classList;
+  // useEffect(() => {
+  //   const x = window;
+  //   x.addEventListener("click", (e) => {
+  //     //maybe if something goes wrong ..putting this in a try,catch block
+  //     try {
+  //       e.stopPropagation();
+  //       e.preventDefault();
+  //       let arr = e.target.classList;
 
-        for (let i = 0; i < arr.length; i++) {
-          let element = document.querySelector(`.${arr[i]}`);
+  //       for (let i = 0; i < arr.length; i++) {
+  //         let element = document.querySelector(`.${arr[i]}`);
 
-          // doing this 'if(element==null)' so if the form-btn is clicked cancel this function shouldn't be affected.
-          //since the form-btn will be null when it is closed, so to prevent the error
-          if (element == null) {
-            return;
-          }
+  //         // doing this 'if(element==null)' so if the form-btn is clicked cancel this function shouldn't be affected.
+  //         //since the form-btn will be null when it is closed, so to prevent the error
+  //         if (element == null) {
+  //           return;
+  //         }
 
-          let p = element.classList;
-          if (
-            p[i].toString() !== "drop-btn" &&
-            p[i] !== null &&
-            p[i] !== "ham-icon" &&
-            p[i] !== "close-icon"
-          ) {
-            const c = document.querySelector(".drop-btn-active");
-            if (c) {
-              c.classList.remove("drop-btn-active");
-              setIsclick(false);
-              return;
-            }
-          }
-          arr = [];
-        }
+  //         let p = element.classList;
+  //         if (
+  //           p[i].toString() !== "drop-btn" &&
+  //           p[i] !== null &&
+  //           p[i] !== "ham-icon" &&
+  //           p[i] !== "close-icon"
+  //         ) {
+  //           const c = document.querySelector(".drop-btn-active");
+  //           if (c) {
+  //             c.classList.remove("drop-btn-active");
+  //             setIsclick(false);
+  //             return;
+  //           }
+  //         }
+  //         arr = [];
+  //       }
 
-        arr = [];
-      } catch (err) {
-        console.log(err.message);
-      }
-    });
-  }, []);
+  //       arr = [];
+  //     } catch (err) {
+  //       console.log(err.message);
+  //     }
+  //   });
+  // }, []);
   return (
     <div className="Home">
       <div className="Navigation">

@@ -50,3 +50,7 @@
 .SearchResult .add-btn button {
   cursor: pointer;
 }
+
+.hello {
+  border: 1px solid;
+}

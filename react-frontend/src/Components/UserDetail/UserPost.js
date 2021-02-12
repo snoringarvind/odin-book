@@ -72,6 +72,7 @@ const UserPost = () => {
     if (logged_in_userid.toString() === userid.toString()) {
       setIsOwner(true);
     }
+    console.log("hello");
 
     get_posts();
 
@@ -115,6 +116,8 @@ const UserPost = () => {
     //but postupdate and postcreate ka click-value child compoenent postform mein change ho raha tha isliye userpost re-render ho raha tha.
     setDeleteClick(false);
   };
+
+  console.log(location.pathname);
 
   return (
     <div className="UserPost">

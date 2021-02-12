@@ -44,7 +44,7 @@ const MyFriendsCard = ({
       <div className="name-container">
         <Link
           to={{
-            pathname: `/user/${value.username}`,
+            pathname: `/user/${value.username}/posts`,
             state: value._id,
           }}
         >

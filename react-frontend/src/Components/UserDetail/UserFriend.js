@@ -47,40 +47,40 @@ const UserFriend = () => {
     });
   };
 
-  const get_my_friend_list = () => {
-    //this is the owner id
-    const jwtData = JSON.parse(localStorage.getItem("jwtData"));
-    let username;
-    let userid;
-    if (jwtData) {
-      username = jwtData.user;
-      userid = jwtData.sub;
-    }
+  // const get_my_friend_list = () => {
+  //   //this is the owner id
+  //   const jwtData = JSON.parse(localStorage.getItem("jwtData"));
+  //   let username;
+  //   let userid;
+  //   if (jwtData) {
+  //     username = jwtData.user;
+  //     userid = jwtData.sub;
+  //   }
 
-    const route = `/friend/${userid}`;
-    const method = "GET";
+  //   const route = `/friend/${userid}`;
+  //   const method = "GET";
 
-    const cb_error = (err) => {
-      setError(err.message);
-    };
+  //   const cb_error = (err) => {
+  //     setError(err.message);
+  //   };
 
-    const cb_response = (response) => {
-      setMyFriendList(response.data);
-    };
+  //   const cb_response = (response) => {
+  //     setMyFriendList(response.data);
+  //   };
 
-    axios_request({
-      route: route,
-      data: "",
-      method: method,
-      axios_error: cb_error,
-      axios_response: cb_response,
-    });
-  };
+  //   axios_request({
+  //     route: route,
+  //     data: "",
+  //     method: method,
+  //     axios_error: cb_error,
+  //     axios_response: cb_response,
+  //   });
+  // };
 
   useEffect(() => {
     make_server_request();
-    get_my_friend_list();
-  }, []);
+    // get_my_friend_list();
+  }, [location.pathname]);
 
   useEffect(() => {
     // setTempResult(result);

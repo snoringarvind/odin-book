@@ -42,7 +42,11 @@ const SearchResult = () => {
     const cb_response = (response) => {
       console.log(response);
       setGetLoading(false);
-      setResult(response.data);
+      if (!Array.isArray(response.data)) {
+        setResult([response.data]);
+      } else {
+        setResult(response.data);
+      }
     };
 
     axios_request({
@@ -54,40 +58,40 @@ const SearchResult = () => {
     });
   };
 
-  const get_my_friend_list = () => {
-    //this is the owner id
-    const jwtData = JSON.parse(localStorage.getItem("jwtData"));
-    let username;
-    let userid;
-    if (jwtData) {
-      username = jwtData.user;
-      userid = jwtData.sub;
-    }
+  // const get_my_friend_list = () => {
+  //   //this is the owner id
+  //   const jwtData = JSON.parse(localStorage.getItem("jwtData"));
+  //   let username;
+  //   let userid;
+  //   if (jwtData) {
+  //     username = jwtData.user;
+  //     userid = jwtData.sub;
+  //   }
 
-    const route = `/friend/${userid}`;
-    const method = "GET";
+  //   const route = `/friend/${userid}`;
+  //   const method = "GET";
 
-    const cb_error = (err) => {
-      setError(err.message);
-    };
+  //   const cb_error = (err) => {
+  //     setError(err.message);
+  //   };
 
-    const cb_response = (response) => {
-      setMyFriendList(response.data);
-    };
+  //   const cb_response = (response) => {
+  //     setMyFriendList(response.data);
+  //   };
 
-    axios_request({
-      route: route,
-      data: "",
-      method: method,
-      axios_error: cb_error,
-      axios_response: cb_response,
-    });
-  };
+  //   axios_request({
+  //     route: route,
+  //     data: "",
+  //     method: method,
+  //     axios_error: cb_error,
+  //     axios_response: cb_response,
+  //   });
+  // };
 
   useEffect(() => {
     if (searchValueChange === true) {
       make_server_request();
-      get_my_friend_list();
+      // get_my_friend_list();
       setSearchValueChange(false);
     }
   }, [searchValueChange]);
@@ -96,7 +100,7 @@ const SearchResult = () => {
     if (!searchValueChange) {
       if (params) {
         make_server_request();
-        get_my_friend_list();
+        // get_my_friend_list();
       }
     }
     //to prefil the search bar in case the user realoads the page
@@ -109,6 +113,8 @@ const SearchResult = () => {
       {!getLoading &&
         (error ? (
           <div className="error">{error}</div>
+        ) : result.length == 0 ? (
+          <div className="empty">No users found with this query :(</div>
         ) : (
           result.map((value, index) => {
             return (
@@ -119,7 +125,7 @@ const SearchResult = () => {
                 result={result}
                 setError={setError}
                 key={uniqid()}
-                myFriendList={myFriendList}
+                // myFriendList={myFriendList}
               />
             );
           })

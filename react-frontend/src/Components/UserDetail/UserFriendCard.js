@@ -67,10 +67,10 @@ const UserFriendCard = ({
     });
 
     // only do this for the owner,,, bcoz it deletes the user from the screen
-    if (personid.toString() === userid.toString()) {
-      result.splice(index, 1);
-      setIschanged(!isChanged);
-    }
+    // if (personid.toString() === userid.toString()) {
+    //   result.splice(index, 1);
+    //   setIschanged(!isChanged);
+    // }
   };
 
   const display = () => {
@@ -149,7 +149,7 @@ const UserFriendCard = ({
       <div className="name-container">
         <Link
           to={{
-            pathname: `/user/${value.username}`,
+            pathname: `/user/${value.username}/posts`,
             state: value._id,
           }}
         >

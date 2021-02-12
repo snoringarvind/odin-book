@@ -1,5 +1,6 @@
 import React from "react";
 import "./CommentCard.css";
+import { Link } from "react-router-dom";
 
 const CommentCard = ({ value, index, postIndex }) => {
   return (
@@ -9,8 +10,15 @@ const CommentCard = ({ value, index, postIndex }) => {
       </div>
       <div className="comment-container">
         <div className="name">
-          <span>{value.user.fname} </span>
-          <span>{value.user.lname}</span>
+          <Link
+            to={{
+              pathname: `/user/${value.user.username}/posts`,
+              state: value.user._id,
+            }}
+          >
+            <span>{value.user.fname} </span>
+            <span>{value.user.lname}</span>
+          </Link>
         </div>
         <div className="comment">{value.comment}</div>
       </div>

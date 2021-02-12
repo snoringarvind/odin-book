@@ -15,6 +15,8 @@ const OdinBookProvider = ({ children }) => {
 
   //for  form
   const [userPostResult, setUserPostResult] = useState([]);
+  const [myFriends, setMyFriends] = useState([]);
+  const [didfriendsMount, setDidfriendsMount] = useState(true);
 
   //global isAuth for route requests
   const axios_request = async ({
@@ -69,6 +71,8 @@ const OdinBookProvider = ({ children }) => {
         searchValue: [searchValueChange, setSearchValueChange],
         searchBarStateValue: [searchBarState, setSearchBarState],
         userPostResultValue: [userPostResult, setUserPostResult],
+        myFriendsValue: [myFriends, setMyFriends],
+        didfriendsMountValue: [didfriendsMount, setDidfriendsMount],
       }}
     >
       {children}

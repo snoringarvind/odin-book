@@ -141,7 +141,21 @@ exports.user_get_search_list = (req, res, next) => {
           if (result.length == 0) {
             return res.status(200).json([]);
           } else {
-            return res.status(200).json(result);
+            let arr = [];
+            User.findById(res.locals.user.sub, (err2, result2) => {
+              if (err2) return res.status(500).json({ msg: err2.message });
+              else {
+                for (let i = 0; i < result.length; i++) {
+                  const check = result2.friend.includes(result[i]._id);
+                  if (check) {
+                    arr.push({ user: result, isfriend: true });
+                  } else {
+                    arr.push({ user: result, isfriend: false });
+                  }
+                }
+                return res.status(200).json(arr);
+              }
+            });
           }
         }
       });
@@ -152,7 +166,7 @@ exports.user_get_search_list = (req, res, next) => {
     const u = [...fname];
     console.log(u);
     if (u[0] === "@") {
-      User.findOne({ username: fname })
+      User.find({ username: fname })
         .select("-password")
         .exec((err, result) => {
           if (err) return res.status(500).json({ msg: err.message });
@@ -160,7 +174,21 @@ exports.user_get_search_list = (req, res, next) => {
             if (result == null) {
               return res.status(200).json([]);
             } else {
-              return res.status(200).json(result);
+              User.findById(res.locals.user.sub, (err2, result2) => {
+                if (err2) return res.status(500).json({ msg: err2.message });
+                else {
+                  const i = result2.friend.includes(result._id);
+                  if (i) {
+                    return res
+                      .status(200)
+                      .json({ user: result, isfriend: true });
+                  } else {
+                    return res
+                      .status(200)
+                      .json({ user: result, isfriend: false });
+                  }
+                }
+              });
             }
           }
         });
@@ -173,7 +201,21 @@ exports.user_get_search_list = (req, res, next) => {
             if (result.length == 0) {
               return res.status(200).json([]);
             } else {
-              return res.status(200).json(result);
+              let arr = [];
+              User.findById(res.locals.user.sub, (err2, result2) => {
+                if (err2) return res.status(500).json({ msg: err2.message });
+                else {
+                  for (let i = 0; i < result.length; i++) {
+                    const check = result2.friend.includes(result[i]._id);
+                    if (check) {
+                      arr.push({ user: result, isfriend: true });
+                    } else {
+                      arr.push({ user: result, isfriend: false });
+                    }
+                  }
+                  return res.status(200).json(arr);
+                }
+              });
             }
           }
         });

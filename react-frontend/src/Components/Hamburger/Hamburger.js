@@ -15,7 +15,7 @@ const Hamburger = () => {
       <div className="account">
         <div className="profile-picture"></div>
         <div className="nav-link-container">
-          <Link to={{ pathname: `/user/${username}`, state: userid }}>
+          <Link to={{ pathname: `/user/${username}/posts`, state: userid }}>
             <div className="user">{username}</div>
             <div className="nav-link-desc">See your profile</div>
           </Link>

@@ -6,17 +6,21 @@ import MyFriendsCard from "./MyFriendsCard";
 import "./MyFriends.css";
 
 const MyFriends = () => {
-  const { axios_request } = useContext(OdinBookContext);
+  const { axios_request, myFriendsValue, didfriendsMountValue } = useContext(
+    OdinBookContext
+  );
   const [error, setError] = useState("");
-  const [getLoading, setGetLoading] = useState(true);
-  const [result, setResult] = useState([]);
+  const [getLoading, setGetLoading] = useState(false);
+  // const [result, setResult] = useState([]);
 
+  const [myFriends, setMyFriends] = myFriendsValue;
   const jwtData = JSON.parse(localStorage.getItem("jwtData"));
   const userid = jwtData.sub;
   const myfriend_list_route = `/friend/${userid}`;
   const myfriend_list_method = "GET";
 
   const [isChanged, setIschanged] = useState(false);
+  const [didfriendsMount, setDidfriendsMount] = didfriendsMountValue;
 
   const make_server_request = () => {
     const cb_error = (err) => {
@@ -24,7 +28,8 @@ const MyFriends = () => {
       setGetLoading(false);
     };
     const cb_response = (response) => {
-      setResult(response.data);
+      // setResult(response.data);
+      setMyFriends(response.data);
       setGetLoading(false);
     };
 
@@ -37,10 +42,15 @@ const MyFriends = () => {
     });
   };
 
+  console.log(didfriendsMount);
   useEffect(() => {
-    make_server_request();
+    if (didfriendsMount == true) {
+      make_server_request();
+    }
+    setDidfriendsMount(false);
   }, []);
 
+  console.log(myFriendsValue);
   return (
     <div className="MyFriends">
       {" "}
@@ -49,12 +59,12 @@ const MyFriends = () => {
         (error ? (
           <div className="error">{error}</div>
         ) : (
-          result.map((value, index) => {
+          myFriends.map((value, index) => {
             return (
               <MyFriendsCard
                 value={value}
                 index={index}
-                result={result}
+                result={myFriends}
                 setError={setError}
                 key={uniqid()}
                 isChanged={isChanged}

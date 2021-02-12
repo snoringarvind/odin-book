@@ -6,6 +6,7 @@ import {
   Switch,
   useParams,
   useLocation,
+  useHistory,
 } from "react-router-dom";
 import UserAbout from "./UserAbout";
 import UserPost from "./UserPost";
@@ -17,6 +18,8 @@ const UserDetail = () => {
   let params = useParams();
   console.log(params);
   console.log(location.state);
+  const history = useHistory();
+  console.log(history);
 
   return (
     <div className="UserDetail">
@@ -39,13 +42,13 @@ const UserDetail = () => {
         />
       </div>
       <Switch>
-        <Route exact path={`/user/${params.username}/posts`}>
+        <Route path={`/user/${params.username}/posts`}>
           <UserPost />
         </Route>
-        <Route exact path={`/user/${params.username}/about`}>
+        <Route path={`/user/${params.username}/about`}>
           <UserAbout />
         </Route>
-        <Route exact path={`/user/${params.username}/friends`}>
+        <Route path={`/user/${params.username}/friends`}>
           <UserFriend />
         </Route>
       </Switch>

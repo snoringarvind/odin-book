@@ -17,12 +17,13 @@ const CommentForm = ({
   const post_comment = (e) => {
     e.preventDefault();
 
+    // setNewCommentLoading(true);
+
     let element = document.querySelector(`#post-${postIndex}`);
     const remove_empty = element.querySelector(".empty");
     if (remove_empty) {
       remove_empty.style.display = "none";
     }
-    setNewCommentLoading(true);
 
     const comments_route = `/post/${postid}/comment`;
     const comments_method = "POST";
@@ -47,7 +48,7 @@ const CommentForm = ({
       const height = element.scrollHeight;
       console.log(height);
       element.scrollTop = height;
-      setNewCommentLoading(false);
+      // setNewCommentLoading(false);
       // console.log([response.data.comment_list].concat(comments.comment_list));
       // setComments([response.data].concat(comments));
     };

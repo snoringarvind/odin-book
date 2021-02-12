@@ -24,20 +24,24 @@ const UserDetail = () => {
   return (
     <div className="UserDetail">
       <div className="user-banner">{params.username}</div>
+      <div className="name-container">
+        <div>{location.state.fname}</div>
+        <div>{location.state.lname}</div>
+      </div>
       <div className="UserNav">
         <UserNav
           to={`/user/${params.username}/posts`}
-          state={location.state}
+          state={location.state.userid}
           label="Posts"
         />
         <UserNav
           to={`/user/${params.username}/about`}
-          state={location.state}
+          state={location.state.userid}
           label="About"
         />
         <UserNav
-          to={`/user/${params.username}/friends`}
-          state={location.state}
+          to={`/user/${params.username.userid}/friends`}
+          state={location.state.userid}
           label="Friends"
         />
       </div>

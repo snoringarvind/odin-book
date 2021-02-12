@@ -63,7 +63,11 @@ const SearchResultCard = ({ value, index, setError, myFriendList }) => {
         <Link
           to={{
             pathname: `/user/${value.user[index].username}/posts`,
-            state: value.user[index]._id,
+            state: {
+              userid: value.user[index]._id,
+              fname: value.user[index].fname,
+              lname: value.user[index].lname,
+            },
           }}
         >
           <div className="name">

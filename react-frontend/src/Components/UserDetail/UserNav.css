@@ -14,7 +14,8 @@
   color: black;
   text-decoration: none;
   /* border: 1px solid; */
-  height: 7vh;
+  /* height: 7vh; */
+  padding: 10px;
   display: flex;
   align-items: center;
 }

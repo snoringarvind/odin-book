@@ -15,7 +15,7 @@ exports.newsfeed = async (req, res, next) => {
     console.log(friend_list);
     const posts = await Post.find({ user: friend_list }).populate(
       "user",
-      "-password"
+      "-password -friend"
     );
 
     console.log(posts);

@@ -17,9 +17,14 @@ const UserPostCard = ({
   setDeleteClick,
   deleteClick,
   logged_in_userid,
-  // likeLength,
-  // setLikeLength,
+  likeLength,
+  setLikeLength,
   setPostIndex,
+  likeClick,
+  setLikeClick,
+  indexOfLikeClicked,
+  setIndexOfLikeClicked,
+  postsLength,
 }) => {
   const [cardError, setCardError] = useState("");
   const [commentError, setCommentError] = useState("");
@@ -29,9 +34,7 @@ const UserPostCard = ({
   const [newCommentLoading, setNewCommentLoading] = useState(false);
   const [onlyOneClick, setonlyOneClick] = useState(true);
 
-  const [likeLength, setLikeLength] = useState("");
-
-  const [likeClick, setLikeClick] = useState(null);
+  // const [likeLength, setLikeLength] = useState("");
 
   const like_post = (postid) => {
     const like_post_route = `/post/${postid}/like`;
@@ -84,6 +87,60 @@ const UserPostCard = ({
   //     element.style.color = "blue";
   //   }
   // }, []);
+
+  // useEffect(() => {
+  //   console.log(g);
+  //   setLikeClick(g);
+  // }, []);
+
+  const [pp, setpp] = useState(false);
+
+  const show_like = () => {
+    console.log(indexOfLikeClicked, likeClick);
+    if (indexOfLikeClicked == null) {
+      if (g) {
+        return "blue";
+      } else {
+        return "";
+      }
+    } else if (indexOfLikeClicked !== null) {
+      if (indexOfLikeClicked === index) {
+        if (likeClick) {
+          return "blue";
+        } else {
+          return "";
+        }
+      }
+    }
+  };
+
+  useEffect(() => {
+    likeClick.push(g);
+    setLikeClick(likeClick);
+    likeLength.push(value.like.length);
+    setLikeLength(likeLength);
+    // console.log(likeLength[index]);
+    setpp(!pp);
+
+    if (likeLength.length > postsLength) {
+      // console.log(likeLength.length, postsLength);
+      const x = likeLength.length - postsLength;
+      likeLength.splice(postsLength, x);
+    }
+    if (likeClick.length > postsLength) {
+      const j = likeClick.length - postsLength;
+      likeClick.splice(postsLength, j);
+    }
+    console.log(
+      "likeClick.length=",
+      likeClick.length,
+      "likeLength=",
+      likeLength.length,
+      "postslength=",
+      postsLength
+    );
+  }, []);
+
   return (
     <div className="UserPostCard">
       <div className="head">
@@ -156,42 +213,57 @@ const UserPostCard = ({
         <div className="post-content">{value.content_text}</div>
       </div>
       <div className="no-like">
-        <span>{likeLength === "" ? value.like.length : likeLength} </span>
-        <span>
-          {(likeLength === "" ? value.like.length : likeLength) === 1
-            ? "  like"
-            : "  likes"}
-        </span>
+        {/* <span>{likeLength[index]} </span> */}
+        <span>{likeLength[index]}</span>
       </div>
       <div className="card-footer">
         <div
           style={{
-            color:
-              (likeClick == null && (g ? "blue" : "")) ||
-              (likeClick !== null && (likeClick ? "blue" : "")),
+            color: likeClick[index] ? "blue" : "",
+            // (likeClick == null && (g ? "blue" : "")) ||
+            // (likeClick !== null && (likeClick ? "blue" : "")),
           }}
           className="like-icon far fa-thumbs-up"
           onClick={(e) => {
             e.preventDefault();
             like_post(value._id);
-            if (likeClick == null) {
-              if (g) {
-                setLikeClick(false);
-                setLikeLength(value.like.length - 1);
-              } else {
-                setLikeClick(true);
-                setLikeLength(value.like.length + 1);
-              }
+            //   console.log(likeClick, g);
+            //   if (likeClick == null) {
+            //     if (g) {
+            //       setLikeClick(false);
+            //       setLikeLength(value.like.length - 1);
+            //       console.log("hello");
+            //     } else {
+            //       setLikeClick(true);
+            //       setLikeLength(value.like.length + 1);
+            //       console.log("man");
+            //     }
+            //   } else {
+            //     if (likeClick) {
+            //       setLikeLength(likeLength - 1);
+            //     } else {
+            //       setLikeLength(likeLength + 1);
+            //     }
+            //     setLikeClick(!likeClick);
+            //   }
+            //   console.log(likeClick);
+            //   setIndexOfLikeClicked(index);
+            console.log(likeClick[index]);
+            // console.log(indexOfLikeClicked);
+            if (likeClick[index] == true) {
+              likeLength[index] = likeLength[index] - 1;
+              setLikeLength(likeLength);
             } else {
-              if (likeClick) {
-                setLikeLength(likeLength - 1);
-              } else {
-                setLikeLength(likeLength + 1);
-              }
-              setLikeClick(!likeClick);
+              likeLength[index] = likeLength[index] + 1;
+              setLikeLength(likeLength);
             }
+            setIndexOfLikeClicked(null);
+            likeClick[index] = !likeClick[index];
+            setLikeClick(likeClick);
+            setpp(!pp);
           }}
         ></div>
+
         <div
           className="comment-icon far fa-comment-alt"
           onClick={(e) => {

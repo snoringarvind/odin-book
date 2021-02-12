@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 import { axios_request } from "../Utils";
+import NewsFeedCard from "./NewsFeedCard";
 
 const NewsFeed = () => {
   // const { axios_request } = useContext(OdinBookContext);
@@ -46,13 +47,7 @@ const NewsFeed = () => {
       return <div className="empty">No Posts to show</div>;
     } else {
       for (let i = 0; i < result.length; i++) {
-        arr.push(
-          <div className="card" key={uniqid()}>
-            <div className="title">{result[i].title}</div>
-            <div className="content_text">{result[i].content_text}</div>
-            <div className="like">{result[i].like.length}</div>
-          </div>
-        );
+        arr.push(<div className="card" key={uniqid()}></div>);
       }
       return arr;
     }
@@ -62,7 +57,17 @@ const NewsFeed = () => {
     <div className="NewsFeed">
       {getLoading && "loading..."}
       {!getLoading && (
-        <>{error ? <div className="error">{error}</div> : display_posts()}</>
+        <>
+          {error ? (
+            <div className="error">{error}</div>
+          ) : (
+            result.map((value, index) => {
+              return (
+                <NewsFeedCard value={value} index={index} key={uniqid()} />
+              );
+            })
+          )}
+        </>
       )}
     </div>
   );

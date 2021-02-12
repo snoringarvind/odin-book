@@ -23,7 +23,7 @@ const UserPost = () => {
   const [updateClick, setUpdateClick] = useState("");
   const [createClick, setCreateClick] = useState(false);
   const [deleteClick, setDeleteClick] = useState(false);
-  const [likeLength, setLikeLength] = useState(false);
+  const [likeLength, setLikeLength] = useState([]);
 
   // const [commentLength, setCommentLength] = useState([]);
 
@@ -75,12 +75,16 @@ const UserPost = () => {
     console.log("hello");
 
     get_posts();
+    // setLikeLength([]);
 
     //if the owner then show the post form
     //here owner is the logged in user
     //and the userid is of the person we are browing which will be in the url
   }, []);
 
+  // useEffect(() => {
+  //   setLikeLength([]);
+  // }, [likeLength]);
   // useEffect(() => {
   //   if(indexOfCardClicked)
   // }, [optionClick]);
@@ -118,6 +122,9 @@ const UserPost = () => {
   };
 
   console.log(location.pathname);
+
+  const [likeClick, setLikeClick] = useState([]);
+  const [indexOfLikeClicked, setIndexOfLikeClicked] = useState(null);
 
   return (
     <div className="UserPost">
@@ -175,6 +182,11 @@ const UserPost = () => {
                   logged_in_userid={logged_in_userid}
                   likeLength={likeLength}
                   setLikeLength={setLikeLength}
+                  indexOfLikeClicked={indexOfLikeClicked}
+                  setIndexOfLikeClicked={setIndexOfLikeClicked}
+                  likeClick={likeClick}
+                  setLikeClick={setLikeClick}
+                  postsLength={result.length}
                 />
               );
             })}

@@ -7,11 +7,7 @@ import "./MyFriends.css";
 import { axios_request } from "../Utils";
 
 const MyFriends = () => {
-  const {
-    myFriendsValue,
-    myFriendsBtnValue,
-    didfriendsMountValue,
-  } = useContext(OdinBookContext);
+  const { myFriendsValue } = useContext(OdinBookContext);
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(false);
   // const [result, setResult] = useState([]);
@@ -19,10 +15,6 @@ const MyFriends = () => {
   const [myFriends, setMyFriends] = myFriendsValue;
   const [isChanged, setIsChanged] = useState(false);
 
-  useEffect(() => {
-    console.log("hello");
-    setMyFriends(myFriends);
-  }, [isChanged]);
   // const [myFriendsBtn, setMyFriendsBtn] = myFriendsBtnValue;
 
   // // const [isChanged, setIschanged] = useState(false);
@@ -63,7 +55,6 @@ const MyFriends = () => {
 
   return (
     <div className="MyFriends">
-      {" "}
       {getLoading && "loading..."}
       {!getLoading &&
         (error ? (

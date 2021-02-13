@@ -10,12 +10,18 @@ const UserFriendCard = ({
   setError,
   userFriendList,
   setUserFriendList,
+  userid,
+  isChanged,
+  setIsChanged,
 }) => {
   // const params = useParams();
   // console.log("params", params);
   // const history = useHistory();
   // console.log("histroy", history);
 
+  const { jwtData, myFriendsValue } = useContext(OdinBookContext);
+
+  const [myFriends, setMyFriends] = myFriendsValue;
   console.log("hello");
   //removes friend
   const clickHandler = () => {
@@ -47,10 +53,11 @@ const UserFriendCard = ({
     });
 
     // only do this for the owner,,, bcoz it deletes the user from the screen
-    // if (personid.toString() === userid.toString()) {
-    //   result.splice(index, 1);
-    //   setIschanged(!isChanged);
-    // }
+    if (jwtData.sub == userid) {
+      myFriends.splice(index, 1);
+      setMyFriends(myFriends);
+      setIsChanged(!isChanged);
+    }
   };
 
   const [pp, setpp] = useState(false);
@@ -81,14 +88,19 @@ const UserFriendCard = ({
       <div
         className="add-btn"
         onClick={() => {
-          console.log(userFriendList[index]);
-          userFriendList[index] = !userFriendList[index];
-          setUserFriendList(userFriendList);
-          setpp(!pp);
+          if (jwtData.sub != userid) {
+            console.log(userFriendList[index]);
+            userFriendList[index] = !userFriendList[index];
+            setUserFriendList(userFriendList);
+            setpp(!pp);
+          }
           clickHandler();
         }}
       >
-        <button>{userFriendList[index] ? "Remove" : "Add"}</button>
+        {jwtData.sub == userid && <button>Remove</button>}
+        {jwtData.sub !== userid && (
+          <button>{userFriendList[index] ? "Remove" : "Add"}</button>
+        )}
       </div>
     </div>
   );

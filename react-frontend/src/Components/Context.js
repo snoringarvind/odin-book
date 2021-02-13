@@ -19,9 +19,12 @@ const OdinBookProvider = ({ children }) => {
 
   //for MyFriends to not re-render
   const [myFriends, setMyFriends] = useState([]);
-  const [myFriendsBtn, setMyFriendsBtn] = useState([]);
 
-  const [didfriendsMount, setDidfriendsMount] = useState(true);
+  //for myabout to not re-render
+  const [myAbout, setMyAbout] = useState({});
+
+  //for mypost to not re-render
+  const [myPosts, setMyposts] = useState([]);
 
   const [myFriendsLoading, setMyFriendsLoading] = useState(true);
   // let [jwtData, setJwData]
@@ -44,10 +47,53 @@ const OdinBookProvider = ({ children }) => {
     };
     const cb_response = (response) => {
       setMyFriends(response.data);
-      const h = Array(response.data.length).fill(true);
-      setMyFriendsBtn(h);
+      // const h = Array(response.data.length).fill(true);
+      // setMyFriendsBtn(h);
       console.log(response.data);
       setMyFriendsLoading(false);
+    };
+
+    axios_request({
+      route: route,
+      method: method,
+      data: "",
+      axios_error: cb_error,
+      axios_response: cb_response,
+    });
+  };
+  const get_myabout = () => {
+    const route = `/profile/${jwtData.sub}`;
+    const method = "GET";
+
+    const cb_error = (err) => {
+      console.log(err.message);
+    };
+    const cb_response = (response) => {
+      setMyAbout(response.data);
+    };
+
+    axios_request({
+      route: route,
+      method: method,
+      data: "",
+      axios_error: cb_error,
+      axios_response: cb_response,
+    });
+  };
+
+  const get_myposts = () => {
+    const route = `/posts/${jwtData.sub}`;
+    const method = "GET";
+
+    const cb_error = (err) => {
+      console.log(err.message);
+      if (err.response) {
+        console.log(err.response.data);
+      }
+    };
+    const cb_response = (response) => {
+      console.log(response.data);
+      setMyposts(response.data);
     };
 
     axios_request({
@@ -61,6 +107,8 @@ const OdinBookProvider = ({ children }) => {
 
   useEffect(() => {
     get_myfriends_list();
+    get_myabout();
+    get_myposts();
   }, []);
 
   return (
@@ -70,8 +118,8 @@ const OdinBookProvider = ({ children }) => {
         searchBarStateValue: [searchBarState, setSearchBarState],
         userPostResultValue: [userPostResult, setUserPostResult],
         myFriendsValue: [myFriends, setMyFriends],
-        myFriendsBtnValue: [myFriendsBtn, setMyFriendsBtn],
-        didfriendsMountValue: [didfriendsMount, setDidfriendsMount],
+        myAboutValue: [myAbout, setMyAbout],
+        myPostsValue: [myPosts, setMyposts],
         jwtData: jwtData,
       }}
     >

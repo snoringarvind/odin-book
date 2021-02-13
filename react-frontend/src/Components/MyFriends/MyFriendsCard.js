@@ -15,8 +15,6 @@ const MyFriendsCard = ({
   isChanged,
   setIsChanged,
 }) => {
-  const { myFriendsValue } = useContext(OdinBookContext);
-  const [myFriends1, setMyFriends1] = myFriendsValue;
   //here we will also delete the friend from the screen maybe with a confirm message.
   //e.g. are you sure you want to remove this friend.
   const clickHandler = () => {
@@ -44,14 +42,10 @@ const MyFriendsCard = ({
     console.log(myFriends[index]);
     myFriends.splice(index, 1);
     setMyFriends(myFriends);
-    setpp(!pp);
     setIsChanged(!isChanged);
     // myFriendsBtn.splice(index, 1);
     // setMyFriendsBtn(myFriendsBtn);
   };
-
-  console.log(myFriends);
-  const [pp, setpp] = useState(false);
 
   useEffect(() => {}, [myFriends]);
   return (
@@ -83,7 +77,7 @@ const MyFriendsCard = ({
             // console.log(myFriendsBtn[index]);
             // myFriendsBtn[index] = !myFriendsBtn[index];
             // setMyFriendsBtn(myFriendsBtn);
-            setpp(!pp);
+
             return clickHandler();
           }}
         >

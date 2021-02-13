@@ -14,6 +14,9 @@ const UserFriend = () => {
   const [result, setResult] = useState([]);
   const [userFriendList, setUserFriendList] = useState([]);
 
+  const [isChanged, setIsChanged] = useState(false);
+  const { myFriendsValue } = useContext(OdinBookContext);
+  const [myFriends, setMyFriends] = myFriendsValue;
   const location = useLocation();
   const userid = location.state.userid;
 
@@ -47,13 +50,21 @@ const UserFriend = () => {
       axios_response: cb_response,
     });
   };
+  const { jwtData } = useContext(OdinBookContext);
 
   useEffect(() => {
-    make_server_request();
+    console.log(jwtData.sub, userid);
+    if (jwtData.sub !== userid) {
+      make_server_request();
+    } else {
+      setResult(myFriends);
+      setGetLoading(false);
+    }
     // get_my_friend_list();
   }, [location.pathname]);
 
   // console.log(myFriendList);
+  // console.log(result);
   return (
     <div className="UserFriend">
       {getLoading && "loading.."}
@@ -70,6 +81,9 @@ const UserFriend = () => {
                 key={uniqid()}
                 userFriendList={userFriendList}
                 setUserFriendList={setUserFriendList}
+                userid={userid}
+                isChanged={isChanged}
+                setIsChanged={setIsChanged}
               />
             );
           })

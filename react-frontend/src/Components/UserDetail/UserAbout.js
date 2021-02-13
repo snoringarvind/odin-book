@@ -4,7 +4,11 @@ import { OdinBookContext } from "../Context";
 import { axios_request } from "../Utils";
 
 const UserAbout = () => {
+  const { myAboutValue } = useContext(OdinBookContext);
+  const [myAbout, setMyAbout] = myAboutValue;
+
   const [getLoading, setGetLoading] = useState(true);
+
   const [about, setAbout] = useState("");
   const [error, setError] = useState("");
 
@@ -36,8 +40,16 @@ const UserAbout = () => {
     });
   };
 
+  const { jwtData } = useContext(OdinBookContext);
+
   useEffect(() => {
-    make_server_request();
+    console.log(jwtData.sub, userid);
+    if (jwtData.sub !== userid) {
+      make_server_request();
+    } else {
+      setAbout(myAbout);
+      setGetLoading(false);
+    }
   }, []);
 
   const display_about = () => {

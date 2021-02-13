@@ -12,7 +12,8 @@ import { axios_request } from "../Utils";
 
 const UserPost = ({ path }) => {
   console.log(path);
-  const { jwtData } = useContext(OdinBookContext);
+  const { jwtData, myPostsValue } = useContext(OdinBookContext);
+  const [myPosts, setMyPosts] = myPostsValue;
 
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(true);
@@ -40,8 +41,9 @@ const UserPost = ({ path }) => {
   const location = useLocation();
 
   console.log(location);
-  let userid;
 
+  //putting in an if-block since in news feed location.state will be undefined
+  let userid;
   if (path == "userpost") {
     userid = location.state.userid;
   }
@@ -77,27 +79,24 @@ const UserPost = ({ path }) => {
   };
 
   useEffect(() => {
-    console.log(jwtData);
-    console.log(jwtData.sub);
     console.log(userid);
-    if (jwtData && userid) {
-      if (jwtData.sub.toString() === userid.toString()) {
-        setIsOwner(true);
-      } else {
-        setIsOwner(false);
-      }
-    } else {
+    //herer if the url is news-feed , the userid will be undefined.
+    if (userid !== jwtData.sub) {
+      console.log(userid, jwtData.sub);
+      get_posts();
       setIsOwner(false);
+    } else {
+      setResult(myPosts);
+      setGetLoading(false);
+      setIsOwner(true);
     }
-    console.log("hello");
 
-    get_posts();
     // setLikeLength([]);
 
     //if the owner then show the post form
     //here owner is the logged in user
     //and the userid is of the person we are browing which will be in the url
-  }, [location.pathname]);
+  }, []);
 
   // useEffect(() => {
   //   setLikeLength([]);

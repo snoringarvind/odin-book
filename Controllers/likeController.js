@@ -16,7 +16,7 @@ exports.like_get = (req, res, next) => {
 };
 
 exports.like_post = [
-  body("like").escape(),
+  body("like").trim().escape(),
   async (req, res, next) => {
     let msg;
     try {
@@ -28,7 +28,7 @@ exports.like_post = [
       console.log(res.locals.user.sub);
       console.log(isContain);
       if (!isContain) {
-        query.push(res.locals.user.sub);
+        query.push(res.locals.user.sub.toString());
         msg = "like added";
         console.log("msg");
         Post.findByIdAndUpdate(req.params.postid, { like: query }, (err) => {

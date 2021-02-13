@@ -18,44 +18,40 @@ const MyFriends = () => {
 
   const [myFriends, setMyFriends] = myFriendsValue;
   const [myFriendsBtn, setMyFriendsBtn] = myFriendsBtnValue;
-  const jwtData = JSON.parse(localStorage.getItem("jwtData"));
-  const userid = jwtData.sub;
-  const myfriend_list_route = `/friend/${userid}`;
-  const myfriend_list_method = "GET";
 
-  // const [isChanged, setIschanged] = useState(false);
-  const [didfriendsMount, setDidfriendsMount] = didfriendsMountValue;
+  // // const [isChanged, setIschanged] = useState(false);
+  // const [didfriendsMount, setDidfriendsMount] = didfriendsMountValue;
 
-  const make_server_request = () => {
-    const cb_error = (err) => {
-      setError(err.message);
-      setGetLoading(false);
-    };
-    const cb_response = (response) => {
-      // setResult(response.data);
-      setMyFriends(response.data);
-      setGetLoading(false);
-      console.log(response.data.length);
-      const h = Array(response.data.length).fill(true);
-      setMyFriendsBtn(h);
-    };
+  // const make_server_request = () => {
+  //   const cb_error = (err) => {
+  //     setError(err.message);
+  //     setGetLoading(false);
+  //   };
+  //   const cb_response = (response) => {
+  //     // setResult(response.data);
+  //     setMyFriends(response.data);
+  //     setGetLoading(false);
+  //     console.log(response.data.length);
+  //     const h = Array(response.data.length).fill(true);
+  //     setMyFriendsBtn(h);
+  //   };
 
-    axios_request({
-      route: myfriend_list_route,
-      data: "",
-      method: myfriend_list_method,
-      axios_error: cb_error,
-      axios_response: cb_response,
-    });
-  };
+  //   axios_request({
+  //     route: myfriend_list_route,
+  //     data: "",
+  //     method: myfriend_list_method,
+  //     axios_error: cb_error,
+  //     axios_response: cb_response,
+  //   });
+  // };
 
-  console.log(didfriendsMount);
-  useEffect(() => {
-    if (didfriendsMount == true) {
-      make_server_request();
-    }
-    setDidfriendsMount(false);
-  }, []);
+  // console.log(didfriendsMount);
+  // useEffect(() => {
+  //   if (didfriendsMount == true) {
+  //     make_server_request();
+  //   }
+  //   setDidfriendsMount(false);
+  // }, []);
 
   console.log(myFriendsBtn);
 

@@ -17,26 +17,24 @@ exports.myProfile_post = [
   body("fname")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("First name cannot be empty")
-    .escape(),
+    .withMessage("First name cannot be empty"),
   body("lname")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("Last message cannot be empty")
-    .escape(),
+    .withMessage("Last message cannot be empty"),
   // body("profilePhoto").escape(),
   // body("bannerPhoto").escape(),
-  body("bio").trim().escape(),
-  body("nickname").trim().escape(),
-  body("school").trim().escape(),
-  body("college").trim().escape(),
-  body("working").trim().escape(),
-  body("relationshipStatus").trim().escape(),
+  body("bio").trim(),
+  body("nickname").trim(),
+  body("school").trim(),
+  body("college").trim(),
+  body("working").trim(),
+  body("relationshipStatus").trim(),
   body("books").escape(),
   body("food").escape(),
-  body("phone").trim().escape(),
-  body("email").trim().escape(),
-  body("gender").trim().escape(),
+  body("phone").trim(),
+  body("email").trim(),
+  body("gender").trim(),
   //*toDate to cast date string to proper Javascript type.
   //*checkFaly:true accepts date or null string
   //*is08601 is the date format
@@ -137,8 +135,8 @@ exports.myProfile_post = [
     // }
 
     const profile = {
-      fname: req.body.fname,
-      lname: req.body.lname,
+      fname: req.body.fname.toString(),
+      lname: req.body.lname.toString(),
       // profilePhoto: {
       //   data: res.locals.profile_photo_data,
       //   contentType: res.locals.profile_photo_mimetype,
@@ -147,20 +145,20 @@ exports.myProfile_post = [
       //   data: res.locals.banner_photo_data,
       //   contentType: res.locals.banner_photo_mimetype,
       // },
-      bio: req.body.bio,
-      nickName: req.body.nickName,
-      school: req.body.school,
-      college: req.body.college,
-      working: req.body.working,
-      relationshipStatus: req.body.relationshipStatus,
-      book: req.body.book,
-      food: req.body.food,
-      phone: req.body.phone,
-      email: req.body.email,
-      gender: req.body.gender,
+      bio: req.body.bio.toString(),
+      nickName: req.body.nickName.toString(),
+      school: req.body.school.toString(),
+      college: req.body.college.toString(),
+      working: req.body.working.toString(),
+      relationshipStatus: req.body.relationshipStatus.toString(),
+      book: req.body.book.toString(),
+      food: req.body.food.toString(),
+      phone: req.body.phone.toString(),
+      email: req.body.email.toString(),
+      gender: req.body.gender.toString(),
       dob: req.body.dob,
 
-      user: res.locals.user.sub,
+      user: res.locals.user.sub.toString(),
     };
 
     console.log(profile);

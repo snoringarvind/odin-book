@@ -18,6 +18,7 @@ import UserDetail from "../UserDetail/UserDetail";
 import Hamburger from "../Hamburger/Hamburger";
 import MyFriends from "../MyFriends/MyFriends";
 import { OdinBookContext } from "../Context";
+import UserPost from "../UserDetail/UserPost";
 
 const Home = () => {
   let location = useLocation();
@@ -107,7 +108,7 @@ const Home = () => {
 
       <Switch location={background || location}>
         <Route exact path="/">
-          <NewsFeed />
+          <UserPost path="newsfeed" />
         </Route>
         {/* user's friends */}
         <Route exect path="/user/:username">

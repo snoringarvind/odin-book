@@ -14,7 +14,7 @@ exports.comment_get = (req, res, next) => {
     });
 };
 
-//!tooks kind of stupid to do this
+//!looks kind of stupid to do this
 // exports.comment_length_get = (req, res, next) => {
 //   Comment.findOne({ post: req.params.postid }).exec((err, result) => {
 //     if (err) return res.status(500).json({ msg: err.message });
@@ -29,8 +29,7 @@ exports.comment_post = [
   body("comment")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("comment cannot be empty")
-    .escape(),
+    .withMessage("comment cannot be empty"),
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -43,8 +42,8 @@ exports.comment_post = [
         );
         query = query.comment_list;
         const comment_detail = {
-          comment: req.body.comment,
-          user: res.locals.user.sub,
+          comment: req.body.comment.toString(),
+          user: res.locals.user.sub.toString(),
         };
         query.push(comment_detail);
         Comment.findOneAndUpdate(
@@ -73,8 +72,7 @@ exports.comment_put = [
   body("comment")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("comment cannot be empty")
-    .escape(),
+    .withMessage("comment cannot be empty"),
   async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -88,7 +86,7 @@ exports.comment_put = [
         query = query.comment_list;
         for (let i = 0; i < query.length; i++) {
           if (query[i]._id == req.params.commentid) {
-            query[i].comment = req.body.comment;
+            query[i].comment = req.body.comment.toString();
             Comment.findOneAndUpdate(
               { post: req.params.postid },
               { comment_list: query },

@@ -7,6 +7,7 @@ const fs = require("fs");
 
 const User = require("../models/User");
 
+//!no need for this
 exports.myposts_get = (req, res, next) => {
   Post.find({ user: res.locals.user.sub }).exec((err, result) => {
     console.log(result);
@@ -21,13 +22,11 @@ exports.myposts_post = [
   body("title")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("title cannot be empty")
-    .escape(),
+    .withMessage("title cannot be empty"),
   body("content_text")
     .isLength({ min: 1 })
     .withMessage("content cannot be empty")
-    .trim()
-    .escape(),
+    .trim(),
   // body("content_image").escape(),
   body("like.*").escape(),
   body("user").escape(),
@@ -72,21 +71,21 @@ exports.myposts_post = [
     }
 
     const post = new Post({
-      title: req.body.title,
-      content_text: req.body.content_text,
+      title: req.body.title.toString(),
+      content_text: req.body.content_text.toString(),
       // content_image: {
       //   data: content_image,
       //   contentType: mimeType,
       // },
       like: [],
-      user: res.locals.user.sub,
+      user: res.locals.user.sub.toString(),
     });
 
     console.log(post);
     const comment = new Comment({
       comment_list: [],
-      post: post._id,
-      user: res.locals.user.sub,
+      post: post._id.toString(),
+      user: res.locals.user.sub.toString(),
     });
 
     async.parallel(
@@ -138,13 +137,11 @@ exports.mypost_put = [
   body("title")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("title cannot be empty")
-    .escape(),
+    .withMessage("title cannot be empty"),
   body("content_text")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("content cannot be empty")
-    .escape(),
+    .withMessage("content cannot be empty"),
   // body("content_image").escape(),
   body("like.*").escape(),
   body("user").escape(),
@@ -185,8 +182,8 @@ exports.mypost_put = [
     }
 
     const post = {
-      title: req.body.title,
-      content_text: req.body.content_text,
+      title: req.body.title.toString(),
+      content_text: req.body.content_text.toString(),
       // content_image: { data: content_image, contentType: mimeType },
     };
     // console.log(post);

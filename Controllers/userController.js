@@ -12,28 +12,23 @@ exports.user_signup = [
   body("fname")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("First name cannot be empty")
-    .escape(),
+    .withMessage("First name cannot be empty"),
   body("lname")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("Last name cannot be empty")
-    .escape(),
+    .withMessage("Last name cannot be empty"),
   body("username")
     .trim()
     .isLength({ min: 4 })
     .withMessage("username is too small")
     .isLength({ max: 20 })
-    .withMessage("username is too large")
-    .escape(),
+    .withMessage("username is too large"),
   body("password")
     .trim()
     .isLength({ min: 6 })
     .withMessage("password is too short")
     .isLength({ max: 30 })
-    .withMessage("password is too large")
-    .escape(),
-
+    .withMessage("password is too large"),
   (req, res, next) => {
     console.log(req.body);
     const errors = validationResult(req);
@@ -49,10 +44,10 @@ exports.user_signup = [
 
   (req, res, next) => {
     const user = new User({
-      fname: req.body.fname,
-      lname: req.body.lname,
-      username: "@" + req.body.username,
-      password: res.locals.hashPassword,
+      fname: req.body.fname.toString(),
+      lname: req.body.lname.toString(),
+      username: "@" + req.body.username.toString(),
+      password: res.locals.hashPassword.toString(),
       friend: [],
     });
 
@@ -63,8 +58,8 @@ exports.user_signup = [
           return res.status(403).json({ msg: "username taken" });
         } else {
           const profile = new Profile({
-            fname: req.body.fname,
-            lname: req.body.lname,
+            fname: req.body.fname.toString(),
+            lname: req.body.lname.toString(),
             profilePhoto: "",
             bannerPhoto: "",
             bio: "",
@@ -141,21 +136,22 @@ exports.user_get_search_list = (req, res, next) => {
           if (result.length == 0) {
             return res.status(200).json([]);
           } else {
-            let arr = [];
-            User.findById(res.locals.user.sub, (err2, result2) => {
-              if (err2) return res.status(500).json({ msg: err2.message });
-              else {
-                for (let i = 0; i < result.length; i++) {
-                  const check = result2.friend.includes(result[i]._id);
-                  if (check) {
-                    arr.push({ user: result, isfriend: true });
-                  } else {
-                    arr.push({ user: result, isfriend: false });
-                  }
-                }
-                return res.status(200).json(arr);
-              }
-            });
+            return res.status(200).json(result);
+            // let arr = [];
+            // User.findById(res.locals.user.sub, (err2, result2) => {
+            //   if (err2) return res.status(500).json({ msg: err2.message });
+            //   else {
+            //     for (let i = 0; i < result.length; i++) {
+            //       const check = result2.friend.includes(result[i]._id);
+            //       if (check) {
+            //         arr.push({ user: result, isfriend: true });
+            //       } else {
+            //         arr.push({ user: result, isfriend: false });
+            //       }
+            //     }
+            //     return res.status(200).json(arr);
+            //   }
+            // });
           }
         }
       });
@@ -174,21 +170,22 @@ exports.user_get_search_list = (req, res, next) => {
             if (result == null) {
               return res.status(200).json([]);
             } else {
-              User.findById(res.locals.user.sub, (err2, result2) => {
-                if (err2) return res.status(500).json({ msg: err2.message });
-                else {
-                  const i = result2.friend.includes(result._id);
-                  if (i) {
-                    return res
-                      .status(200)
-                      .json({ user: result, isfriend: true });
-                  } else {
-                    return res
-                      .status(200)
-                      .json({ user: result, isfriend: false });
-                  }
-                }
-              });
+              return res.status(200).json(result);
+              // User.findById(res.locals.user.sub, (err2, result2) => {
+              //   if (err2) return res.status(500).json({ msg: err2.message });
+              //   else {
+              //     const i = result2.friend.includes(result._id);
+              //     if (i) {
+              //       return res
+              //         .status(200)
+              //         .json({ user: result, isfriend: true });
+              //     } else {
+              //       return res
+              //         .status(200)
+              //         .json({ user: result, isfriend: false });
+              //     }
+              //   }
+              // });
             }
           }
         });
@@ -201,21 +198,22 @@ exports.user_get_search_list = (req, res, next) => {
             if (result.length == 0) {
               return res.status(200).json([]);
             } else {
-              let arr = [];
-              User.findById(res.locals.user.sub, (err2, result2) => {
-                if (err2) return res.status(500).json({ msg: err2.message });
-                else {
-                  for (let i = 0; i < result.length; i++) {
-                    const check = result2.friend.includes(result[i]._id);
-                    if (check) {
-                      arr.push({ user: result, isfriend: true });
-                    } else {
-                      arr.push({ user: result, isfriend: false });
-                    }
-                  }
-                  return res.status(200).json(arr);
-                }
-              });
+              return res.status(200).json(result);
+              // let arr = [];
+              // User.findById(res.locals.user.sub, (err2, result2) => {
+              //   if (err2) return res.status(500).json({ msg: err2.message });
+              //   else {
+              //     for (let i = 0; i < result.length; i++) {
+              //       const check = result2.friend.includes(result[i]._id);
+              //       if (check) {
+              //         arr.push({ user: result, isfriend: true });
+              //       } else {
+              //         arr.push({ user: result, isfriend: false });
+              //       }
+              //     }
+              //     return res.status(200).json(arr);
+              //   }
+              // });
             }
           }
         });

@@ -17,10 +17,9 @@ const UserLikes = ({ postid, setUsersLikedIndex }) => {
   console.log(location);
   const params = useParams();
   console.log(params);
-  const get_users_liked = () => {
-    // const userid = location.state();
 
-    // const route = `/friend/${}`;
+  const get_users_liked = () => {
+    const route = `/post/${postid}/like`;
     const method = "GET";
     const cb_error = (err) => {
       setError(err.message);
@@ -30,13 +29,13 @@ const UserLikes = ({ postid, setUsersLikedIndex }) => {
       setLikeList(response.data.like);
     };
 
-    // axios_request({
-    //   route: route,
-    //   method: method,
-    //   data: "",
-    //   axios_error: cb_error,
-    //   axios_response: cb_response,
-    // });
+    axios_request({
+      route: route,
+      method: method,
+      data: "",
+      axios_error: cb_error,
+      axios_response: cb_response,
+    });
   };
 
   const get_friend_list = () => {

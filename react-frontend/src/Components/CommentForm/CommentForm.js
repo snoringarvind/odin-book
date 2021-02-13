@@ -91,7 +91,7 @@ const CommentForm = ({
           <div className="profile-picture">
             {[jwtData.fname[0].toLowerCase()]}
           </div>
-          <form onSubmit={post_comment}>
+          <form onSubmit={post_comment} autoComplete="off">
             <input
               type="text"
               name="comment"

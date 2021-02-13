@@ -14,8 +14,8 @@ exports.friend_list_get = (req, res, next) => {
 };
 
 exports.friend_post = [
-  body("friend.*").escape(),
-  body("user").escape(),
+  body("friend").trim().escape(),
+  body("user").trim().escape(),
   async (req, res, next) => {
     console.log("helllllllllloooooooooo");
     console.log(req.params.userid);
@@ -34,7 +34,7 @@ exports.friend_post = [
 
       const isContain = query.includes(req.params.userid);
       if (!isContain) {
-        query.push(req.params.userid);
+        query.push(req.params.userid.toString());
         msg = "friend added to your friend-list";
         User.findByIdAndUpdate(
           res.locals.user.sub,

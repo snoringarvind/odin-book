@@ -6,13 +6,11 @@ exports.login_post = [
   body("username")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("username cannot be empty")
-    .escape(),
+    .withMessage("username cannot be empty"),
   body("password")
     .trim()
     .isLength({ min: 1 })
-    .withMessage("password cannot be empty")
-    .escape(),
+    .withMessage("password cannot be empty"),
 
   (req, res, next) => {
     const errors = validationResult(req);

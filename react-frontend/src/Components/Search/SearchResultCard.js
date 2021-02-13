@@ -13,13 +13,16 @@ const SearchResultCard = ({
   friendBtn,
   setFriendBtn,
 }) => {
-  const { jwtData } = useContext(OdinBookContext);
-
+  const { jwtData, myFriendsValue, myFriendsBtnValue } = useContext(
+    OdinBookContext
+  );
+  const [myFriends, setMyFriends] = myFriendsValue;
+  const [myFriendsBtn, setMyFriendsBtn] = myFriendsBtnValue;
   //removes friend
   const clickHandler = () => {
     // setIsClicked(!isClicked);
 
-    const route = `/friend/${value.user[index]._id}`;
+    const route = `/friend/${value._id}`;
     const method = "POST";
 
     const cb_error = (err) => {
@@ -43,52 +46,62 @@ const SearchResultCard = ({
 
   const [pp, setpp] = useState(false);
 
-  let g = value.isfriend;
+  let g;
+  for (let i = 0; i < myFriends.length; i++) {
+    // g = myFriends[i].includes(result._id);
+    console.log(myFriends[i]);
+    let val = Object.values(myFriends[i]);
+    console.log(val);
+  }
 
   useEffect(() => {
     if (friendBtn.length < result.length) {
-      console.log(value.isfriend);
       friendBtn.push(g);
       setFriendBtn(friendBtn);
-      console.log(friendBtn);
     }
-    console.log(result.length, friendBtn.length);
     setpp(!pp);
   }, []);
 
-  console.log(value.user[index]._id);
-  console.log(jwtData.sub);
-  console.log(friendBtn);
+  // console.log(value.user[index]._id);
+  // console.log(jwtData.sub);
+  // console.log(friendBtn);
   return (
     <div className="SearchResultCard">
-      <div className="profile-picture">
-        {[...value.user[index].fname[0].toLowerCase()]}
-      </div>
+      <div className="profile-picture">{[...value.fname[0].toLowerCase()]}</div>
       <div className="name-container">
         <Link
           to={{
-            pathname: `/user/${value.user[index].username}/posts`,
+            pathname: `/user/${value.username}/posts`,
             state: {
-              userid: value.user[index]._id,
-              fname: value.user[index].fname,
-              lname: value.user[index].lname,
-              username: value.user[index].username,
+              userid: value._id,
+              fname: value.fname,
+              lname: value.lname,
+              username: value.username,
             },
           }}
         >
           <div className="name">
-            <span>{value.user[index].fname} </span>
-            <span>{value.user[index].lname}</span>
+            <span>{value.fname} </span>
+            <span>{value.lname}</span>
           </div>
         </Link>
-        <div className="username">{value.user[index].username}</div>
+        <div className="username">{value.username}</div>
       </div>
       <div className="add-btn">
-        {value.user[index]._id !== jwtData.sub && (
+        {value._id !== jwtData.sub && (
           <button
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
+
+              //he add as friend so we will update our myfriend list
+              if (friendBtn) {
+                myFriends.push(value);
+                setMyFriends(myFriends);
+                myFriendsBtn.push(true);
+                setMyFriendsBtn(myFriendsBtn);
+              }
+
               friendBtn[index] = !friendBtn[index];
               setFriendBtn(friendBtn);
               setpp(!pp);

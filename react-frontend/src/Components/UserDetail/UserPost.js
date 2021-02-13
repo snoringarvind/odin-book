@@ -10,7 +10,8 @@ import UserPostCard from "./UserPostCard";
 import MyPostDelete from "../MyPosts/MyPostDelete";
 import { axios_request } from "../Utils";
 
-const UserPost = () => {
+const UserPost = ({ path }) => {
+  console.log(path);
   const { jwtData } = useContext(OdinBookContext);
 
   const [error, setError] = useState("");
@@ -39,16 +40,23 @@ const UserPost = () => {
   const location = useLocation();
 
   console.log(location);
-  const userid = location.state.userid;
-  const fname = location.state.fname;
-  const lname = location.state.lname;
-  const username = location.state.username;
+  let userid;
+
+  if (path == "userpost") {
+    userid = location.state.userid;
+  }
 
   const params = useParams();
   console.log("params", params);
 
   const get_posts = () => {
-    const post_list_route = `/posts/${userid}`;
+    let post_list_route;
+    if (path == "userpost") {
+      post_list_route = `/posts/${userid}`;
+    } else if (path == "newsfeed") {
+      post_list_route = "/news-feed";
+    }
+
     const post_list_method = "GET";
     const cb_error = (err) => {
       setError(err.mesage);
@@ -72,7 +80,7 @@ const UserPost = () => {
     console.log(jwtData);
     console.log(jwtData.sub);
     console.log(userid);
-    if (jwtData) {
+    if (jwtData && userid) {
       if (jwtData.sub.toString() === userid.toString()) {
         setIsOwner(true);
       } else {
@@ -195,6 +203,7 @@ const UserPost = () => {
                   postsLength={result.length}
                   UserLikedIndex={UserLikedIndex}
                   setUsersLikedIndex={setUsersLikedIndex}
+                  path={path}
                 />
               );
             })}

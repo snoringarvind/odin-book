@@ -1,5 +1,6 @@
 import axios from "axios";
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
+import { axios_request } from "./Utils";
 
 const OdinBookContext = createContext();
 
@@ -34,7 +35,31 @@ const OdinBookProvider = ({ children }) => {
     console.log(err.message);
   }
 
-  console.log(jwtData);
+  const get_myfriends_list = () => {
+    const route = `/friend/${jwtData.sub}`;
+    const method = "GET";
+    const cb_error = (err) => {
+      console.log(err.message);
+    };
+    const cb_response = (response) => {
+      setMyFriends(response.data);
+      const h = Array(response.data.length).fill(true);
+      setMyFriendsBtn(h);
+    };
+
+    axios_request({
+      route: route,
+      method: method,
+      data: "",
+      axios_error: cb_error,
+      axios_response: cb_response,
+    });
+  };
+
+  useEffect(() => {
+    get_myfriends_list();
+  }, []);
+
   return (
     <OdinBookContext.Provider
       value={{

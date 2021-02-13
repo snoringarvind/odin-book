@@ -3,6 +3,7 @@ import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 import { axios_request } from "../Utils";
 import NewsFeedCard from "./NewsFeedCard";
+// import "./NewsFeed.css";
 
 const NewsFeed = () => {
   // const { axios_request } = useContext(OdinBookContext);
@@ -11,6 +12,8 @@ const NewsFeed = () => {
   const [getLoading, setGetLoading] = useState(true);
 
   const [result, setResult] = useState("");
+
+  const [newsfeedLikedIndex, setNewsFeedLikedIndex] = useState(null);
 
   const post_list_route = "/news-feed";
   const post_list_method = "GET";
@@ -63,7 +66,13 @@ const NewsFeed = () => {
           ) : (
             result.map((value, index) => {
               return (
-                <NewsFeedCard value={value} index={index} key={uniqid()} />
+                <NewsFeedCard
+                  value={value}
+                  index={index}
+                  key={uniqid()}
+                  newsfeedLikedIndex={newsfeedLikedIndex}
+                  setNewsFeedLikedIndex={setNewsFeedLikedIndex}
+                />
               );
             })
           )}

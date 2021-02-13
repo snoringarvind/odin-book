@@ -3,7 +3,7 @@ import "./CommentCard.css";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { OdinBookContext } from "../Context";
 
-const CommentCard = ({ comment, index, postIndex }) => {
+const CommentCard = ({ comment, index, postIndex, path }) => {
   console.log(comment);
 
   const { jwtData } = useContext(OdinBookContext);
@@ -14,7 +14,7 @@ const CommentCard = ({ comment, index, postIndex }) => {
       </div>
       <div className="comment-container">
         <div className="name">
-          {jwtData.sub !== comment.user._id && (
+          {path !== "userpost" && (
             <Link
               to={{
                 pathname: `/user/${comment.user.username}/posts`,
@@ -30,7 +30,7 @@ const CommentCard = ({ comment, index, postIndex }) => {
               <span>{comment.user.lname}</span>
             </Link>
           )}
-          {jwtData.sub == comment.user._id && (
+          {path === "userpost" && (
             <>
               <span>{comment.user.fname} </span>
               <span>{comment.user.lname}</span>

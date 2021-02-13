@@ -25,6 +25,7 @@ exports.newsfeed = async (req, res, next) => {
   }
 };
 
+//!no need for this
 exports.post_detail_get = (req, res, next) => {
   //populating user so we can show the name of user who posted the post.
 

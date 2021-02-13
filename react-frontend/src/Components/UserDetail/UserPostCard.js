@@ -27,6 +27,7 @@ const UserPostCard = ({
   postsLength,
   UserLikedIndex,
   setUsersLikedIndex,
+  path,
 }) => {
   const [cardError, setCardError] = useState("");
   const [commentError, setCommentError] = useState("");
@@ -39,9 +40,14 @@ const UserPostCard = ({
   const { jwtData } = useContext(OdinBookContext);
 
   const location = useLocation();
-  const fname = location.state.fname;
-  const lname = location.state.lname;
-  const username = location.state.username;
+  let fname;
+  let lname;
+  let username;
+  if (path == "userpost") {
+    fname = location.state.fname;
+    lname = location.state.lname;
+    username = location.state.username;
+  }
 
   const like_post = (postid) => {
     const like_post_route = `/post/${postid}/like`;
@@ -111,14 +117,20 @@ const UserPostCard = ({
   return (
     <div className="UserPostCard">
       <div className="head">
-        <div className="profile-picture">{[...fname[0].toLowerCase()]}</div>
+        <div className="profile-picture">
+          {fname
+            ? [...fname[0].toLowerCase()]
+            : [...value.user.fname[0].toLowerCase()]}
+        </div>
         <div className="name-container">
           <div className="name">
-            <span>{fname} </span>
-            <span>{lname}</span>
+            <span>{fname ? fname : value.user.fname} </span>
+            <span>{lname ? lname : value.user.lname}</span>
           </div>
 
-          <div className="username">{username}</div>
+          <div className="username">
+            {username ? username : value.user.username}
+          </div>
         </div>
         {isOwner && (
           <div
@@ -179,7 +191,6 @@ const UserPostCard = ({
       </div>
       <div
         className="no-like"
-        style={{ textDecoration: "underline", cursor: "pointer" }}
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
@@ -248,7 +259,7 @@ const UserPostCard = ({
               <div className="no-comment">
                 <span>{comments.comment_list.length} </span>
                 <span>
-                  {comments.comment_list.length == 1 ? " Comment" : " Comments"}
+                  {comments.comment_list.length == 1 ? " comment" : " comments"}
                 </span>
               </div>
               {comments.comment_list.map((comment, index) => (
@@ -257,6 +268,7 @@ const UserPostCard = ({
                   key={uniqid()}
                   index={index}
                   postIndex={index}
+                  path={path}
                 />
               ))}
             </>

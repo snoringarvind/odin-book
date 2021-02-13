@@ -56,7 +56,7 @@ const UserDetail = () => {
       </div>
       <Switch>
         <Route path={`/user/${params.username}/posts`}>
-          <UserPost />
+          <UserPost path="userpost" />
         </Route>
         <Route path={`/user/${params.username}/about`}>
           <UserAbout />

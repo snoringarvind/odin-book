@@ -1,0 +1,36 @@
+.UserLikes {
+  position: fixed;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  border: 1px solid green;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 1;
+}
+
+.UserLikes .box {
+  width: 80%;
+  background-color: white;
+  height: 60vh;
+  padding: 20px;
+  border: 1px solid greenyellow;
+}
+
+.UserLikes .box .form-close-btn {
+  display: flex;
+  justify-content: flex-end;
+  /* margin: 20px; */
+  border: 1px solid red;
+  font-size: 1.8rem;
+  border-bottom: 2px solid darkgray;
+  padding-bottom: 10px;
+}
+
+.UserLikesCard {
+  border: 1px solid green;
+  /* background-color: red; */
+}

@@ -42,7 +42,6 @@ exports.post_detail_get = (req, res, next) => {
 exports.post_list_get = (req, res, next) => {
   console.log("hello");
   Post.find({ user: req.params.userid })
-    .populate("user", "-password")
     .sort({ created_at: -1 })
     .exec((err, result) => {
       if (err) return res.status(500).json({ msg: err.message });

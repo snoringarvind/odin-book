@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Route, Switch, useLocation, useParams } from "react-router-dom";
 import MyPostUpdate from "../MyPosts/MyPostUpdate";
 import MyPostList from "../MyPosts/MyPostList";
@@ -17,57 +17,60 @@ import SearchResult from "../Search/SearchResult";
 import UserDetail from "../UserDetail/UserDetail";
 import Hamburger from "../Hamburger/Hamburger";
 import MyFriends from "../MyFriends/MyFriends";
+import { OdinBookContext } from "../Context";
 
 const Home = () => {
   let location = useLocation();
   let background = location.state && location.state.background;
   const [isClick, setIsclick] = useState(false);
 
+  const { jwtData } = useContext(OdinBookContext);
+
   // console.log(location);
   // const params = useParams();
   // console.log(params);
 
-  // useEffect(() => {
-  //   const x = window;
-  //   x.addEventListener("click", (e) => {
-  //     //maybe if something goes wrong ..putting this in a try,catch block
-  //     try {
-  //       e.stopPropagation();
-  //       e.preventDefault();
-  //       let arr = e.target.classList;
+  useEffect(() => {
+    const x = window;
+    x.addEventListener("click", (e) => {
+      //maybe if something goes wrong ..putting this in a try,catch block
+      try {
+        e.stopPropagation();
+        e.preventDefault();
+        let arr = e.target.classList;
 
-  //       for (let i = 0; i < arr.length; i++) {
-  //         let element = document.querySelector(`.${arr[i]}`);
+        for (let i = 0; i < arr.length; i++) {
+          let element = document.querySelector(`.${arr[i]}`);
 
-  //         // doing this 'if(element==null)' so if the form-btn is clicked cancel this function shouldn't be affected.
-  //         //since the form-btn will be null when it is closed, so to prevent the error
-  //         if (element == null) {
-  //           return;
-  //         }
+          // doing this 'if(element==null)' so if the form-btn is clicked cancel this function shouldn't be affected.
+          //since the form-btn will be null when it is closed, so to prevent the error
+          if (element == null) {
+            return;
+          }
 
-  //         let p = element.classList;
-  //         if (
-  //           p[i].toString() !== "drop-btn" &&
-  //           p[i] !== null &&
-  //           p[i] !== "ham-icon" &&
-  //           p[i] !== "close-icon"
-  //         ) {
-  //           const c = document.querySelector(".drop-btn-active");
-  //           if (c) {
-  //             c.classList.remove("drop-btn-active");
-  //             setIsclick(false);
-  //             return;
-  //           }
-  //         }
-  //         arr = [];
-  //       }
+          let p = element.classList;
+          if (
+            p[i].toString() !== "drop-btn" &&
+            p[i] !== null &&
+            p[i] !== "ham-icon" &&
+            p[i] !== "close-icon"
+          ) {
+            const c = document.querySelector(".drop-btn-active");
+            if (c) {
+              c.classList.remove("drop-btn-active");
+              setIsclick(false);
+              return;
+            }
+          }
+          arr = [];
+        }
 
-  //       arr = [];
-  //     } catch (err) {
-  //       console.log(err.message);
-  //     }
-  //   });
-  // }, []);
+        arr = [];
+      } catch (err) {
+        console.log(err.message);
+      }
+    });
+  }, []);
   return (
     <div className="Home">
       <div className="Navigation">
@@ -123,9 +126,9 @@ const Home = () => {
         {/* <Route exact path="/mypost/:mypostid">
           <MyPostDetail />
         </Route> */}
-        <Route path="/create-post">
+        {/* <Route path="/create-post">
           <MyPostCreate />
-        </Route>
+        </Route> */}
         <Route path="/news-feed/:postid">
           <PostDetail />
         </Route>

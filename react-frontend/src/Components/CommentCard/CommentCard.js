@@ -1,26 +1,43 @@
-import React from "react";
+import React, { useContext } from "react";
 import "./CommentCard.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
+import { OdinBookContext } from "../Context";
 
-const CommentCard = ({ value, index, postIndex }) => {
+const CommentCard = ({ comment, index, postIndex }) => {
+  console.log(comment);
+
+  const { jwtData } = useContext(OdinBookContext);
   return (
     <div className="CommentCard">
       <div className="profile-picture">
-        {[...value.user.fname[0].toLowerCase()]}
+        {[...comment.user.fname[0].toLowerCase()]}
       </div>
       <div className="comment-container">
         <div className="name">
-          <Link
-            to={{
-              pathname: `/user/${value.user.username}/posts`,
-              state: value.user._id,
-            }}
-          >
-            <span>{value.user.fname} </span>
-            <span>{value.user.lname}</span>
-          </Link>
+          {jwtData.sub !== comment.user._id && (
+            <Link
+              to={{
+                pathname: `/user/${comment.user.username}/posts`,
+                state: {
+                  fname: comment.user.fname,
+                  lname: comment.user.lname,
+                  username: comment.user.username,
+                  userid: comment.user._id,
+                },
+              }}
+            >
+              <span>{comment.user.fname} </span>
+              <span>{comment.user.lname}</span>
+            </Link>
+          )}
+          {jwtData.sub == comment.user._id && (
+            <>
+              <span>{comment.user.fname} </span>
+              <span>{comment.user.lname}</span>
+            </>
+          )}
         </div>
-        <div className="comment">{value.comment}</div>
+        <div className="comment">{comment.comment}</div>
       </div>
     </div>
   );

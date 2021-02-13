@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
+import { axios_request } from "../Utils";
 
 const Login = () => {
-  const { axios_request } = useContext(OdinBookContext);
   const [state, setState] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState([]);
   const [error, setError] = useState("");

@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { axios_request } from "../Utils";
 import CommentForm from "../CommentForm/CommentForm";
 import CommentCard from "../CommentCard/CommentCard";
 import uniqid from "uniqid";
+import UserLikes from "./UserLikes";
+import { OdinBookContext } from "../Context";
+import { useLocation } from "react-router-dom";
 
 const UserPostCard = ({
   value,
@@ -16,15 +19,14 @@ const UserPostCard = ({
   isOwner,
   setDeleteClick,
   deleteClick,
-  logged_in_userid,
   likeLength,
   setLikeLength,
   setPostIndex,
   likeClick,
   setLikeClick,
-  indexOfLikeClicked,
-  setIndexOfLikeClicked,
   postsLength,
+  UserLikedIndex,
+  setUsersLikedIndex,
 }) => {
   const [cardError, setCardError] = useState("");
   const [commentError, setCommentError] = useState("");
@@ -34,7 +36,12 @@ const UserPostCard = ({
   const [newCommentLoading, setNewCommentLoading] = useState(false);
   const [onlyOneClick, setonlyOneClick] = useState(true);
 
-  // const [likeLength, setLikeLength] = useState("");
+  const { jwtData } = useContext(OdinBookContext);
+
+  const location = useLocation();
+  const fname = location.state.fname;
+  const lname = location.state.lname;
+  const username = location.state.username;
 
   const like_post = (postid) => {
     const like_post_route = `/post/${postid}/like`;
@@ -78,58 +85,18 @@ const UserPostCard = ({
     });
   };
 
-  let g = value.like.includes(logged_in_userid);
-  // console.log(g);
-  // useEffect(() => {
-  //   const g = value.like.includes(logged_in_userid);
-  //   if (g) {
-  //     const element = document.querySelector(".like-icon");
-  //     element.style.color = "blue";
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log(g);
-  //   setLikeClick(g);
-  // }, []);
+  let g = value.like.includes(jwtData.sub);
 
   const [pp, setpp] = useState(false);
 
-  const show_like = () => {
-    console.log(indexOfLikeClicked, likeClick);
-    if (indexOfLikeClicked == null) {
-      if (g) {
-        return "blue";
-      } else {
-        return "";
-      }
-    } else if (indexOfLikeClicked !== null) {
-      if (indexOfLikeClicked === index) {
-        if (likeClick) {
-          return "blue";
-        } else {
-          return "";
-        }
-      }
-    }
-  };
-
   useEffect(() => {
-    likeClick.push(g);
-    setLikeClick(likeClick);
-    likeLength.push(value.like.length);
-    setLikeLength(likeLength);
-    // console.log(likeLength[index]);
-    setpp(!pp);
-
-    if (likeLength.length > postsLength) {
-      // console.log(likeLength.length, postsLength);
-      const x = likeLength.length - postsLength;
-      likeLength.splice(postsLength, x);
-    }
-    if (likeClick.length > postsLength) {
-      const j = likeClick.length - postsLength;
-      likeClick.splice(postsLength, j);
+    if (likeLength.length < postsLength) {
+      likeClick.push(g);
+      setLikeClick(likeClick);
+      likeLength.push(value.like.length);
+      setLikeLength(likeLength);
+      // console.log(likeLength[index]);
+      setpp(!pp);
     }
     console.log(
       "likeClick.length=",
@@ -144,16 +111,14 @@ const UserPostCard = ({
   return (
     <div className="UserPostCard">
       <div className="head">
-        <div className="profile-picture">
-          {[...value.user.fname[0].toLowerCase()]}
-        </div>
+        <div className="profile-picture">{[...fname[0].toLowerCase()]}</div>
         <div className="name-container">
           <div className="name">
-            <span>{value.user.fname} </span>
-            <span>{value.user.lname}</span>
+            <span>{fname} </span>
+            <span>{lname}</span>
           </div>
 
-          <div className="username">{value.user.username}</div>
+          <div className="username">{username}</div>
         </div>
         {isOwner && (
           <div
@@ -212,44 +177,34 @@ const UserPostCard = ({
         <div className="post-title">{value.title}</div>
         <div className="post-content">{value.content_text}</div>
       </div>
-      <div className="no-like">
+      <div
+        className="no-like"
+        style={{ textDecoration: "underline", cursor: "pointer" }}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setUsersLikedIndex(index);
+          // setpp(!pp);
+        }}
+      >
         {/* <span>{likeLength[index]} </span> */}
-        <span>{likeLength[index]}</span>
+        <span>{likeLength[index]} </span>
+        <span> </span>
+        <span> {likeLength[index] == 1 ? "like" : "likes"}</span>
       </div>
+      {UserLikedIndex === index && (
+        <UserLikes postid={value._id} setUsersLikedIndex={setUsersLikedIndex} />
+      )}
       <div className="card-footer">
         <div
           style={{
             color: likeClick[index] ? "blue" : "",
-            // (likeClick == null && (g ? "blue" : "")) ||
-            // (likeClick !== null && (likeClick ? "blue" : "")),
           }}
           className="like-icon far fa-thumbs-up"
           onClick={(e) => {
             e.preventDefault();
             like_post(value._id);
-            //   console.log(likeClick, g);
-            //   if (likeClick == null) {
-            //     if (g) {
-            //       setLikeClick(false);
-            //       setLikeLength(value.like.length - 1);
-            //       console.log("hello");
-            //     } else {
-            //       setLikeClick(true);
-            //       setLikeLength(value.like.length + 1);
-            //       console.log("man");
-            //     }
-            //   } else {
-            //     if (likeClick) {
-            //       setLikeLength(likeLength - 1);
-            //     } else {
-            //       setLikeLength(likeLength + 1);
-            //     }
-            //     setLikeClick(!likeClick);
-            //   }
-            //   console.log(likeClick);
-            //   setIndexOfLikeClicked(index);
             console.log(likeClick[index]);
-            // console.log(indexOfLikeClicked);
             if (likeClick[index] == true) {
               likeLength[index] = likeLength[index] - 1;
               setLikeLength(likeLength);
@@ -257,7 +212,6 @@ const UserPostCard = ({
               likeLength[index] = likeLength[index] + 1;
               setLikeLength(likeLength);
             }
-            setIndexOfLikeClicked(null);
             likeClick[index] = !likeClick[index];
             setLikeClick(likeClick);
             setpp(!pp);
@@ -297,9 +251,9 @@ const UserPostCard = ({
                   {comments.comment_list.length == 1 ? " Comment" : " Comments"}
                 </span>
               </div>
-              {comments.comment_list.map((value, index) => (
+              {comments.comment_list.map((comment, index) => (
                 <CommentCard
-                  value={value}
+                  comment={comment}
                   key={uniqid()}
                   index={index}
                   postIndex={index}
@@ -312,7 +266,6 @@ const UserPostCard = ({
       </div>
       {commentIconClicked && (
         <CommentForm
-          profile_picture={[...value.user.fname[0].toLowerCase()]}
           postid={value._id}
           key={uniqid()}
           setComments={setComments}

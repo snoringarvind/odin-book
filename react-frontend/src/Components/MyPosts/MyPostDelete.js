@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Redirect, useHistory, useParams } from "react-router-dom";
 import { OdinBookContext } from "../Context";
+import { axios_request } from "../Utils";
 import "./MyPostDelete.css";
 
 const MyPostDelete = ({
@@ -9,8 +10,6 @@ const MyPostDelete = ({
   user_delete_response,
   postid,
 }) => {
-  const { axios_request } = useContext(OdinBookContext);
-
   console.log(postid);
 
   const mypost_delete_route = `/mypost/${postid}`;

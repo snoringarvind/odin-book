@@ -5,18 +5,15 @@ import uniqid from "uniqid";
 import "./SearchResult.css";
 import axios from "axios";
 import SearchResultCard from "./SearchResultCard";
+import { axios_request } from "../Utils";
 
 const SearchResult = () => {
-  const { axios_request, searchValue, searchBarStateValue } = useContext(
-    OdinBookContext
-  );
-
-  const [myFriendList, setMyFriendList] = useState([]);
+  const { searchValue, searchBarStateValue } = useContext(OdinBookContext);
 
   const [searchValueChange, setSearchValueChange] = searchValue;
   const [searchBarState, setSearchBarState] = searchBarStateValue;
 
-  const [friendBtn, setFriendBtn] = useState(false);
+  const [friendBtn, setFriendBtn] = useState([]);
 
   const params = useParams();
 
@@ -58,36 +55,6 @@ const SearchResult = () => {
     });
   };
 
-  // const get_my_friend_list = () => {
-  //   //this is the owner id
-  //   const jwtData = JSON.parse(localStorage.getItem("jwtData"));
-  //   let username;
-  //   let userid;
-  //   if (jwtData) {
-  //     username = jwtData.user;
-  //     userid = jwtData.sub;
-  //   }
-
-  //   const route = `/friend/${userid}`;
-  //   const method = "GET";
-
-  //   const cb_error = (err) => {
-  //     setError(err.message);
-  //   };
-
-  //   const cb_response = (response) => {
-  //     setMyFriendList(response.data);
-  //   };
-
-  //   axios_request({
-  //     route: route,
-  //     data: "",
-  //     method: method,
-  //     axios_error: cb_error,
-  //     axios_response: cb_response,
-  //   });
-  // };
-
   useEffect(() => {
     if (searchValueChange === true) {
       make_server_request();
@@ -125,7 +92,8 @@ const SearchResult = () => {
                 result={result}
                 setError={setError}
                 key={uniqid()}
-                // myFriendList={myFriendList}
+                friendBtn={friendBtn}
+                setFriendBtn={setFriendBtn}
               />
             );
           })

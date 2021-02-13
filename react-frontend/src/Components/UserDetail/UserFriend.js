@@ -6,18 +6,17 @@ import uniqid from "uniqid";
 import "./UserFriend.css";
 import UserFriendCard from "./UserFriendCard";
 import async from "async";
+import { axios_request } from "../Utils";
 
 const UserFriend = () => {
-  const { axios_request } = useContext(OdinBookContext);
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(true);
   const [result, setResult] = useState([]);
+  const [userFriendList, setUserFriendList] = useState([]);
 
-  const [myFriendList, setMyFriendList] = useState([]);
-
-  const [isChanged, setIschanged] = useState(false);
   const location = useLocation();
-  const userid = location.state;
+  const userid = location.state.userid;
+
   const friend_list_route = `/friend/${userid}`;
   const friend_list_method = "GET";
 
@@ -36,6 +35,8 @@ const UserFriend = () => {
       setGetLoading(false);
       setResult(response.data);
       // console.log(response);
+      const h = Array(response.data.length).fill(true);
+      setUserFriendList(h);
     };
 
     axios_request({
@@ -47,48 +48,10 @@ const UserFriend = () => {
     });
   };
 
-  // const get_my_friend_list = () => {
-  //   //this is the owner id
-  //   const jwtData = JSON.parse(localStorage.getItem("jwtData"));
-  //   let username;
-  //   let userid;
-  //   if (jwtData) {
-  //     username = jwtData.user;
-  //     userid = jwtData.sub;
-  //   }
-
-  //   const route = `/friend/${userid}`;
-  //   const method = "GET";
-
-  //   const cb_error = (err) => {
-  //     setError(err.message);
-  //   };
-
-  //   const cb_response = (response) => {
-  //     setMyFriendList(response.data);
-  //   };
-
-  //   axios_request({
-  //     route: route,
-  //     data: "",
-  //     method: method,
-  //     axios_error: cb_error,
-  //     axios_response: cb_response,
-  //   });
-  // };
-
   useEffect(() => {
     make_server_request();
     // get_my_friend_list();
   }, [location.pathname]);
-
-  useEffect(() => {
-    // setTempResult(result);
-    // console.log(result);
-    setResult(result);
-
-    //here change result won't work because the result is set later(takes time since it is await), and so it can't detect any change in the result, but if it was not await there was no need for "[isChanged]", we could have done "[result]" in the useEffect
-  }, [isChanged]);
 
   // console.log(myFriendList);
   return (
@@ -103,13 +66,10 @@ const UserFriend = () => {
               <UserFriendCard
                 value={value}
                 index={index}
-                setResult={setResult}
-                result={result}
                 setError={setError}
                 key={uniqid()}
-                isChanged={isChanged}
-                setIschanged={setIschanged}
-                myFriendList={myFriendList}
+                userFriendList={userFriendList}
+                setUserFriendList={setUserFriendList}
               />
             );
           })

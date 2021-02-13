@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { axios_request } from "../Utils";
 import uniqid from "uniqid";
 import "./CommentForm.css";
+import { OdinBookContext } from "../Context";
 
 const CommentForm = ({
-  profile_picture,
   postid,
   setComments,
   postIndex,
   setNewCommentLoading,
 }) => {
+  const { jwtData } = useContext(OdinBookContext);
   const [state, setState] = useState({ comment: "" });
   const [errors, setErrors] = useState([]);
   const [error, setError] = useState("");
@@ -87,7 +88,9 @@ const CommentForm = ({
       {error && <div className="error">{error}</div>}
       {!error && (
         <>
-          <div className="profile-picture">{profile_picture}</div>
+          <div className="profile-picture">
+            {[jwtData.fname[0].toLowerCase()]}
+          </div>
           <form onSubmit={post_comment}>
             <input
               type="text"

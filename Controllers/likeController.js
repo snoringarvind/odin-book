@@ -6,7 +6,7 @@ const { Query } = require("mongoose");
 
 exports.like_get = (req, res, next) => {
   Post.findById(req.params.postid, "like")
-    .populate("like", "username")
+    .populate("like", "-friend -password ")
     .exec((err, result) => {
       if (err) return res.status(500).json({ msg: err.message });
       else {

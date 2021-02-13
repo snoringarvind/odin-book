@@ -2,7 +2,7 @@ import React from "react";
 import { useRouteMatch, Link } from "react-router-dom";
 import "./UserNav.css";
 
-const UserNav = ({ to, state, label }) => {
+const UserNav = ({ to, fname, lname, userid, username, label }) => {
   let match = useRouteMatch({ path: to });
   if (match) {
     match = match.isExact;
@@ -11,7 +11,9 @@ const UserNav = ({ to, state, label }) => {
 
   return (
     <div className={match ? "active nav-links" : "nav-links"}>
-      <Link to={{ pathname: to, state: state }}>{label}</Link>
+      <Link to={{ pathname: to, state: { fname, lname, userid, username } }}>
+        {label}
+      </Link>
     </div>
   );
 };

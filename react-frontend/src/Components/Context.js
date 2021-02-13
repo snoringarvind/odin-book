@@ -15,64 +15,36 @@ const OdinBookProvider = ({ children }) => {
 
   //for  form
   const [userPostResult, setUserPostResult] = useState([]);
+
+  //for MyFriends to not re-render
   const [myFriends, setMyFriends] = useState([]);
+  const [myFriendsBtn, setMyFriendsBtn] = useState([]);
+
   const [didfriendsMount, setDidfriendsMount] = useState(true);
 
-  //global isAuth for route requests
-  const axios_request = async ({
-    route,
-    data,
-    method,
-    axios_error,
-    axios_response,
-  }) => {
-    // console.log(route);
-    const jwtData = JSON.parse(localStorage.getItem("jwtData"));
+  // let [jwtData, setJwData]
+  // let
+  let jwtData;
+  let setJwData;
+  try {
+    [jwtData, setJwData] = useState(
+      JSON.parse(localStorage.getItem("jwtData"))
+    );
+  } catch (err) {
+    console.log(err.message);
+  }
 
-    // console.log(jwtData);
-    if (jwtData !== null || route === "/login" || route === "/signup") {
-      // console.log("helllo");
-      try {
-        let token;
-        let headers;
-        if (route !== "/login" && route !== "/signup") {
-          token = jwtData.token;
-          headers = { authorization: `Bearer ${token}` };
-        }
-
-        // console.log(data);
-        // console.log(method);
-        // console.log(route);
-        const response_data = await axios({
-          url: `${serverUrl}${route}`,
-          method: method,
-          headers: headers || "",
-          data: data,
-        });
-        console.log("Context Response=", response_data);
-        axios_response(response_data);
-      } catch (err) {
-        if (err.response) {
-          console.log("Context Error", err.response.data);
-        } else {
-          console.log("Context Error", err.message);
-        }
-        axios_error(err);
-      }
-    } else {
-      console.log("Context Error= NO JWT TOKEN");
-    }
-  };
-
+  console.log(jwtData);
   return (
     <OdinBookContext.Provider
       value={{
-        axios_request: axios_request,
         searchValue: [searchValueChange, setSearchValueChange],
         searchBarStateValue: [searchBarState, setSearchBarState],
         userPostResultValue: [userPostResult, setUserPostResult],
         myFriendsValue: [myFriends, setMyFriends],
+        myFriendsBtnValue: [myFriendsBtn, setMyFriendsBtn],
         didfriendsMountValue: [didfriendsMount, setDidfriendsMount],
+        jwtData: jwtData,
       }}
     >
       {children}

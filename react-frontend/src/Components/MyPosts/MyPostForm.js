@@ -3,6 +3,7 @@ import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import "./MyPostForm.css";
+import { axios_request } from "../Utils";
 
 const MyPostForm = ({
   route,
@@ -23,7 +24,6 @@ const MyPostForm = ({
   const [error, setError] = useState("");
   const [errors, setErrors] = useState([]);
 
-  const { axios_request } = useContext(OdinBookContext);
   const [postLoading, setPostLoading] = useState(false);
 
   const history = useHistory();

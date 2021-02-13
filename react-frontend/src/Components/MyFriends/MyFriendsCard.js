@@ -1,17 +1,16 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { OdinBookContext } from "../Context";
+import { axios_request } from "../Utils";
 
 const MyFriendsCard = ({
   value,
   index,
   result,
   setError,
-  isChanged,
-  setIschanged,
+  myFriendsBtn,
+  setMyFriendsBtn,
 }) => {
-  const { axios_request } = useContext(OdinBookContext);
-
   //removes friend
   const clickHandler = () => {
     const route = `/friend/${value._id}`;
@@ -33,10 +32,9 @@ const MyFriendsCard = ({
       axios_error: cb_error,
       axios_response: cb_response,
     });
-
-    result.splice(index, 1);
-    setIschanged(!isChanged);
   };
+
+  const [pp, setpp] = useState(false);
 
   return (
     <div className="MyFriendsCard">
@@ -45,7 +43,12 @@ const MyFriendsCard = ({
         <Link
           to={{
             pathname: `/user/${value.username}/posts`,
-            state: value._id,
+            state: {
+              fname: value.fname,
+              lname: value.lname,
+              username: value.username,
+              userid: value._id,
+            },
           }}
         >
           <div className="name">
@@ -58,10 +61,15 @@ const MyFriendsCard = ({
       <div className="add-btn">
         <button
           onClick={() => {
+            // console.log(friendArray[index]);
+            console.log(myFriendsBtn[index]);
+            myFriendsBtn[index] = !myFriendsBtn[index];
+            setMyFriendsBtn(myFriendsBtn);
+            setpp(!pp);
             return clickHandler();
           }}
         >
-          Remove
+          {myFriendsBtn[index] ? "Remove" : "Add"}
         </button>
       </div>
     </div>

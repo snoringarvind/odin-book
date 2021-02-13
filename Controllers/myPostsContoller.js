@@ -8,15 +8,13 @@ const fs = require("fs");
 const User = require("../models/User");
 
 exports.myposts_get = (req, res, next) => {
-  Post.find({ user: res.locals.user.sub })
-    .populate("user")
-    .exec((err, result) => {
-      console.log(result);
-      if (err) return res.status(500).json({ msg: err.message });
-      else {
-        return res.status(200).json(result);
-      }
-    });
+  Post.find({ user: res.locals.user.sub }).exec((err, result) => {
+    console.log(result);
+    if (err) return res.status(500).json({ msg: err.message });
+    else {
+      return res.status(200).json(result);
+    }
+  });
 };
 
 exports.myposts_post = [

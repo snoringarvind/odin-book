@@ -4,22 +4,26 @@ import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 import MyFriendsCard from "./MyFriendsCard";
 import "./MyFriends.css";
+import { axios_request } from "../Utils";
 
 const MyFriends = () => {
-  const { axios_request, myFriendsValue, didfriendsMountValue } = useContext(
-    OdinBookContext
-  );
+  const {
+    myFriendsValue,
+    myFriendsBtnValue,
+    didfriendsMountValue,
+  } = useContext(OdinBookContext);
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(false);
   // const [result, setResult] = useState([]);
 
   const [myFriends, setMyFriends] = myFriendsValue;
+  const [myFriendsBtn, setMyFriendsBtn] = myFriendsBtnValue;
   const jwtData = JSON.parse(localStorage.getItem("jwtData"));
   const userid = jwtData.sub;
   const myfriend_list_route = `/friend/${userid}`;
   const myfriend_list_method = "GET";
 
-  const [isChanged, setIschanged] = useState(false);
+  // const [isChanged, setIschanged] = useState(false);
   const [didfriendsMount, setDidfriendsMount] = didfriendsMountValue;
 
   const make_server_request = () => {
@@ -31,6 +35,9 @@ const MyFriends = () => {
       // setResult(response.data);
       setMyFriends(response.data);
       setGetLoading(false);
+      console.log(response.data.length);
+      const h = Array(response.data.length).fill(true);
+      setMyFriendsBtn(h);
     };
 
     axios_request({
@@ -50,7 +57,8 @@ const MyFriends = () => {
     setDidfriendsMount(false);
   }, []);
 
-  console.log(myFriendsValue);
+  console.log(myFriendsBtn);
+
   return (
     <div className="MyFriends">
       {" "}
@@ -67,8 +75,8 @@ const MyFriends = () => {
                 result={myFriends}
                 setError={setError}
                 key={uniqid()}
-                isChanged={isChanged}
-                setIschanged={setIschanged}
+                setMyFriendsBtn={setMyFriendsBtn}
+                myFriendsBtn={myFriendsBtn}
               />
             );
           })

@@ -31,17 +31,26 @@ const UserDetail = () => {
       <div className="UserNav">
         <UserNav
           to={`/user/${params.username}/posts`}
-          state={location.state.userid}
+          fname={location.state.fname}
+          lname={location.state.lname}
+          userid={location.state.userid}
+          username={location.state.username}
           label="Posts"
         />
         <UserNav
           to={`/user/${params.username}/about`}
-          state={location.state.userid}
+          fname={location.state.fname}
+          lname={location.state.lname}
+          userid={location.state.userid}
+          username={location.state.username}
           label="About"
         />
         <UserNav
-          to={`/user/${params.username.userid}/friends`}
-          state={location.state.userid}
+          to={`/user/${params.username}/friends`}
+          fname={location.state.fname}
+          lname={location.state.lname}
+          userid={location.state.userid}
+          username={location.state.username}
           label="Friends"
         />
       </div>

@@ -1,22 +1,29 @@
-import React from "react";
+import React, { useCallback, useContext } from "react";
 import { Link } from "react-router-dom";
+import { OdinBookContext } from "../Context";
 import "./Hamburger.css";
 
 const Hamburger = () => {
-  const jwtData = JSON.parse(localStorage.getItem("jwtData"));
-  let username;
-  let userid;
-  if (jwtData) {
-    username = jwtData.user;
-    userid = jwtData.sub;
-  }
+  const { jwtData } = useContext(OdinBookContext);
+  console.log(jwtData);
+
   return (
     <div className="Hamburger">
       <div className="account">
         <div className="profile-picture"></div>
         <div className="nav-link-container">
-          <Link to={{ pathname: `/user/${username}/posts`, state: userid }}>
-            <div className="user">{username}</div>
+          <Link
+            to={{
+              pathname: `/user/${jwtData.user}/posts`,
+              state: {
+                fname: jwtData.fname,
+                lname: jwtData.lname,
+                username: jwtData.user,
+                userid: jwtData.sub,
+              },
+            }}
+          >
+            <div className="user">{jwtData.user}</div>
             <div className="nav-link-desc">See your profile</div>
           </Link>
         </div>

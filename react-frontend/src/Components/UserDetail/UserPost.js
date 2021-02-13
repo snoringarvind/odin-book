@@ -11,7 +11,7 @@ import MyPostDelete from "../MyPosts/MyPostDelete";
 import { axios_request } from "../Utils";
 
 const UserPost = () => {
-  // const { axios_request } = useContext(OdinBookContext);
+  const { jwtData } = useContext(OdinBookContext);
 
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(true);
@@ -37,7 +37,12 @@ const UserPost = () => {
   const [indexOfCardClicked, setindexOfCardClicked] = useState(null);
 
   const location = useLocation();
-  const userid = location.state;
+
+  console.log(location);
+  const userid = location.state.userid;
+  const fname = location.state.fname;
+  const lname = location.state.lname;
+  const username = location.state.username;
 
   const params = useParams();
   console.log("params", params);
@@ -63,14 +68,18 @@ const UserPost = () => {
     });
   };
 
-  const jwtData = JSON.parse(localStorage.getItem("jwtData"));
-  let logged_in_userid;
-  if (jwtData) {
-    logged_in_userid = jwtData.sub;
-  }
   useEffect(() => {
-    if (logged_in_userid.toString() === userid.toString()) {
-      setIsOwner(true);
+    console.log(jwtData);
+    console.log(jwtData.sub);
+    console.log(userid);
+    if (jwtData) {
+      if (jwtData.sub.toString() === userid.toString()) {
+        setIsOwner(true);
+      } else {
+        setIsOwner(false);
+      }
+    } else {
+      setIsOwner(false);
     }
     console.log("hello");
 
@@ -80,7 +89,7 @@ const UserPost = () => {
     //if the owner then show the post form
     //here owner is the logged in user
     //and the userid is of the person we are browing which will be in the url
-  }, []);
+  }, [location.pathname]);
 
   // useEffect(() => {
   //   setLikeLength([]);
@@ -124,7 +133,7 @@ const UserPost = () => {
   console.log(location.pathname);
 
   const [likeClick, setLikeClick] = useState([]);
-  const [indexOfLikeClicked, setIndexOfLikeClicked] = useState(null);
+  const [UserLikedIndex, setUsersLikedIndex] = useState(null);
 
   return (
     <div className="UserPost">
@@ -179,14 +188,13 @@ const UserPost = () => {
                   isOwner={isOwner}
                   setDeleteClick={setDeleteClick}
                   deleteClick={deleteClick}
-                  logged_in_userid={logged_in_userid}
                   likeLength={likeLength}
                   setLikeLength={setLikeLength}
-                  indexOfLikeClicked={indexOfLikeClicked}
-                  setIndexOfLikeClicked={setIndexOfLikeClicked}
                   likeClick={likeClick}
                   setLikeClick={setLikeClick}
                   postsLength={result.length}
+                  UserLikedIndex={UserLikedIndex}
+                  setUsersLikedIndex={setUsersLikedIndex}
                 />
               );
             })}

@@ -1,15 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { OdinBookContext } from "../Context";
+import { axios_request } from "../Utils";
 
 const UserAbout = () => {
-  const { axios_request } = useContext(OdinBookContext);
   const [getLoading, setGetLoading] = useState(true);
   const [about, setAbout] = useState("");
   const [error, setError] = useState("");
 
   const location = useLocation();
-  const userid = location.state;
+  const fname = location.state.fname;
+  const lname = location.state.lname;
+  const username = location.state.username;
+  const userid = location.state.userid;
 
   const profile_route = `/profile/${userid}`;
   const profile_route_method = "GET";

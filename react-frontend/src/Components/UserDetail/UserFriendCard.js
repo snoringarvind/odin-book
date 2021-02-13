@@ -1,48 +1,30 @@
+import { set } from "mongoose";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { OdinBookContext } from "../Context";
+import { axios_request } from "../Utils";
 
 const UserFriendCard = ({
   value,
   index,
-  setResult,
-  result,
   setError,
-  isChanged,
-  setIschanged,
-  myFriendList,
+  userFriendList,
+  setUserFriendList,
 }) => {
   // const params = useParams();
   // console.log("params", params);
   // const history = useHistory();
   // console.log("histroy", history);
 
-  const location = useLocation();
-  const personid = location.state;
-
-  const [btnValue, setBtnValue] = useState(null);
-
-  const [btnLoading, setBtnLoading] = useState(false);
-
-  const jwtData = JSON.parse(localStorage.getItem("jwtData"));
-  let username;
-  let userid;
-  if (jwtData) {
-    username = jwtData.user;
-    userid = jwtData.sub;
-  }
-
-  const [isClicked, setIsClicked] = useState(true);
-
-  const { axios_request } = useContext(OdinBookContext);
+  console.log("hello");
   //removes friend
   const clickHandler = () => {
     // if i don't do this it show 'cannot update state after the component is unmounted'
     //becoz you are not waiting for the response and directly deleting the user from the sreen
-    if (personid.toString() !== userid.toString()) {
-      setBtnLoading(true);
-      setIsClicked(!isClicked);
-    }
+    // if (personid.toString() !== userid.toString()) {
+    //   setBtnLoading(true);
+    //   setIsClicked(!isClicked);
+    // }
 
     const route = `/friend/${value._id}`;
     const method = "POST";
@@ -50,12 +32,10 @@ const UserFriendCard = ({
     const cb_error = (err) => {
       //!using same state to set Error
       setError(err.message);
-      setBtnLoading(false);
     };
 
     const cb_response = (response) => {
       // console.log(response);
-      setBtnLoading(false);
     };
 
     axios_request({
@@ -73,74 +53,7 @@ const UserFriendCard = ({
     // }
   };
 
-  const display = () => {
-    // console.log("hahahahha");
-
-    //if you have searched yourself you can remove the friend from the screen.
-    if (personid.toString() === userid.toString()) {
-      return <button onClick={clickHandler}>Remove</button>;
-    }
-
-    if (myFriendList.length == 0) {
-      if (value._id === userid) {
-        return;
-      } else {
-        return (
-          <button
-            onClick={() => {
-              if (btnLoading) {
-                return;
-              } else {
-                return clickHandler();
-              }
-            }}
-          >
-            {btnLoading && "loading..."}
-            {!btnLoading && (isClicked ? "Add" : "Remove")}
-          </button>
-        );
-      }
-    } else {
-      for (let i = 0; i < myFriendList.length; i++) {
-        if (value._id === myFriendList[i]._id) {
-          return (
-            <button
-              onClick={() => {
-                if (btnLoading) {
-                  return;
-                } else {
-                  return clickHandler();
-                }
-              }}
-            >
-              {btnLoading && "loading..."}
-              {!btnLoading && (isClicked ? "Remove" : "Add")}
-            </button>
-          );
-        } else if (value._id === userid) {
-          return;
-        }
-      }
-      return (
-        <button
-          onClick={() => {
-            if (btnLoading) {
-              return;
-            } else {
-              return clickHandler();
-            }
-          }}
-        >
-          {btnLoading && "loading..."}
-          {!btnLoading && (isClicked ? "Add" : "Remove")}
-        </button>
-      );
-    }
-  };
-
-  useEffect(() => {
-    display();
-  }, []);
+  const [pp, setpp] = useState(false);
 
   return (
     <div className="UserFriendCard">
@@ -150,7 +63,12 @@ const UserFriendCard = ({
         <Link
           to={{
             pathname: `/user/${value.username}/posts`,
-            state: value._id,
+            state: {
+              userid: value._id,
+              fname: value.fname,
+              lname: value.lname,
+              username: value.username,
+            },
           }}
         >
           <div className="name">
@@ -160,7 +78,18 @@ const UserFriendCard = ({
         </Link>
         <div className="username">{value.username}</div>
       </div>
-      <div className="add-btn">{display()}</div>
+      <div
+        className="add-btn"
+        onClick={() => {
+          console.log(userFriendList[index]);
+          userFriendList[index] = !userFriendList[index];
+          setUserFriendList(userFriendList);
+          setpp(!pp);
+          clickHandler();
+        }}
+      >
+        <button>{userFriendList[index] ? "Remove" : "Add"}</button>
+      </div>
     </div>
   );
 };

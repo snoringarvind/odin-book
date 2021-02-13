@@ -17,7 +17,13 @@ const MyFriends = () => {
   // const [result, setResult] = useState([]);
 
   const [myFriends, setMyFriends] = myFriendsValue;
-  const [myFriendsBtn, setMyFriendsBtn] = myFriendsBtnValue;
+  const [isChanged, setIsChanged] = useState(false);
+
+  useEffect(() => {
+    console.log("hello");
+    setMyFriends(myFriends);
+  }, [isChanged]);
+  // const [myFriendsBtn, setMyFriendsBtn] = myFriendsBtnValue;
 
   // // const [isChanged, setIschanged] = useState(false);
   // const [didfriendsMount, setDidfriendsMount] = didfriendsMountValue;
@@ -53,7 +59,7 @@ const MyFriends = () => {
   //   setDidfriendsMount(false);
   // }, []);
 
-  console.log(myFriendsBtn);
+  // console.log(myFriendsBtn);
 
   return (
     <div className="MyFriends">
@@ -68,11 +74,14 @@ const MyFriends = () => {
               <MyFriendsCard
                 value={value}
                 index={index}
-                result={myFriends}
+                myFriends={myFriends}
+                setMyFriends={setMyFriends}
                 setError={setError}
                 key={uniqid()}
-                setMyFriendsBtn={setMyFriendsBtn}
-                myFriendsBtn={myFriendsBtn}
+                // setMyFriendsBtn={setMyFriendsBtn}
+                // myFriendsBtn={myFriendsBtn}
+                isChanged={isChanged}
+                setIsChanged={setIsChanged}
               />
             );
           })

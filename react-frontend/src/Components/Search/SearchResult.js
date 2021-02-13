@@ -27,6 +27,9 @@ const SearchResult = () => {
 
   const user_list_method = "GET";
   const make_server_request = () => {
+    // friendBtn.splice(0, friendBtn.length);
+    // setFriendBtn(friendBtn);
+    // console.log(friendBtn);
     const cb_error = (err) => {
       if (err.response) {
         console.log(err.response.data);
@@ -59,6 +62,7 @@ const SearchResult = () => {
     if (searchValueChange === true) {
       make_server_request();
       // get_my_friend_list();
+
       setSearchValueChange(false);
     }
   }, [searchValueChange]);
@@ -75,6 +79,8 @@ const SearchResult = () => {
   }, []);
 
   let arrg = [];
+
+  console.log(friendBtn);
 
   return (
     <div className="SearchResult">

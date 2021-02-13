@@ -1,3 +1,4 @@
+import { set } from "mongoose";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { OdinBookContext } from "../Context";
@@ -6,12 +7,18 @@ import { axios_request } from "../Utils";
 const MyFriendsCard = ({
   value,
   index,
-  result,
+  myFriends,
+  setMyFriends,
   setError,
-  myFriendsBtn,
-  setMyFriendsBtn,
+  // myFriendsBtn,
+  // setMyFriendsBtn,
+  isChanged,
+  setIsChanged,
 }) => {
-  //removes friend
+  const { myFriendsValue } = useContext(OdinBookContext);
+  const [myFriends1, setMyFriends1] = myFriendsValue;
+  //here we will also delete the friend from the screen maybe with a confirm message.
+  //e.g. are you sure you want to remove this friend.
   const clickHandler = () => {
     const route = `/friend/${value._id}`;
     const method = "POST";
@@ -32,10 +39,21 @@ const MyFriendsCard = ({
       axios_error: cb_error,
       axios_response: cb_response,
     });
+
+    console.log(index);
+    console.log(myFriends[index]);
+    myFriends.splice(index, 1);
+    setMyFriends(myFriends);
+    setpp(!pp);
+    setIsChanged(!isChanged);
+    // myFriendsBtn.splice(index, 1);
+    // setMyFriendsBtn(myFriendsBtn);
   };
 
+  console.log(myFriends);
   const [pp, setpp] = useState(false);
 
+  useEffect(() => {}, [myFriends]);
   return (
     <div className="MyFriendsCard">
       <div className="profile-picture">{[...value.fname[0].toLowerCase()]}</div>
@@ -62,14 +80,15 @@ const MyFriendsCard = ({
         <button
           onClick={() => {
             // console.log(friendArray[index]);
-            console.log(myFriendsBtn[index]);
-            myFriendsBtn[index] = !myFriendsBtn[index];
-            setMyFriendsBtn(myFriendsBtn);
+            // console.log(myFriendsBtn[index]);
+            // myFriendsBtn[index] = !myFriendsBtn[index];
+            // setMyFriendsBtn(myFriendsBtn);
             setpp(!pp);
             return clickHandler();
           }}
         >
-          {myFriendsBtn[index] ? "Remove" : "Add"}
+          Remove
+          {/* {myFriendsBtn[index] ? "Remove" : "Add"} */}
         </button>
       </div>
     </div>

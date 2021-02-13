@@ -18,7 +18,7 @@ const SearchResultCard = ({
     OdinBookContext
   );
   const [myFriends, setMyFriends] = myFriendsValue;
-  const [myFriendsBtn, setMyFriendsBtn] = myFriendsBtnValue;
+  // const [myFriendsBtn, setMyFriendsBtn] = myFriendsBtnValue;
 
   const [myFriendsIndex, setMyFriendsIndex] = useState(null);
 
@@ -75,25 +75,34 @@ const SearchResultCard = ({
     for (let i = 0; i < myFriends.length; i++) {
       // g = myFriends[i].includes(result._id);
       // console.log(myFriends[i]._id, value._id);
-      console.log(myFriends[i]._id, value._id);
+      // console.log(myFriends[i], value);
+
       if (myFriends[i]._id == value._id) {
+        // console.log(myFriends[i], value,g);
+        // console.log(g);
         g = true;
+
+        console.log(myFriends[i], value, g);
         setMyFriendsIndex(i);
         break;
       }
     }
 
     console.log(g);
-    if (friendBtn.length < result.length) {
-      console.log(g);
-      friendBtn.push(g);
-      setFriendBtn(friendBtn);
-    }
+    friendBtn[index] = g;
+    setFriendBtn(friendBtn);
+    // // console.log(g);
+    // if (friendBtn.length < result.length) {
+    //   console.log(g);
+    //   friendBtn.push(g);
+    //   setFriendBtn(friendBtn);
+    // }
     setpp(!pp);
+    console.log(friendBtn);
     console.log(friendBtn[index], index);
   }, []);
 
-  console.log(friendBtn[index], index);
+  // console.log(friendBtn[index], index);
 
   // console.log(value.user[index]._id);
   // console.log(jwtData.sub);
@@ -136,14 +145,14 @@ const SearchResultCard = ({
               if (friendBtn[index] == false) {
                 myFriends.push(value);
                 setMyFriends(myFriends);
-                myFriendsBtn.push(true);
-                setMyFriendsBtn(myFriendsBtn);
+                // myFriendsBtn.push(true);
+                // setMyFriendsBtn(myFriendsBtn);
               } else {
                 console.log("hello");
                 myFriends.splice(myFriendsIndex, 1);
                 setMyFriends(myFriends);
-                myFriendsBtn.splice(myFriendsIndex, 1);
-                setMyFriends(myFriends);
+                // myFriendsBtn.splice(myFriendsIndex, 1);
+                // setMyFriends(myFriends);
                 // for (let i = 0; i < myFriends.length; i++) {
                 //   if (myFriends._id == value._id) {
                 //   }

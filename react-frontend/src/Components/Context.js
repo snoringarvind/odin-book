@@ -23,6 +23,7 @@ const OdinBookProvider = ({ children }) => {
 
   const [didfriendsMount, setDidfriendsMount] = useState(true);
 
+  const [myFriendsLoading, setMyFriendsLoading] = useState(true);
   // let [jwtData, setJwData]
   // let
   let jwtData;
@@ -45,6 +46,8 @@ const OdinBookProvider = ({ children }) => {
       setMyFriends(response.data);
       const h = Array(response.data.length).fill(true);
       setMyFriendsBtn(h);
+      console.log(response.data);
+      setMyFriendsLoading(false);
     };
 
     axios_request({
@@ -72,7 +75,8 @@ const OdinBookProvider = ({ children }) => {
         jwtData: jwtData,
       }}
     >
-      {children}
+      {myFriendsLoading && "loading context"}
+      {!myFriendsLoading && children}
     </OdinBookContext.Provider>
   );
 };

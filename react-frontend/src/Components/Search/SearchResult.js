@@ -74,6 +74,8 @@ const SearchResult = () => {
     setSearchBarState({ search: params.name });
   }, []);
 
+  let arrg = [];
+
   return (
     <div className="SearchResult">
       {getLoading && "loading..."}
@@ -94,6 +96,7 @@ const SearchResult = () => {
                 key={uniqid()}
                 friendBtn={friendBtn}
                 setFriendBtn={setFriendBtn}
+                arrg={arrg}
               />
             );
           })

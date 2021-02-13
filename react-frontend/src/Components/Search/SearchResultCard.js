@@ -12,12 +12,16 @@ const SearchResultCard = ({
   result,
   friendBtn,
   setFriendBtn,
+  arrg,
 }) => {
   const { jwtData, myFriendsValue, myFriendsBtnValue } = useContext(
     OdinBookContext
   );
   const [myFriends, setMyFriends] = myFriendsValue;
   const [myFriendsBtn, setMyFriendsBtn] = myFriendsBtnValue;
+
+  const [myFriendsIndex, setMyFriendsIndex] = useState(null);
+
   //removes friend
   const clickHandler = () => {
     // setIsClicked(!isClicked);
@@ -46,25 +50,57 @@ const SearchResultCard = ({
 
   const [pp, setpp] = useState(false);
 
-  let g;
-  for (let i = 0; i < myFriends.length; i++) {
-    // g = myFriends[i].includes(result._id);
-    console.log(myFriends[i]);
-    let val = Object.values(myFriends[i]);
-    console.log(val);
-  }
+  // let g;
+  // for (let i = 0; i < myFriends.length; i++) {
+  //   // g = myFriends[i].includes(result._id);
+  //   // console.log(myFriends[i]._id, value._id);
+  //   if (myFriends[i]._id == value._id) {
+  //     g = true;
+  //   } else {
+  //     g = false;
+  //   }
+  //   // console.log(g);
+  // }
+
+  // console.log(g);
 
   useEffect(() => {
+    // console.log("ahsahsahsahsbashbsh");
+    // console.log(friendBtn.length, result.length);
+
+    console.log("hellllll");
+    // console.log(friendBtn);
+    let g = false;
+
+    for (let i = 0; i < myFriends.length; i++) {
+      // g = myFriends[i].includes(result._id);
+      // console.log(myFriends[i]._id, value._id);
+      console.log(myFriends[i]._id, value._id);
+      if (myFriends[i]._id == value._id) {
+        g = true;
+        setMyFriendsIndex(i);
+        break;
+      }
+    }
+
+    console.log(g);
     if (friendBtn.length < result.length) {
+      console.log(g);
       friendBtn.push(g);
       setFriendBtn(friendBtn);
     }
     setpp(!pp);
+    console.log(friendBtn[index], index);
   }, []);
+
+  console.log(friendBtn[index], index);
 
   // console.log(value.user[index]._id);
   // console.log(jwtData.sub);
   // console.log(friendBtn);
+  // console.log(arrg[index]);
+  // console.log(arrg);
+  // console.log(g, myFriends[index]);
   return (
     <div className="SearchResultCard">
       <div className="profile-picture">{[...value.fname[0].toLowerCase()]}</div>
@@ -94,12 +130,24 @@ const SearchResultCard = ({
               e.preventDefault();
               e.stopPropagation();
 
+              console.log(friendBtn[index], myFriendsIndex);
+
               //he add as friend so we will update our myfriend list
-              if (friendBtn) {
+              if (friendBtn[index] == false) {
                 myFriends.push(value);
                 setMyFriends(myFriends);
                 myFriendsBtn.push(true);
                 setMyFriendsBtn(myFriendsBtn);
+              } else {
+                console.log("hello");
+                myFriends.splice(myFriendsIndex, 1);
+                setMyFriends(myFriends);
+                myFriendsBtn.splice(myFriendsIndex, 1);
+                setMyFriends(myFriends);
+                // for (let i = 0; i < myFriends.length; i++) {
+                //   if (myFriends._id == value._id) {
+                //   }
+                // }
               }
 
               friendBtn[index] = !friendBtn[index];
@@ -108,6 +156,7 @@ const SearchResultCard = ({
               clickHandler();
             }}
           >
+            {/* {arrg[index] ? "remove" : "add"} */}
             {friendBtn[index] ? "remove" : "add"}
             {/* {friendBtn.length == 0 && (value.isfriend ? "Remove" : "Add")} */}
             {/* {friendBtn.length !== 0 && (friendBtn[index] ? "Remove" : "Add")} */}

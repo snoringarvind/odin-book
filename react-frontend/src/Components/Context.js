@@ -1,6 +1,9 @@
 import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
 import { axios_request } from "./Utils";
+import async from "async";
+// import { response } from "express";
+import { Switch, useLocation } from "react-router-dom";
 
 const OdinBookContext = createContext();
 
@@ -19,16 +22,22 @@ const OdinBookProvider = ({ children }) => {
 
   //for MyFriends to not re-render
   const [myFriends, setMyFriends] = useState([]);
+  const [myFriendsBtn, setMyFriendsBtn] = useState([]);
+  const [didMyFriendsMount, setDidMyFriendsMount] = useState(true);
 
   //for myabout to not re-render
   const [myAbout, setMyAbout] = useState({});
 
   //for mypost to not re-render
   const [myPosts, setMyposts] = useState([]);
+  const [didMyPostsMount, setDidMyPostsMount] = useState(true);
 
-  const [myFriendsLoading, setMyFriendsLoading] = useState(true);
-  // let [jwtData, setJwData]
-  // let
+  //for mynewsfeed to not re-render
+  const [myNewsfeed, setMyNewsFeed] = useState([]);
+  const [didMyNewsFeedMount, setDidMyNewsFeedMount] = useState(true);
+
+  // const [loading, setLoading] = useState(true);
+
   let jwtData;
   let setJwData;
   try {
@@ -39,92 +48,32 @@ const OdinBookProvider = ({ children }) => {
     console.log(err.message);
   }
 
-  const get_myfriends_list = () => {
-    const route = `/friend/${jwtData.sub}`;
-    const method = "GET";
-    const cb_error = (err) => {
-      console.log(err.message);
-    };
-    const cb_response = (response) => {
-      setMyFriends(response.data);
-      // const h = Array(response.data.length).fill(true);
-      // setMyFriendsBtn(h);
-      console.log(response.data);
-      setMyFriendsLoading(false);
-    };
-
-    axios_request({
-      route: route,
-      method: method,
-      data: "",
-      axios_error: cb_error,
-      axios_response: cb_response,
-    });
-  };
-  const get_myabout = () => {
-    const route = `/profile/${jwtData.sub}`;
-    const method = "GET";
-
-    const cb_error = (err) => {
-      console.log(err.message);
-    };
-    const cb_response = (response) => {
-      setMyAbout(response.data);
-    };
-
-    axios_request({
-      route: route,
-      method: method,
-      data: "",
-      axios_error: cb_error,
-      axios_response: cb_response,
-    });
-  };
-
-  const get_myposts = () => {
-    const route = `/posts/${jwtData.sub}`;
-    const method = "GET";
-
-    const cb_error = (err) => {
-      console.log(err.message);
-      if (err.response) {
-        console.log(err.response.data);
-      }
-    };
-    const cb_response = (response) => {
-      console.log(response.data);
-      setMyposts(response.data);
-    };
-
-    axios_request({
-      route: route,
-      method: method,
-      data: "",
-      axios_error: cb_error,
-      axios_response: cb_response,
-    });
-  };
-
-  useEffect(() => {
-    get_myfriends_list();
-    get_myabout();
-    get_myposts();
-  }, []);
-
   return (
     <OdinBookContext.Provider
       value={{
         searchValue: [searchValueChange, setSearchValueChange],
         searchBarStateValue: [searchBarState, setSearchBarState],
-        userPostResultValue: [userPostResult, setUserPostResult],
-        myFriendsValue: [myFriends, setMyFriends],
-        myAboutValue: [myAbout, setMyAbout],
-        myPostsValue: [myPosts, setMyposts],
         jwtData: jwtData,
+
+        userPostResultValue: [userPostResult, setUserPostResult],
+
+        myFriendsValue: [myFriends, setMyFriends],
+        myFriendsBtnValue: [myFriendsBtn, setMyFriendsBtn],
+
+        myAboutValue: [myAbout, setMyAbout],
+
+        myPostsValue: [myPosts, setMyposts],
+        didMyPostsMountValue: [didMyPostsMount, setDidMyPostsMount],
+
+        myNewsFeedValue: [myNewsfeed, setMyNewsFeed],
+        didMyNewsFeedMountValue: [didMyNewsFeedMount, setDidMyNewsFeedMount],
+
+        didMyFriendsMountValue: [didMyFriendsMount, setDidMyFriendsMount],
       }}
     >
-      {myFriendsLoading && "loading context"}
-      {!myFriendsLoading && children}
+      {/* {loading && "loading context"} */}
+      {/* {!loading && children} */}
+      {children}
     </OdinBookContext.Provider>
   );
 };

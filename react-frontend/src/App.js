@@ -6,11 +6,13 @@ import Login from "./Components/Login/Login";
 
 function App() {
   const { jwtData } = useContext(OdinBookContext);
+  // console.log(jwtData);
 
+  // const jwtData = JSON.parse(localStorage.getItem());
   return (
     <div className="App">
       {jwtData && <Home />}
-      {!jwtData && <Login />}
+      {jwtData == null && <Login />}
     </div>
   );
 }

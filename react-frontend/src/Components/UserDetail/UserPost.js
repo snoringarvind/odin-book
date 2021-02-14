@@ -11,9 +11,18 @@ import MyPostDelete from "../MyPosts/MyPostDelete";
 import { axios_request } from "../Utils";
 
 const UserPost = ({ path }) => {
-  console.log(path);
-  const { jwtData, myPostsValue } = useContext(OdinBookContext);
+  // console.log(path);
+  const {
+    jwtData,
+    myPostsValue,
+    didMyPostsMountValue,
+    myNewsFeedValue,
+    didMyNewsFeedMountValue,
+  } = useContext(OdinBookContext);
   const [myPosts, setMyPosts] = myPostsValue;
+  const [myNewsfeed, setMyNewsFeed] = myNewsFeedValue;
+  const [didMyNewsFeedMount, setDidMyNewsFeedMount] = didMyNewsFeedMountValue;
+  const [didMyPostsMount, setDidMyPostsMount] = didMyPostsMountValue;
 
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(true);
@@ -40,7 +49,7 @@ const UserPost = ({ path }) => {
 
   const location = useLocation();
 
-  console.log(location);
+  // console.log(location);
 
   //putting in an if-block since in news feed location.state will be undefined
   let userid;
@@ -49,13 +58,13 @@ const UserPost = ({ path }) => {
   }
 
   const params = useParams();
-  console.log("params", params);
+  // console.log("params", params);
 
   const get_posts = () => {
     let post_list_route;
     if (path == "userpost") {
       post_list_route = `/posts/${userid}`;
-    } else if (path == "newsfeed") {
+    } else if (path === "newsfeed") {
       post_list_route = "/news-feed";
     }
 
@@ -65,7 +74,18 @@ const UserPost = ({ path }) => {
       setGetLoading(false);
     };
     const cb_response = (response) => {
-      setResult(response.data);
+      if (path == "newsfeed") {
+        setMyNewsFeed(response.data);
+        setResult(response.data);
+      } else if (path === "userpost") {
+        if (userid === jwtData.sub) {
+          setMyPosts(response.data);
+          setResult(response.data);
+        } else {
+          setResult(response.data);
+        }
+      }
+
       setGetLoading(false);
     };
 
@@ -78,17 +98,37 @@ const UserPost = ({ path }) => {
     });
   };
 
+  // console.log(path);
+
   useEffect(() => {
-    console.log(userid);
-    //herer if the url is news-feed , the userid will be undefined.
-    if (userid !== jwtData.sub) {
-      console.log(userid, jwtData.sub);
-      get_posts();
-      setIsOwner(false);
-    } else {
-      setResult(myPosts);
-      setGetLoading(false);
-      setIsOwner(true);
+    // console.log(userid);
+    if (path == "userpost") {
+      //herer if the url is news-feed , the userid will be undefined.
+      if (userid !== jwtData.sub) {
+        // console.log(userid, jwtData.sub);
+        get_posts();
+        setIsOwner(false);
+      } else {
+        if (didMyPostsMount) {
+          get_posts();
+          setIsOwner(true);
+          setDidMyPostsMount(false);
+        } else {
+          setResult(myPosts);
+          setGetLoading(false);
+        }
+      }
+    } else if (path == "newsfeed") {
+      if (didMyNewsFeedMount) {
+        get_posts();
+        setIsOwner(false);
+        setDidMyNewsFeedMount(false);
+        // console.log(didMyNewsFeedMount);
+      } else {
+        setResult(myNewsfeed);
+        setGetLoading(false);
+        // console.log("hello");
+      }
     }
 
     // setLikeLength([]);
@@ -98,6 +138,11 @@ const UserPost = ({ path }) => {
     //and the userid is of the person we are browing which will be in the url
   }, []);
 
+  console.log(path);
+  console.log(myNewsfeed);
+  console.log(result);
+
+  // console.log("hello");
   // useEffect(() => {
   //   setLikeLength([]);
   // }, [likeLength]);
@@ -109,7 +154,7 @@ const UserPost = ({ path }) => {
     // setNewPost([...result, response.data.save_post]);
     // console.log(response.data.save_post);
     // console.log(result);
-    console.log(response);
+    // console.log(response);
     setResult([response.data].concat(result));
     console.log([response.data].concat(result));
 
@@ -117,7 +162,7 @@ const UserPost = ({ path }) => {
   };
 
   const post_update_response = (response) => {
-    console.log(response);
+    // console.log(response);
     result[updateIndex] = response.data;
     setResult(result);
   };
@@ -137,14 +182,17 @@ const UserPost = ({ path }) => {
     setDeleteClick(false);
   };
 
-  console.log(location.pathname);
+  // console.log(location.pathname);
 
   const [likeClick, setLikeClick] = useState([]);
   const [UserLikedIndex, setUsersLikedIndex] = useState(null);
 
   return (
     <div className="UserPost">
-      {getLoading && "loading..."}
+      {/* doing path=='newsfeed' herer bcoz for a second it shows loading even if we are loading the data from state */}
+      {/* maybe we will show loading even for newsfeed for a second. */}
+      {/* {getLoading && path !== "newsfeed" && "loading"} */}
+      {getLoading && "loading"}
       {!getLoading &&
         (error ? (
           <div className="error">{error}</div>

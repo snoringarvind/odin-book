@@ -23,6 +23,7 @@ const OdinBookProvider = ({ children }) => {
 
   //for myabout to not re-render
   const [myAbout, setMyAbout] = useState({});
+  const [didMyAboutMount, setdidMyAboutMount] = useState(true);
 
   //for mypost to not re-render
   const [myPosts, setMyposts] = useState([]);
@@ -58,6 +59,8 @@ const OdinBookProvider = ({ children }) => {
 
         myNewsFeedValue: [myNewsfeed, setMyNewsFeed],
         didMyNewsFeedMountValue: [didMyNewsFeedMount, setDidMyNewsFeedMount],
+
+        didMyAboutMountValue: [didMyAboutMount, setdidMyAboutMount],
       }}
     >
       {children}

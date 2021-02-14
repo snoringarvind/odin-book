@@ -52,18 +52,15 @@ const UserFriend = ({ path }) => {
     const cb_response = (response) => {
       if (path == "myfriends") {
         setMyFriends(response.data);
-        setResult(response.data);
       } else {
         if (userid == jwtData.sub) {
           setMyFriends(response.data);
-          setResult(response.data);
         } else {
-          setResult(response.data);
           const h = Array(response.data.length).fill(true);
           setFriendBtn(h);
         }
       }
-
+      setResult(response.data);
       setGetLoading(false);
     };
 

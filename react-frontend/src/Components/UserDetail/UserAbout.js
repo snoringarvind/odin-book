@@ -4,10 +4,13 @@ import { OdinBookContext } from "../Context";
 import { axios_request } from "../Utils";
 
 const UserAbout = () => {
-  const { myAboutValue } = useContext(OdinBookContext);
+  const { myAboutValue, didMyAboutMountValue } = useContext(OdinBookContext);
   const [myAbout, setMyAbout] = myAboutValue;
+  const [didMyAboutMount, setdidMyAboutMount] = didMyAboutMountValue;
 
   const [getLoading, setGetLoading] = useState(true);
+
+  const [result, setResult] = useState({});
 
   const [about, setAbout] = useState("");
   const [error, setError] = useState("");
@@ -23,7 +26,11 @@ const UserAbout = () => {
 
   const make_server_request = () => {
     const cb_response = (response) => {
-      setAbout(response.data);
+      if (userid === jwtData.sub) {
+        setMyAbout(response.data);
+      }
+      setResult(response.data);
+
       setGetLoading(false);
     };
     const cb_error = (err) => {
@@ -47,8 +54,13 @@ const UserAbout = () => {
     if (jwtData.sub !== userid) {
       make_server_request();
     } else {
-      setAbout(myAbout);
-      setGetLoading(false);
+      if (didMyAboutMount) {
+        make_server_request();
+        setdidMyAboutMount(false);
+      } else {
+        setResult(myAbout);
+        setGetLoading(false);
+      }
     }
   }, []);
 
@@ -56,79 +68,79 @@ const UserAbout = () => {
     return (
       <>
         <div>
-          <span className="title">Name:</span> <span>{about.fname} </span>
-          <span>{about.lname}</span>
+          <span className="title">Name:</span> <span>{result.fname} </span>
+          <span>{result.lname}</span>
         </div>
-        {about.bio && (
+        {result.bio && (
           <div>
             <span className="title">Bio:</span>
-            {about.bio}
+            {result.bio}
           </div>
         )}
-        {about.nickName && (
+        {result.nickName && (
           <div>
             <span className="titie">NickName:</span>
-            {about.nickName}
+            {result.nickName}
           </div>
         )}
-        {about.school && (
+        {result.school && (
           <div>
             <span className="title">School:</span>
-            {about.school}
+            {result.school}
           </div>
         )}
-        {about.college && (
+        {result.college && (
           <div>
             <span className="title">College:</span>
-            {about.college}
+            {result.college}
           </div>
         )}
-        {about.working && (
+        {result.working && (
           <div>
             <span className="title">Work:</span>
-            {about.working}
+            {result.working}
           </div>
         )}
-        {about.relationshipStatus && (
+        {result.relationshipStatus && (
           <div>
             <span className="title">Relationship Status:</span>
-            {about.relationshipStatus}
+            {result.relationshipStatus}
           </div>
         )}
-        {about.book && (
+        {result.book && (
           <div>
             <span className="title">Books:</span>
-            {about.book}
+            {result.book}
           </div>
         )}
-        {about.food && (
+        {result.food && (
           <div>
             <span className="title">Food:</span>
-            {about.food}
+            {result.food}
           </div>
         )}
-        {about.phone && (
+        {result.phone && (
           <div>
             <span className="title">Phone:</span>
-            {about.phone}
+            {result.phone}
           </div>
         )}
-        {about.email && (
+        {result.email && (
           <div>
             <span className="title">Email:</span>
-            {about.email}
+            {result.email}
           </div>
         )}
-        {about.gender && (
+        {result.gender && (
           <div>
             <span className="title">Gender:</span>
-            {about.gender}
+            {result.gender}
           </div>
         )}
-        {about.dob && (
+        {result.dob && (
           <div>
             <span className="title">Birthday</span>
-            {about.dob}
+            {result.dob}
           </div>
         )}
       </>

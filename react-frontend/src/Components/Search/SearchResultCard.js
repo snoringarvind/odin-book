@@ -14,11 +14,8 @@ const SearchResultCard = ({
   setFriendBtn,
   arrg,
 }) => {
-  const { jwtData, myFriendsValue, myFriendsBtnValue } = useContext(
-    OdinBookContext
-  );
+  const { jwtData, myFriendsValue } = useContext(OdinBookContext);
   const [myFriends, setMyFriends] = myFriendsValue;
-  // const [myFriendsBtn, setMyFriendsBtn] = myFriendsBtnValue;
 
   const [myFriendsIndex, setMyFriendsIndex] = useState(null);
 

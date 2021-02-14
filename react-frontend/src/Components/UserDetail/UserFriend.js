@@ -8,20 +8,27 @@ import UserFriendCard from "./UserFriendCard";
 import async from "async";
 import { axios_request } from "../Utils";
 
-const UserFriend = () => {
+const UserFriend = ({ path }) => {
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(true);
   const [result, setResult] = useState([]);
-  const [userFriendList, setUserFriendList] = useState([]);
+
+  const [friendBtn, setFriendBtn] = useState([]);
 
   const [isChanged, setIsChanged] = useState(false);
-  const { myFriendsValue } = useContext(OdinBookContext);
+  const { myFriendsValue, didMyFriendsMountValue } = useContext(
+    OdinBookContext
+  );
+
+  const [didMyFriendsMount, setDidMyFriendsMount] = didMyFriendsMountValue;
+
   const [myFriends, setMyFriends] = myFriendsValue;
   const location = useLocation();
-  const userid = location.state.userid;
-
-  const friend_list_route = `/friend/${userid}`;
-  const friend_list_method = "GET";
+  let userid;
+  //since there will be no location.state for myfriends route.
+  if (path != "myfriends") {
+    userid = location.state.userid;
+  }
 
   // const params = useParams();
   // console.log("params", params);
@@ -29,17 +36,35 @@ const UserFriend = () => {
   // console.log("histroy", history);
 
   const make_server_request = () => {
+    let friend_list_route;
+    if (path == "myfriends") {
+      friend_list_route = `/friend/${jwtData.sub}`;
+    } else {
+      friend_list_route = `/friend/${userid}`;
+    }
+    const friend_list_method = "GET";
+
     const cb_error = (err) => {
       setError(err.message);
       setGetLoading(false);
     };
 
     const cb_response = (response) => {
+      if (path == "myfriends") {
+        setMyFriends(response.data);
+        setResult(response.data);
+      } else {
+        if (userid == jwtData.sub) {
+          setMyFriends(response.data);
+          setResult(response.data);
+        } else {
+          setResult(response.data);
+          const h = Array(response.data.length).fill(true);
+          setFriendBtn(h);
+        }
+      }
+
       setGetLoading(false);
-      setResult(response.data);
-      // console.log(response);
-      const h = Array(response.data.length).fill(true);
-      setUserFriendList(h);
     };
 
     axios_request({
@@ -53,15 +78,30 @@ const UserFriend = () => {
   const { jwtData } = useContext(OdinBookContext);
 
   useEffect(() => {
-    console.log(jwtData.sub, userid);
-    if (jwtData.sub !== userid) {
-      make_server_request();
+    if (path == "myfriends") {
+      if (didMyFriendsMount) {
+        make_server_request();
+        setDidMyFriendsMount(false);
+      } else {
+        setResult(myFriends);
+        setGetLoading(false);
+      }
     } else {
-      setResult(myFriends);
-      setGetLoading(false);
+      if (jwtData.sub !== userid) {
+        make_server_request();
+      } else {
+        if (didMyFriendsMount) {
+          make_server_request();
+          setDidMyFriendsMount(false);
+        } else {
+          setResult(myFriends);
+          setGetLoading(false);
+        }
+      }
     }
+
     // get_my_friend_list();
-  }, [location.pathname]);
+  }, []);
 
   // console.log(myFriendList);
   // console.log(result);
@@ -79,11 +119,12 @@ const UserFriend = () => {
                 index={index}
                 setError={setError}
                 key={uniqid()}
-                userFriendList={userFriendList}
-                setUserFriendList={setUserFriendList}
+                friendBtn={friendBtn}
+                setFriendBtn={setFriendBtn}
                 userid={userid}
                 isChanged={isChanged}
                 setIsChanged={setIsChanged}
+                path={path}
               />
             );
           })

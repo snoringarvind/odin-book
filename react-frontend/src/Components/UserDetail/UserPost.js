@@ -77,7 +77,7 @@ const UserPost = ({ path }) => {
       if (path == "newsfeed") {
         setMyNewsFeed(response.data);
         setResult(response.data);
-      } else if (path === "userpost") {
+      } else {
         if (userid === jwtData.sub) {
           setMyPosts(response.data);
           setResult(response.data);

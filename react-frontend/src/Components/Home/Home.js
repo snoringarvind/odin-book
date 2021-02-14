@@ -19,6 +19,7 @@ import Hamburger from "../Hamburger/Hamburger";
 import MyFriends from "../MyFriends/MyFriends";
 import { OdinBookContext } from "../Context";
 import UserPost from "../UserDetail/UserPost";
+import UserFriend from "../UserDetail/UserFriend";
 
 const Home = () => {
   let location = useLocation();
@@ -144,7 +145,7 @@ const Home = () => {
         </Route>
 
         <Route exact path="/friends">
-          <MyFriends />
+          <UserFriend path="myfriends" />
         </Route>
         {/* <Route exact path="/account">
           my-Account

@@ -9,7 +9,7 @@ const OdinBookContext = createContext();
 
 const OdinBookProvider = ({ children }) => {
   // ex. http://localhost:3000/odinbook
-  const [serverUrl] = useState("http://localhost:3000/odinbook");
+  // const [serverUrl] = useState("http://localhost:3000/odinbook");
 
   //to render the searchresult page if the user hits enter
   const [searchValueChange, setSearchValueChange] = useState(false);
@@ -17,12 +17,8 @@ const OdinBookProvider = ({ children }) => {
   //to prefill the search bar if there is a value in the url
   const [searchBarState, setSearchBarState] = useState({ search: "" });
 
-  //for  form
-  const [userPostResult, setUserPostResult] = useState([]);
-
   //for MyFriends to not re-render
   const [myFriends, setMyFriends] = useState([]);
-  const [myFriendsBtn, setMyFriendsBtn] = useState([]);
   const [didMyFriendsMount, setDidMyFriendsMount] = useState(true);
 
   //for myabout to not re-render
@@ -39,11 +35,8 @@ const OdinBookProvider = ({ children }) => {
   // const [loading, setLoading] = useState(true);
 
   let jwtData;
-  let setJwData;
   try {
-    [jwtData, setJwData] = useState(
-      JSON.parse(localStorage.getItem("jwtData"))
-    );
+    [jwtData] = useState(JSON.parse(localStorage.getItem("jwtData")));
   } catch (err) {
     console.log(err.message);
   }
@@ -55,10 +48,8 @@ const OdinBookProvider = ({ children }) => {
         searchBarStateValue: [searchBarState, setSearchBarState],
         jwtData: jwtData,
 
-        userPostResultValue: [userPostResult, setUserPostResult],
-
         myFriendsValue: [myFriends, setMyFriends],
-        myFriendsBtnValue: [myFriendsBtn, setMyFriendsBtn],
+        didMyFriendsMountValue: [didMyFriendsMount, setDidMyFriendsMount],
 
         myAboutValue: [myAbout, setMyAbout],
 
@@ -67,12 +58,8 @@ const OdinBookProvider = ({ children }) => {
 
         myNewsFeedValue: [myNewsfeed, setMyNewsFeed],
         didMyNewsFeedMountValue: [didMyNewsFeedMount, setDidMyNewsFeedMount],
-
-        didMyFriendsMountValue: [didMyFriendsMount, setDidMyFriendsMount],
       }}
     >
-      {/* {loading && "loading context"} */}
-      {/* {!loading && children} */}
       {children}
     </OdinBookContext.Provider>
   );

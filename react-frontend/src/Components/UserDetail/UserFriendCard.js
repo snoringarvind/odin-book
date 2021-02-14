@@ -8,11 +8,12 @@ const UserFriendCard = ({
   value,
   index,
   setError,
-  userFriendList,
-  setUserFriendList,
+  friendBtn,
+  setFriendBtn,
   userid,
   isChanged,
   setIsChanged,
+  path,
 }) => {
   // const params = useParams();
   // console.log("params", params);
@@ -53,7 +54,7 @@ const UserFriendCard = ({
     });
 
     // only do this for the owner,,, bcoz it deletes the user from the screen
-    if (jwtData.sub == userid) {
+    if (jwtData.sub == userid || path == "myfriends") {
       myFriends.splice(index, 1);
       setMyFriends(myFriends);
       setIsChanged(!isChanged);
@@ -62,6 +63,7 @@ const UserFriendCard = ({
 
   const [pp, setpp] = useState(false);
 
+  console.log(path);
   return (
     <div className="UserFriendCard">
       {" "}
@@ -89,17 +91,18 @@ const UserFriendCard = ({
         className="add-btn"
         onClick={() => {
           if (jwtData.sub != userid) {
-            console.log(userFriendList[index]);
-            userFriendList[index] = !userFriendList[index];
-            setUserFriendList(userFriendList);
+            friendBtn[index] = !friendBtn[index];
+            setFriendBtn(friendBtn);
             setpp(!pp);
           }
           clickHandler();
         }}
       >
-        {jwtData.sub == userid && <button>Remove</button>}
-        {jwtData.sub !== userid && (
-          <button>{userFriendList[index] ? "Remove" : "Add"}</button>
+        {(jwtData.sub == userid || path === "myfriends") && (
+          <button>Remove</button>
+        )}
+        {jwtData.sub !== userid && path !== "myfriends" && (
+          <button>{friendBtn[index] ? "Remove" : "Add"}</button>
         )}
       </div>
     </div>

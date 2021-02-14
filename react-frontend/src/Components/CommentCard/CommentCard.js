@@ -1,12 +1,34 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./CommentCard.css";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { OdinBookContext } from "../Context";
+import CommentUpdate from "../Comment/CommentUpdate";
+import CommentDelete from "../Comment/CommentDelete";
 
-const CommentCard = ({ comment, index, postIndex, path }) => {
+const CommentCard = ({
+  comment,
+  index,
+  postIndex,
+  path,
+  commentOptionIndex,
+  setCommentOptionIndex,
+  postid,
+  comments,
+  setComments,
+  pp,
+  setpp,
+}) => {
   console.log(comment);
 
   const { jwtData } = useContext(OdinBookContext);
+
+  // const [isChanged, setIsChanged] = useState(false);
+
+  // console.log(isChanged);
+  // useEffect(() => {}, [isChanged]);
+  console.log(commentOptionIndex);
+  const [commentUpdateClick, setCommentUpdateClick] = useState(false);
+  const [commentDeleteClick, setCommentDeleteClick] = useState(false);
   return (
     <div className="CommentCard">
       <div className="profile-picture">
@@ -38,6 +60,75 @@ const CommentCard = ({ comment, index, postIndex, path }) => {
           )}
         </div>
         <div className="comment">{comment.comment}</div>
+      </div>
+      <div
+        className="option-icon"
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+
+          if (commentOptionIndex == index) {
+            setCommentOptionIndex(null);
+          } else {
+            setCommentOptionIndex(index);
+          }
+        }}
+      >
+        <div
+          style={{
+            backgroundColor: commentOptionIndex == index ? "lightgray" : "",
+          }}
+          className="btn fas fa-ellipsis-v"
+        ></div>
+        {commentOptionIndex === index && (
+          <div className="comment-menu">
+            {/* <div
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              setCommentUpdateClick(!commentUpdateClick);
+            }}
+          >
+            Edit
+          </div> */}
+            <div
+              className="comment-btn delete-comment-btn"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                setCommentDeleteClick(!commentDeleteClick);
+              }}
+            >
+              Delete
+            </div>
+          </div>
+        )}
+        {/* {commentUpdateClick && (
+        <CommentUpdate
+          postid={postid}
+          updateValue={comment.comment}
+          setComments={setComments}
+          commentid={comment._id}
+          commentUpdateClick={commentUpdateClick}
+          setCommentUpdateClick={setCommentUpdateClick}
+        />
+      )} */}
+        {commentDeleteClick && (
+          <CommentDelete
+            postid={postid}
+            index={index}
+            setComments={setComments}
+            comments={comments}
+            commentid={comment._id}
+            commentDeleteClick={commentDeleteClick}
+            setCommentDeleteClick={setCommentDeleteClick}
+            // isChanged={isChanged}
+            // setIsChanged={setIsChanged}
+            pp={pp}
+            setpp={setpp}
+            setCommentOptionIndex={setCommentOptionIndex}
+          />
+        )}
       </div>
     </div>
   );

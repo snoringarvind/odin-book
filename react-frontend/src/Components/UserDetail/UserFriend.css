@@ -3,7 +3,19 @@
   align-items: center;
   padding: 20px;
   border-bottom: 1px solid lightgray;
+  /* background-color: white; */
+  /* border-bottom: 1px solid lightgray; */
   /* border: 1px solid; */
+
+  /* margin: 10px 20px; */
+  /* border-radius: 4px; */
+  /* width: 60vw; */
+  /* margin: 3% 5%; */
+  /* border: 1px solid; */
+}
+
+.UserFriend .UserFriendCard:last-child {
+  border-bottom: none;
 }
 
 .UserFriend .people {
@@ -11,17 +23,19 @@
   font-weight: bold;
 }
 .UserFriend {
-  margin: 5vh 5vh;
+  margin: 2vh;
   background-color: white;
   border-radius: 5px;
-  min-height: 83vh;
+  /* min-height: 83vh; */
   border: 1px solid lightgray;
   padding: 20px;
 }
 .UserFriend .profile-picture {
   /* border: 1px solid; */
-  height: 3rem;
-  width: 3rem;
+  max-height: 3.3rem;
+  min-height: 3.3rem;
+  min-width: 3.3rem;
+  max-width: 3.3rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -29,11 +43,13 @@
   background-color: lightpink;
   font-size: 1.5rem;
 
-  margin-right: 30px;
+  margin-right: 20px;
 }
 
 .UserFriend .name-container {
   margin-right: 30px;
+  border: 1px solid;
+  flex-basis: 100%;
 }
 .UserFriend .name-container .name {
   /* border: 1px solid; */
@@ -47,6 +63,21 @@
   color: darkgray;
 }
 
-.UserFriend .add-btn button {
+.UserFriend .add-btn {
   cursor: pointer;
+  /* border: 1px solid red; */
+  width: 2.3rem;
+  min-width: 2.3rem;
+  min-height: 2.3rem;
+  height: 2.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: rgb(236, 236, 236);
+}
+
+.UserFriend .add-btn:hover {
+  transform: scale(1.01);
+  background-color: lightgray;
 }

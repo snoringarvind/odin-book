@@ -5,13 +5,18 @@ import "./CommentForm.css";
 import { OdinBookContext } from "../Context";
 
 const CommentForm = ({
-  postid,
   setComments,
   postIndex,
   setNewCommentLoading,
+  route,
+  method,
+  updateValue,
 }) => {
+  console.log(updateValue);
   const { jwtData } = useContext(OdinBookContext);
-  const [state, setState] = useState({ comment: "" });
+  const [state, setState] = useState({
+    comment: updateValue ? updateValue : "",
+  });
   const [errors, setErrors] = useState([]);
   const [error, setError] = useState("");
 
@@ -20,15 +25,15 @@ const CommentForm = ({
 
     // setNewCommentLoading(true);
 
-    let element = document.querySelector(`#post-${postIndex}`);
-    const remove_empty = element.querySelector(".empty");
-    if (remove_empty) {
-      remove_empty.style.display = "none";
+    console.log(updateValue);
+    let element;
+    if (updateValue !== undefined) {
+      element = document.querySelector(`#post-${postIndex}`);
+      const remove_empty = element.querySelector(".empty");
+      if (remove_empty) {
+        remove_empty.style.display = "none";
+      }
     }
-
-    const comments_route = `/post/${postid}/comment`;
-    const comments_method = "POST";
-
     const cb_error = (err) => {
       console.log(err);
       if (err.response) {
@@ -46,18 +51,20 @@ const CommentForm = ({
       console.log(response.data);
       setComments(response.data);
 
-      const height = element.scrollHeight;
-      console.log(height);
-      element.scrollTop = height;
+      if (updateValue !== undefined) {
+        const height = element.scrollHeight;
+        console.log(height);
+        element.scrollTop = height;
+      }
       // setNewCommentLoading(false);
       // console.log([response.data.comment_list].concat(comments.comment_list));
       // setComments([response.data].concat(comments));
     };
 
     axios_request({
-      route: comments_route,
+      route: route,
       data: state,
-      method: comments_method,
+      method: method,
       axios_error: cb_error,
       axios_response: cb_response,
     });

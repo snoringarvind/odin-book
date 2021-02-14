@@ -99,10 +99,16 @@ const UserFriendCard = ({
         }}
       >
         {(jwtData.sub == userid || path === "myfriends") && (
-          <button>Remove</button>
+          <div className="add-btn fas fa-user-minus"></div>
         )}
         {jwtData.sub !== userid && path !== "myfriends" && (
-          <button>{friendBtn[index] ? "Remove" : "Add"}</button>
+          <div
+            className={
+              friendBtn[index]
+                ? "add-btn fas fa-user-minus"
+                : "add-btn fas fa-user-plus"
+            }
+          ></div>
         )}
       </div>
     </div>

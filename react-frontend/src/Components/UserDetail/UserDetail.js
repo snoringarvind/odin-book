@@ -23,10 +23,13 @@ const UserDetail = () => {
 
   return (
     <div className="UserDetail">
-      <div className="user-banner">{params.username}</div>
-      <div className="name-container">
-        <div>{location.state.fname}</div>
-        <div>{location.state.lname}</div>
+      <div className="user-banner-container">
+        <div className="user-banner">{params.username}</div>
+
+        <div className="name-container">
+          <span>{location.state.fname} </span>
+          <span> {location.state.lname}</span>
+        </div>
       </div>
       <div className="UserNav">
         <UserNav

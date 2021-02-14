@@ -129,46 +129,44 @@ const SearchResultCard = ({
         </Link>
         <div className="username">{value.username}</div>
       </div>
-      <div className="add-btn">
-        {value._id !== jwtData.sub && (
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
+      {value._id !== jwtData.sub && (
+        <div
+          className={
+            friendBtn[index]
+              ? "add-btn fas fa-user-minus"
+              : "add-btn fas fa-user-plus"
+          }
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
 
-              console.log(friendBtn[index], myFriendsIndex);
+            console.log(friendBtn[index], myFriendsIndex);
 
-              //he add as friend so we will update our myfriend list
-              if (friendBtn[index] == false) {
-                myFriends.push(value);
-                setMyFriends(myFriends);
-                // myFriendsBtn.push(true);
-                // setMyFriendsBtn(myFriendsBtn);
-              } else {
-                console.log("hello");
-                myFriends.splice(myFriendsIndex, 1);
-                setMyFriends(myFriends);
-                // myFriendsBtn.splice(myFriendsIndex, 1);
-                // setMyFriends(myFriends);
-                // for (let i = 0; i < myFriends.length; i++) {
-                //   if (myFriends._id == value._id) {
-                //   }
-                // }
-              }
+            //he add as friend so we will update our myfriend list
+            if (friendBtn[index] == false) {
+              myFriends.push(value);
+              setMyFriends(myFriends);
+              // myFriendsBtn.push(true);
+              // setMyFriendsBtn(myFriendsBtn);
+            } else {
+              console.log("hello");
+              myFriends.splice(myFriendsIndex, 1);
+              setMyFriends(myFriends);
+              // myFriendsBtn.splice(myFriendsIndex, 1);
+              // setMyFriends(myFriends);
+              // for (let i = 0; i < myFriends.length; i++) {
+              //   if (myFriends._id == value._id) {
+              //   }
+              // }
+            }
 
-              friendBtn[index] = !friendBtn[index];
-              setFriendBtn(friendBtn);
-              setpp(!pp);
-              clickHandler();
-            }}
-          >
-            {/* {arrg[index] ? "remove" : "add"} */}
-            {friendBtn[index] ? "remove" : "add"}
-            {/* {friendBtn.length == 0 && (value.isfriend ? "Remove" : "Add")} */}
-            {/* {friendBtn.length !== 0 && (friendBtn[index] ? "Remove" : "Add")} */}
-          </button>
-        )}
-      </div>
+            friendBtn[index] = !friendBtn[index];
+            setFriendBtn(friendBtn);
+            setpp(!pp);
+            clickHandler();
+          }}
+        ></div>
+      )}
     </div>
   );
 };

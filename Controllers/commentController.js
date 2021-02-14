@@ -93,14 +93,13 @@ exports.comment_put = [
               (err) => {
                 if (err) return res.status(500).json({ msg: err.message });
                 else {
+                  // console.log("comemmeme");
                   return res
                     .status(200)
                     .json({ msg: "comment has been updated" });
                 }
               }
             );
-          } else {
-            return res.status(500).json({ msg: "something is wrong" });
           }
         }
       } catch (err) {
@@ -123,15 +122,14 @@ exports.comment_delete = async (req, res, next) => {
         Comment.findOneAndUpdate(
           { post: req.params.postid },
           { comment_list: query },
-          (err) => {
+          { new: true },
+          (err, result) => {
             if (err) return res.status(500).json({ msg: err.message });
             else {
               return res.status(200).json({ msg: "comment deleted" });
             }
           }
         );
-      } else {
-        return res.status(500).json({ msg: "something is wrong" });
       }
     }
   } catch (err) {

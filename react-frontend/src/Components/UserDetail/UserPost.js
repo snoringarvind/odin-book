@@ -113,6 +113,7 @@ const UserPost = ({ path }) => {
         } else {
           setResult(myPosts);
           setGetLoading(false);
+          setIsOwner(true);
         }
       }
     } else if (path == "newsfeed") {
@@ -124,6 +125,7 @@ const UserPost = ({ path }) => {
       } else {
         setResult(myNewsfeed);
         setGetLoading(false);
+        setIsOwner(false);
         // console.log("hello");
       }
     }

@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { axios_request } from "../Utils";
-import CommentForm from "../CommentForm/CommentForm";
 import CommentCard from "../CommentCard/CommentCard";
 import uniqid from "uniqid";
 import UserLikes from "./UserLikes";
 import { OdinBookContext } from "../Context";
 import { useLocation } from "react-router-dom";
+import CommentCreate from "../Comment/CommentCreate";
 
 const UserPostCard = ({
   value,
@@ -37,6 +37,7 @@ const UserPostCard = ({
   const [newCommentLoading, setNewCommentLoading] = useState(false);
   const [onlyOneClick, setonlyOneClick] = useState(true);
 
+  const [commentOptionIndex, setCommentOptionIndex] = useState(null);
   const { jwtData } = useContext(OdinBookContext);
 
   const location = useLocation();
@@ -95,7 +96,9 @@ const UserPostCard = ({
 
   const [pp, setpp] = useState(false);
 
+  console.log(comments);
   useEffect(() => {
+    console.log("hello");
     if (likeLength.length < postsLength) {
       likeClick.push(g);
       setLikeClick(likeClick);
@@ -113,6 +116,7 @@ const UserPostCard = ({
       postsLength
     );
   }, []);
+  // console.log(comments);
 
   return (
     <div className="UserPostCard">
@@ -148,7 +152,15 @@ const UserPostCard = ({
               // console.log(indexOfCardClicked, index);
             }}
           >
-            <div className="btn">&#8942;</div>
+            <div
+              className="btn"
+              style={{
+                backgroundColor: indexOfCardClicked == index ? "darkgray" : "",
+                borderRadius: "4px",
+              }}
+            >
+              &#8942;
+            </div>
             {indexOfCardClicked == index && (
               <div className="hamburger-menu">
                 <div
@@ -269,6 +281,13 @@ const UserPostCard = ({
                   index={index}
                   postIndex={index}
                   path={path}
+                  commentOptionIndex={commentOptionIndex}
+                  setCommentOptionIndex={setCommentOptionIndex}
+                  postid={value._id}
+                  comments={comments}
+                  setComments={setComments}
+                  pp={pp}
+                  setpp={setpp}
                 />
               ))}
             </>
@@ -277,10 +296,11 @@ const UserPostCard = ({
         <div>{newCommentLoading && "loading..."}</div>
       </div>
       {commentIconClicked && (
-        <CommentForm
+        <CommentCreate
           postid={value._id}
           key={uniqid()}
           setComments={setComments}
+          comments={comments}
           setNewCommentLoading={setNewCommentLoading}
           postIndex={index}
         />

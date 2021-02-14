@@ -2,7 +2,7 @@
   height: 30vh;
   width: 100%;
   /* border: 1px solid; */
-  border-radius: 0 0 15px 15px;
+  /* border-radius: 0 0 15px 15px; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -11,4 +11,18 @@
   font-weight: 450;
   text-shadow: 0.3px 0.3px 5px black;
   background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+}
+
+.UserDetail .user-banner-container {
+  /* position: relative; */
+}
+
+.UserDetail .user-banner-container .name-container {
+  text-align: center;
+  background-color: white;
+  padding: 20px;
+  font-size: large;
+  font-weight: 450;
+  /* border-radius: 0 0 5px 5px; */
+  border-bottom: 1px solid darkgray;
 }

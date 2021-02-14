@@ -6,22 +6,28 @@
   /* border: 1px solid; */
 }
 
+.SearchResult .SearchResultCard:last-child {
+  border-bottom: none;
+}
+
 .SearchResult .people {
   font-size: 1.1rem;
   font-weight: bold;
 }
 .SearchResult {
-  margin: 5vh 5vh;
+  margin: 2vh;
   background-color: white;
   border-radius: 5px;
-  min-height: 83vh;
+  /* min-height: 83vh; */
   border: 1px solid lightgray;
   padding: 20px;
 }
 .SearchResult .profile-picture {
   /* border: 1px solid; */
-  height: 3rem;
-  width: 3rem;
+  max-height: 3.3rem;
+  min-height: 3.3rem;
+  min-width: 3.3rem;
+  max-width: 3.3rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,6 +40,8 @@
 
 .SearchResult .name-container {
   margin-right: 30px;
+  border: 1px solid;
+  flex-basis: 100%;
 }
 .SearchResult .name-container .name {
   /* border: 1px solid; */
@@ -47,10 +55,21 @@
   color: darkgray;
 }
 
-.SearchResult .add-btn button {
+.SearchResult .add-btn {
   cursor: pointer;
+  /* border: 1px solid red; */
+  width: 2.3rem;
+  min-width: 2.3rem;
+  min-height: 2.3rem;
+  height: 2.3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: rgb(236, 236, 236);
 }
 
-.hello {
-  border: 1px solid;
+.SearchResult .add-btn:hover {
+  transform: scale(1.01);
+  background-color: lightgray;
 }

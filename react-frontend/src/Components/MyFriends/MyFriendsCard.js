@@ -2,7 +2,6 @@ import { set } from "mongoose";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { OdinBookContext } from "../Context";
-import { axios_request } from "../Utils";
 
 const MyFriendsCard = ({
   value,
@@ -15,6 +14,8 @@ const MyFriendsCard = ({
   isChanged,
   setIsChanged,
 }) => {
+  const { axios_request } = useContext(OdinBookContext);
+
   //here we will also delete the friend from the screen maybe with a confirm message.
   //e.g. are you sure you want to remove this friend.
   const clickHandler = () => {

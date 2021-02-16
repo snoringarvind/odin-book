@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-// import { use } from "../../../../routes/odinbook";
-import { axios_request } from "../Utils";
+import React, { useContext, useEffect, useState } from "react";
+import { OdinBookContext } from "../Context";
 import "./CommentDelete.css";
 
 const CommentDelete = ({
@@ -19,6 +18,7 @@ const CommentDelete = ({
 }) => {
   console.log(comments);
 
+  const { axios_request } = useContext(OdinBookContext);
   const mypost_delete_route = `/post/${postid}/comment/${commentid}`;
   const mypost_delete_method = "DELETE";
 

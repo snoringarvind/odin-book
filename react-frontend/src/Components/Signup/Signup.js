@@ -15,11 +15,11 @@ const Signup = () => {
     username: "",
     password: "",
   });
-  const signup_route = "/signup";
-  const signup_method = "POST";
 
   const axios_signup = () => {
     setPostLoading(true);
+    const signup_route = "/signup";
+    const signup_method = "POST";
     const cb_error = (err) => {
       if (err.response) {
         setErrors(err.response.data);

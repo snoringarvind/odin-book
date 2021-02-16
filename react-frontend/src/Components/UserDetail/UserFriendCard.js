@@ -2,8 +2,6 @@ import { set } from "mongoose";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { OdinBookContext } from "../Context";
-import { axios_request } from "../Utils";
-
 const UserFriendCard = ({
   value,
   index,
@@ -20,7 +18,9 @@ const UserFriendCard = ({
   // const history = useHistory();
   // console.log("histroy", history);
 
-  const { jwtData, myFriendsValue } = useContext(OdinBookContext);
+  const { jwtData, myFriendsValue, axios_request } = useContext(
+    OdinBookContext
+  );
 
   const [myFriends, setMyFriends] = myFriendsValue;
   console.log("hello");

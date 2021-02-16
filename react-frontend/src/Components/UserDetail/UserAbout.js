@@ -1,40 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { OdinBookContext } from "../Context";
-import { axios_request } from "../Utils";
 import UseraAboutCard from "./UserAboutCard";
 import uniqid from "uniqid";
 import "./UserAbout.css";
 
 const UserAbout = () => {
-  const { myAboutValue, didMyAboutMountValue } = useContext(OdinBookContext);
+  const { myAboutValue, didMyAboutMountValue, axios_request } = useContext(
+    OdinBookContext
+  );
   const [myAbout, setMyAbout] = myAboutValue;
   const [didMyAboutMount, setdidMyAboutMount] = didMyAboutMountValue;
 
   const [result, setResult] = useState();
-
-  const submitHandler = (e) => {
-    e.preventDefault();
-
-    const route = "/myprofile";
-    const method = "POST";
-
-    const cb_error = (err) => {
-      console.log(err.message);
-    };
-
-    const cb_repsonse = (response) => {
-      console.log(response);
-    };
-
-    axios_request({
-      route: route,
-      data: "",
-      method: method,
-      axios_error: cb_error,
-      axios_response: cb_repsonse,
-    });
-  };
 
   const [getLoading, setGetLoading] = useState(true);
 
@@ -103,29 +81,32 @@ const UserAbout = () => {
     console.log(g);
   }
 
+  const [tooltip, setTooltip] = useState(null);
   const [ee, setee] = useState({});
 
   useEffect(() => {
     if (result) {
-      setee({
-        fname: result.fname,
-        lname: result.lname,
-        bio: result.bio,
-        nickName: result.nickName,
-        school: result.school,
-        college: result.college,
-        working: result.working,
-        relationshipStatus: result.relationshipStatus,
-        book: result.book,
-        food: result.food,
-
-        gender: result.gender,
-        dob: result.dob,
-      });
+      let h = {};
+      for (let i = 0; i < g.length; i++) {
+        h[g[i]] = result[g[i]];
+        if (i === g.length - 1) {
+          setee(h);
+        }
+      }
     }
   }, [result]);
 
   // const [ee, setee] = useState();
+  console.log(ee);
+
+  useEffect(() => {
+    window.addEventListener("keydown", (e) => {
+      // console.log(e.key, "jdfjdfjdfnjdfn");
+      if (e.key == "Escape") {
+        setClickIndex(null);
+      }
+    });
+  }, []);
 
   return (
     <div className="UserAbout">
@@ -146,6 +127,8 @@ const UserAbout = () => {
                 setResult={setResult}
                 ee={ee}
                 setee={setee}
+                tooltip={tooltip}
+                setTooltip={setTooltip}
               />
             );
           })

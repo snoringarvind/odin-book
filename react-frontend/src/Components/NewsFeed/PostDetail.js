@@ -3,7 +3,7 @@ import { OdinBookContext } from "../Context";
 import { useParams } from "react-router-dom";
 
 const PostDetail = () => {
-  const { axios_request } = useContext(OdinBookContext);
+  const axios_request = useContext(OdinBookContext);
 
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(true);

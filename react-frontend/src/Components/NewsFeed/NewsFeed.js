@@ -1,12 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
-import { axios_request } from "../Utils";
 import NewsFeedCard from "./NewsFeedCard";
 // import "./NewsFeed.css";
 
 const NewsFeed = () => {
-  // const { axios_request } = useContext(OdinBookContext);
+  const { axios_request } = useContext(OdinBookContext);
 
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(true);

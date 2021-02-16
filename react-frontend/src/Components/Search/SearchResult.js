@@ -5,10 +5,11 @@ import uniqid from "uniqid";
 import "./SearchResult.css";
 import axios from "axios";
 import SearchResultCard from "./SearchResultCard";
-import { axios_request } from "../Utils";
 
 const SearchResult = () => {
-  const { searchValue, searchBarStateValue } = useContext(OdinBookContext);
+  const { searchValue, searchBarStateValue, axios_request } = useContext(
+    OdinBookContext
+  );
 
   const [searchValueChange, setSearchValueChange] = searchValue;
   const [searchBarState, setSearchBarState] = searchBarStateValue;

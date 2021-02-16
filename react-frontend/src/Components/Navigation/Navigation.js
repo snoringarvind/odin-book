@@ -19,7 +19,7 @@ const Navigation = ({ to, label }) => {
   return (
     <div className={match ? "active nav-links" : "nav-links"}>
       <Link to={to}>
-        <i className="fas">{label}</i>
+        <i className={label}></i>
       </Link>
     </div>
   );

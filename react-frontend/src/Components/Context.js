@@ -1,13 +1,15 @@
 import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
-import { axios_request } from "./Utils";
 import async from "async";
 // import { response } from "express";
 import { Switch, useLocation } from "react-router-dom";
 
+// require("dotenv").config();
+
 const OdinBookContext = createContext();
 
 const OdinBookProvider = ({ children }) => {
+  console.log(process.env.REACT_APP_API_KEY);
   // ex. http://localhost:3000/odinbook
   // const [serverUrl] = useState("http://localhost:3000/odinbook");
 
@@ -33,14 +35,115 @@ const OdinBookProvider = ({ children }) => {
   const [myNewsfeed, setMyNewsFeed] = useState([]);
   const [didMyNewsFeedMount, setDidMyNewsFeedMount] = useState(true);
 
-  // const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
 
-  let jwtData;
-  try {
-    [jwtData] = useState(JSON.parse(localStorage.getItem("jwtData")));
-  } catch (err) {
-    console.log(err.message);
-  }
+  const [isAuth, setIsAuth] = useState(false);
+
+  // let jwt = JSON.parse(localStorage.getItem("jwtData"));
+  const [jwtData, setJwtData] = useState(
+    JSON.parse(localStorage.getItem("jwtData"))
+  );
+
+  let serverUrl = "http://localhost:3000/odinbook";
+
+  const axios_request = async ({
+    route,
+    data,
+    method,
+    axios_error,
+    axios_response,
+  }) => {
+    console.log("hello");
+    // const serverUrl = process.env.serverUrl;
+
+    console.log(jwtData);
+    if (jwtData !== null || route === "/login" || route === "/signup") {
+      // console.log("helllo");
+      try {
+        let token;
+        let headers;
+        if (route !== "/login" && route !== "/signup") {
+          token = jwtData.token;
+          headers = { authorization: `Bearer ${token}` };
+        }
+
+        // console.log(data);
+        // console.log(method);
+        // console.log(route);
+        const response_data = await axios({
+          url: `${serverUrl}${route}`,
+          method: method,
+          headers: headers || "",
+          data: data,
+        });
+        console.log(jwtData);
+
+        console.log(response_data);
+        if (route === "/login" || route === "/signup") {
+          localStorage.setItem(
+            "jwtData",
+            JSON.stringify(response_data.data.jwtData)
+          );
+          setJwtData(response_data.data.jwtData);
+        }
+        setIsAuth(true);
+        console.log("Utils Response=", response_data);
+        axios_response(response_data);
+      } catch (err) {
+        if (err.response) {
+          console.log("Utils Error", err.response.data);
+          if (err.response.status === 403) {
+            setIsAuth(false);
+          }
+        } else {
+          console.log("Utils Error", err.message);
+        }
+        axios_error(err);
+      }
+    } else {
+      console.log("Utils Error= NO JWT TOKEN");
+      setIsAuth(false);
+    }
+  };
+
+  const isLogin = async () => {
+    const route = "/isUserAuth";
+    const method = "GET";
+    // console.log(process.env.REACT_APP_API_KEY);
+
+    if (jwtData) {
+      try {
+        const token = jwtData.token;
+        const headers = { authorization: `Bearer ${token}` };
+
+        const response = await axios({
+          url: `${serverUrl}${route}`,
+          method: method,
+          data: token,
+          headers: headers,
+        });
+
+        console.log("response from context login", response);
+        setIsAuth(true);
+        setLoading(false);
+      } catch (err) {
+        console.log("error from context login", err);
+        setLoading(false);
+        if (err.response) {
+          if (err.response.status == 403) {
+            setIsAuth(false);
+          }
+        }
+      }
+    } else {
+      setIsAuth(false);
+      setLoading(false);
+      console.log("context login no jwt token");
+    }
+  };
+  useEffect(() => {
+    isLogin();
+  }, []);
 
   return (
     <OdinBookContext.Provider
@@ -61,9 +164,13 @@ const OdinBookProvider = ({ children }) => {
         didMyNewsFeedMountValue: [didMyNewsFeedMount, setDidMyNewsFeedMount],
 
         didMyAboutMountValue: [didMyAboutMount, setdidMyAboutMount],
+
+        isAuthValue: [isAuth, setIsAuth],
+
+        axios_request: axios_request,
       }}
     >
-      {children}
+      {!loading ? children : <div className="loading">loading context....</div>}
     </OdinBookContext.Provider>
   );
 };

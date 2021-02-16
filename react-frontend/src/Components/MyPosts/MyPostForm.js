@@ -3,7 +3,6 @@ import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import "./MyPostForm.css";
-import { axios_request } from "../Utils";
 
 const MyPostForm = ({
   route,
@@ -16,6 +15,7 @@ const MyPostForm = ({
   updateClick,
   setUpdateClick,
 }) => {
+  const { axios_request } = useContext(OdinBookContext);
   const [state, setState] = useState({
     title: update_value ? update_value.title : "",
     content_text: update_value ? update_value.content_text : "",

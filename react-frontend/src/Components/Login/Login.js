@@ -1,9 +1,12 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
-import { axios_request } from "../Utils";
+import { Redirect, useHistory } from "react-router-dom";
 
 const Login = () => {
+  const { axios_request, isAuthValue } = useContext(OdinBookContext);
+  const [isAuth, setIsAuth] = isAuthValue;
+
   const [state, setState] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState([]);
   const [error, setError] = useState("");
@@ -25,7 +28,6 @@ const Login = () => {
     };
 
     const cb_response = (response) => {
-      localStorage.setItem("jwtData", JSON.stringify(response.data.jwtData));
       setPostLoading(false);
     };
 
@@ -56,6 +58,14 @@ const Login = () => {
 
     return <ul className="errors">{arr}</ul>;
   };
+
+  const history = useHistory();
+
+  // useEffect(() => {
+  //   if (isAuth == true) {
+  //     history.push("/");
+  //   }
+  // }, [isAuth]);
 
   return (
     <div className="Login">

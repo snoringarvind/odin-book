@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { axios_request } from "../Utils";
+
 import uniqid from "uniqid";
 import "./CommentForm.css";
 import { OdinBookContext } from "../Context";
@@ -13,7 +13,7 @@ const CommentForm = ({
   updateValue,
 }) => {
   console.log(updateValue);
-  const { jwtData } = useContext(OdinBookContext);
+  const { jwtData, axios_request } = useContext(OdinBookContext);
   const [state, setState] = useState({
     comment: updateValue ? updateValue : "",
   });

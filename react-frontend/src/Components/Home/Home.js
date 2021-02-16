@@ -1,5 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Route, Switch, useLocation, useParams } from "react-router-dom";
+import {
+  Redirect,
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useParams,
+} from "react-router-dom";
 import MyPostUpdate from "../MyPosts/MyPostUpdate";
 import MyPostList from "../MyPosts/MyPostList";
 import MyPostCreate from "../MyPosts/MyPostCreate";
@@ -17,20 +24,26 @@ import SearchResult from "../Search/SearchResult";
 import UserDetail from "../UserDetail/UserDetail";
 import Hamburger from "../Hamburger/Hamburger";
 import MyFriends from "../MyFriends/MyFriends";
-import { OdinBookContext } from "../Context";
+// import { OdinBookContext } from "../Context";
 import UserPost from "../UserDetail/UserPost";
 import UserFriend from "../UserDetail/UserFriend";
+import { OdinBookContext } from "../Context";
 
 const Home = () => {
   let location = useLocation();
   let background = location.state && location.state.background;
   const [isClick, setIsclick] = useState(false);
 
-  const { jwtData } = useContext(OdinBookContext);
+  const { isAuthValue, jwtData } = useContext(OdinBookContext);
+  const [isAuth, setIsAuth] = isAuthValue;
+  console.log(isAuth);
 
-  // console.log(location);
-  // const params = useParams();
-  // console.log(params);
+  const history = useHistory();
+  console.log(history);
+
+  console.log(location.pathname);
+
+  const path = location.pathname;
 
   useEffect(() => {
     const x = window;
@@ -57,12 +70,7 @@ const Home = () => {
             p[i] !== "ham-icon" &&
             p[i] !== "close-icon"
           ) {
-            const c = document.querySelector(".drop-btn-active");
-            if (c) {
-              c.classList.remove("drop-btn-active");
-              setIsclick(false);
-              return;
-            }
+            setIsclick(false);
           }
           arr = [];
         }
@@ -75,91 +83,110 @@ const Home = () => {
   }, []);
   return (
     <div className="Home">
-      <div className="Navigation">
-        <SearchBar />
-        <Navigation to="/" label="&#xf015;" />
-        <Navigation to="/friends" label="&#xf500;" />
+      {!isAuth && path == "/logout" && <Redirect to="/login" />}
+      {isAuth && (path === "/login" || path === "/signup") && (
+        <Redirect to="/" />
+      )}
 
-        <div
-          className="drop-btn"
-          onClick={(e) => {
-            const x = document.querySelector(".drop-btn");
-            x.classList.add("drop-btn-active");
-            setIsclick(!isClick);
-            if (isClick) {
-              x.classList.remove("drop-btn-active");
-            }
-          }}
-          onBlur={(e) => {
-            console.log(e);
-            console.log("hello blur");
-          }}
-        >
-          {isClick ? (
-            <div className="close-icon">&#10006;</div>
-          ) : (
-            <div className="ham-icon">&#x2630;</div>
-          )}
-        </div>
+      {isAuth && (
+        <>
+          <div className="Navigation">
+            {/* <div className="nav-bar-title">Odinbook</div> */}
+            {/* width 68% */}
+            <SearchBar />
+            <div className="left-nav">
+              <Navigation to="/" label="fas fa-home" />
+              <Navigation to="/friends" label="fas fa-user-friends" />
+              <Navigation to="#" label="fab fa-facebook-messenger" />
 
-        <div className="content">
-          <Hamburger />
-        </div>
-      </div>
+              {/* width 32% */}
+              <div
+                style={{
+                  color: isClick ? "red" : "",
+                }}
+                className="drop-btn "
+                onClick={(e) => {
+                  setIsclick(!isClick);
+                }}
+                onBlur={(e) => {
+                  console.log(e);
+                  console.log("hello blur");
+                }}
+              >
+                {isClick ? (
+                  <div className="close-icon fas fa-times-circle"></div>
+                ) : (
+                  <div className="ham-icon fa fa-caret-down"></div>
+                )}
+              </div>
+            </div>
+          </div>
+          {isClick ? <Hamburger /> : ""}
+        </>
+      )}
 
       <Switch location={background || location}>
-        <Route exact path="/">
-          <UserPost path="newsfeed" />
-        </Route>
-        {/* user's friends */}
-        <Route exect path="/user/:username">
-          <UserDetail />
-        </Route>
+        {isAuth && (
+          <>
+            <Route exact path="/">
+              <UserPost path="newsfeed" />
+            </Route>
+            <Route exect path="/user/:username">
+              <UserDetail />
+            </Route>
+            <Route path="/search/:name">
+              <SearchResult />
+            </Route>
+            <Route path="/logout">
+              <Logout />
+            </Route>
+
+            <Route exact path="/friends">
+              <UserFriend path="myfriends" />
+            </Route>
+          </>
+        )}
+
+        {!isAuth && (
+          <>
+            <Route path="/signup">
+              <Signup />
+            </Route>
+            <Route path="/login">
+              <Login />
+            </Route>
+          </>
+        )}
 
         {/* <Route path="/user/:username/:">
           <UserDetail />
         </Route> */}
-        <Route path="/myposts">
+        {/* <Route path="/myposts">
           <MyPostList />
-        </Route>
-        <Route path="/update-post/:mypostid">
+        </Route> */}
+        {/* <Route path="/update-post/:mypostid">
           <MyPostUpdate />
-        </Route>
+        </Route> */}
         {/* <Route exact path="/mypost/:mypostid">
           <MyPostDetail />
         </Route> */}
         {/* <Route path="/create-post">
           <MyPostCreate />
         </Route> */}
-        <Route path="/news-feed/:postid">
+        {/* <Route path="/news-feed/:postid">
           <PostDetail />
-        </Route>
-        <Route path="/login">
-          <Login />
-        </Route>
-        <Route path="/logout">
-          <Logout />
-        </Route>
-        <Route path="/signup">
-          <Signup />
-        </Route>
+        </Route> */}
 
-        <Route exact path="/friends">
-          <UserFriend path="myfriends" />
-        </Route>
         {/* <Route exact path="/account">
           my-Account
         </Route> */}
 
         {/* &&&&&& */}
-        <Route path="/search/:name">
-          <SearchResult />
-        </Route>
       </Switch>
 
-      <Route path="/delete-post/mypost:id">
+      {/* <Route path="/delete-post/mypost:id">
         <MyPostDelete />
-      </Route>
+      </Route> */}
     </div>
   );
 };

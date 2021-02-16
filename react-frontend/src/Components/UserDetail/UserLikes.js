@@ -1,12 +1,13 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import { axios_request } from "../Utils";
 import "./UserLikes.css";
 import UserLikesCard from "./UserLikesCard";
 import uniqid from "uniqid";
 import { useParams } from "react-router-dom";
+import { useContext, useState, useEffect } from "react";
+import { OdinBookContext } from "../Context";
 
 const UserLikes = ({ postid, setUsersLikedIndex }) => {
+  const { axios_request } = useContext(OdinBookContext);
   const [error, setError] = useState("");
   const [likeList, setLikeList] = useState([]);
   const [myFriendList, setMyFriendList] = useState([]);

@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { axios_request } from "../Utils";
 import CommentCard from "../CommentCard/CommentCard";
 import uniqid from "uniqid";
 import UserLikes from "./UserLikes";
@@ -38,7 +37,7 @@ const UserPostCard = ({
   const [onlyOneClick, setonlyOneClick] = useState(true);
 
   const [commentOptionIndex, setCommentOptionIndex] = useState(null);
-  const { jwtData } = useContext(OdinBookContext);
+  const { jwtData, axios_request } = useContext(OdinBookContext);
 
   const location = useLocation();
   let fname;

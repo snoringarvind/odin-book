@@ -8,12 +8,12 @@ import "./UserPost.css";
 import MyPostUpdate from "../MyPosts/MyPostUpdate";
 import UserPostCard from "./UserPostCard";
 import MyPostDelete from "../MyPosts/MyPostDelete";
-import { axios_request } from "../Utils";
 
 const UserPost = ({ path }) => {
   // console.log(path);
   const {
     jwtData,
+    axios_request,
     myPostsValue,
     didMyPostsMountValue,
     myNewsFeedValue,
@@ -131,12 +131,14 @@ const UserPost = ({ path }) => {
     }
 
     // setLikeLength([]);
+    console.log(getLoading);
 
     //if the owner then show the post form
     //here owner is the logged in user
     //and the userid is of the person we are browing which will be in the url
   }, []);
 
+  console.log(getLoading);
   console.log(path);
   console.log(myNewsfeed);
   console.log(result);
@@ -191,7 +193,13 @@ const UserPost = ({ path }) => {
       {/* doing path=='newsfeed' herer bcoz for a second it shows loading even if we are loading the data from state */}
       {/* maybe we will show loading even for newsfeed for a second. */}
       {/* {getLoading && path !== "newsfeed" && "loading"} */}
-      {getLoading && "loading"}
+      {getLoading && (
+        <div className="loading-container">
+          <div className="spinner-border loading" role="status">
+            <span className="sr-only">Loading...</span>
+          </div>
+        </div>
+      )}
       {!getLoading &&
         (error ? (
           <div className="error">{error}</div>

@@ -6,7 +6,6 @@ import uniqid from "uniqid";
 import "./UserFriend.css";
 import UserFriendCard from "./UserFriendCard";
 import async from "async";
-import { axios_request } from "../Utils";
 
 const UserFriend = ({ path }) => {
   const [error, setError] = useState("");
@@ -16,7 +15,7 @@ const UserFriend = ({ path }) => {
   const [friendBtn, setFriendBtn] = useState([]);
 
   const [isChanged, setIsChanged] = useState(false);
-  const { myFriendsValue, didMyFriendsMountValue } = useContext(
+  const { myFriendsValue, didMyFriendsMountValue, axios_request } = useContext(
     OdinBookContext
   );
 

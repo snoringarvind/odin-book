@@ -154,8 +154,6 @@ const OdinBookProvider = ({ children }) => {
       const socket = socketIOClient(ENDPOINT, {
         withCredentials: true,
       });
-
-      socket.emit("connection", jwtData.user);
     }
   }, [jwtData]);
 

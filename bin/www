@@ -42,7 +42,10 @@ io.on("connection", (socket) => {
 
     if (!user) {
       console.log("user below");
-      arr.push({ user: username, socketid: socket.id });
+      socket.on("join", function (data) {
+        socket.join(data.user); // We are using room of socket io
+      });
+      arr.push({ user: username, socketid: socket });
       // console.log(arr)s;
     }
     console.log("users", arr);
@@ -57,13 +60,19 @@ io.on("connection", (socket) => {
     for (let i = 0; i < arr.length; i++) {
       console.log(arr[i].user, data.to);
       if (arr[i].user == data.to) {
-        console.log("arr", arr[i].socketid, arr[i].user);
-        socket.broadcast.to(arr[i].socketid).emit("new-message", data.msg);
+        // console.log("arr", arr[i].socketid, arr[i].user);
+        // arr[i].socketid.broadcast
+        //   .to(arr[i].socketid.id)
+        //   .emit("whisper", data.msg);
+        io.sockets.in(data.user).emit("new_msg", { msg: "hello" });
+        // arr[i].socketid.emit("whisper", "please work mataji please.");
+        // io.sockets.emit("nn", "tired");
         console.log(data);
         break;
       }
     }
   });
+  // socket.disconnect();
 });
 
 server.on("error", onError);

@@ -149,24 +149,15 @@ const OdinBookProvider = ({ children }) => {
     isLogin();
 
     console.log(loading);
-    if (!loading) {
+    if (jwtData) {
       console.log(loading);
       const socket = socketIOClient(ENDPOINT, {
         withCredentials: true,
-        transportOptions: {
-          polling: {
-            extraHeaders: {
-              // "my-custom-header": headers,
-            },
-          },
-        },
       });
-      socket.on("connection", (data) => {
-        console.log(data);
-        console.log("connected");
-      });
+
+      socket.emit("connection", jwtData.user);
     }
-  }, [loading]);
+  }, [jwtData]);
 
   return (
     <OdinBookContext.Provider

@@ -131,17 +131,17 @@ const UserPost = ({ path }) => {
     }
 
     // setLikeLength([]);
-    console.log(getLoading);
+    // console.log(getLoading);
 
     //if the owner then show the post form
     //here owner is the logged in user
     //and the userid is of the person we are browing which will be in the url
   }, []);
 
-  console.log(getLoading);
-  console.log(path);
-  console.log(myNewsfeed);
-  console.log(result);
+  // console.log(getLoading);
+  // console.log(path);
+  // console.log(myNewsfeed);
+  // console.log(result);
 
   // console.log("hello");
   // useEffect(() => {

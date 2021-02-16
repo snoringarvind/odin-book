@@ -27,26 +27,45 @@ var server = http.createServer(app);
 const io = socketIo(server, {
   cors: {
     origin: "http://localhost:3001",
-    methods: ["GET", "POST"],
-    allowedHeaders: ["authorization"],
+    methods: ["GET", "POST", "PUT"],
     credentials: true,
-    // handlePreflightRequest: (req, res) => {
-    //   res.writeHead(200, {
-    //     "Access-Control-Allow-Origin": "http://localhost:3001",
-    //     "Access-Control-Allow-Methods": "GET,POST",
-    //     "Access-Control-Allow-Headers": "my-custom-header",
-    //     "Access-Control-Allow-Credentials": true,
-    //   });
-    //   res.end();
-    // },
   },
 });
 
+const arr = [];
 io.on("connection", (socket) => {
   console.log("new client connected");
-});
+  console.log(socket.id);
 
-console.log("hello");
+  socket.on("connection", (username) => {
+    const user = arr.find((value) => username == value.user);
+
+    if (!user) {
+      console.log("user below");
+      arr.push({ user: username, socketid: socket.id });
+      // console.log(arr)s;
+    }
+    console.log("users", arr);
+  });
+
+  socket.emit("check", "hey bro");
+
+  //the message is send from the client
+
+  socket.on("send-message", (data) => {
+    //find socket id
+    for (let i = 0; i < arr.length; i++) {
+      console.log(arr[i].user, data.to);
+      if (arr[i].user == data.to) {
+        console.log("arr", arr[i].socketid, arr[i].user);
+
+        socket.broadcast.to(arr[i].socketid).emit("new-message", data.msg);
+        console.log(data);
+        break;
+      }
+    }
+  });
+});
 
 server.on("error", onError);
 server.on("listening", onListening);

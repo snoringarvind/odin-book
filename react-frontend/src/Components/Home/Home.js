@@ -37,12 +37,12 @@ const Home = () => {
 
   const { isAuthValue, jwtData } = useContext(OdinBookContext);
   const [isAuth, setIsAuth] = isAuthValue;
-  console.log(isAuth);
+  // console.log(isAuth);
 
   const history = useHistory();
-  console.log(history);
+  // console.log(history);
 
-  console.log(location.pathname);
+  // console.log(location.pathname);
 
   const path = location.pathname;
 
@@ -84,7 +84,8 @@ const Home = () => {
   }, []);
   return (
     <div className="Home">
-      {!isAuth && path == "/logout" && <Redirect to="/login" />}
+      {/* {!isAuth && path == "/logout" && <Redirect to="/login" />} */}
+      {!isAuth && <Redirect to="/login" />}
       {isAuth && (path === "/login" || path === "/signup") && (
         <Redirect to="/" />
       )}
@@ -110,8 +111,8 @@ const Home = () => {
                   setIsclick(!isClick);
                 }}
                 onBlur={(e) => {
-                  console.log(e);
-                  console.log("hello blur");
+                  // console.log(e);
+                  // console.log("hello blur");
                 }}
               >
                 {isClick ? (

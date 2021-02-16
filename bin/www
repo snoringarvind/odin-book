@@ -58,7 +58,6 @@ io.on("connection", (socket) => {
       console.log(arr[i].user, data.to);
       if (arr[i].user == data.to) {
         console.log("arr", arr[i].socketid, arr[i].user);
-
         socket.broadcast.to(arr[i].socketid).emit("new-message", data.msg);
         console.log(data);
         break;

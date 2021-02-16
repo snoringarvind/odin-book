@@ -14,6 +14,15 @@ const Chat = () => {
 
   useEffect(() => {
     console.log("hello");
+  }, []);
+
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+    setState({ ...state, [name]: value });
+  };
+  const submitHandler = (e) => {
+    e.preventDefault();
+
     const socket = socketIOClient(ENDPOINT, {
       withCredentials: true,
     });
@@ -25,21 +34,13 @@ const Chat = () => {
     });
 
     socket.on("new-message", (data) => {
-      console.log("hello");
+      // console.log("hello");
       console.log(data);
     });
 
     socket.on("check", (data) => {
       console.log(data);
     });
-  }, []);
-
-  const changeHandler = (e) => {
-    const { name, value } = e.target;
-    setState({ ...state, [name]: value });
-  };
-  const submitHandler = (e) => {
-    e.preventDefault();
   };
   return (
     <div className="Chat">

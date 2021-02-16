@@ -6,11 +6,11 @@ const logger = require("morgan");
 const cors = require("cors");
 require("./config/database");
 
+const app = express();
+
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
 const odinbookRouter = require("./routes/odinbook");
-
-const app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));

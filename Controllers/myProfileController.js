@@ -3,6 +3,7 @@ const { body, validationResult } = require("express-validator");
 const fs = require("fs");
 const multer = require("multer");
 const async = require("async");
+const User = require("../models/User");
 
 exports.myProfile_get = (req, res, next) => {
   Profile.findOne({ user: res.locals.user.sub }, (err, result) => {
@@ -134,9 +135,11 @@ exports.myProfile_post = [
     //   );
     // }
 
+    console.log(req.body);
+
     const profile = {
-      fname: req.body.fname.toString(),
-      lname: req.body.lname.toString(),
+      // fname: req.body.fname ? req.body.fname.toString() : "",
+      // lname: req.body.lname ? req.body.lname.toString() : "",
       // profilePhoto: {
       //   data: res.locals.profile_photo_data,
       //   contentType: res.locals.profile_photo_mimetype,
@@ -145,17 +148,19 @@ exports.myProfile_post = [
       //   data: res.locals.banner_photo_data,
       //   contentType: res.locals.banner_photo_mimetype,
       // },
-      bio: req.body.bio.toString(),
-      nickName: req.body.nickName.toString(),
-      school: req.body.school.toString(),
-      college: req.body.college.toString(),
-      working: req.body.working.toString(),
-      relationshipStatus: req.body.relationshipStatus.toString(),
-      book: req.body.book.toString(),
-      food: req.body.food.toString(),
-      phone: req.body.phone.toString(),
-      email: req.body.email.toString(),
-      gender: req.body.gender.toString(),
+      bio: req.body.bio ? req.body.bio.toString() : "",
+      nickName: req.body.nickName ? req.body.nickName.toString() : "",
+      school: req.body.school ? req.body.school.toString() : "",
+      college: req.body.college ? req.body.college.toString() : "",
+      working: req.body.working ? req.body.working.toString() : "",
+      relationshipStatus: req.body.relationshipStatus
+        ? req.body.relationshipStatus.toString()
+        : "",
+      book: req.body.book ? req.body.book.toString() : "",
+      food: req.body.book ? req.body.food.toString() : "",
+      phone: req.body.phone ? req.body.phone.toString() : "",
+      email: req.body.email ? req.body.email.toString() : "",
+      gender: req.body.gender ? req.body.gender.toString() : "",
       dob: req.body.dob,
 
       user: res.locals.user.sub.toString(),
@@ -175,3 +180,57 @@ exports.myProfile_post = [
     );
   },
 ];
+
+//we will use this to update since we are sending only one valu at once we don't need to update everything
+//!also we have already created a profile a in user so i dont think we need the above post route
+
+exports.myProfile_put = (req, res, next) => {
+  console.log(req.body);
+  let key = Object.keys(req.body);
+  // console.log(req.body);
+  // console.log(key);
+  key = key[0];
+  console.log(key);
+  console.log(req.body[key]);
+  if (key == "fname" || key == "lname") {
+    console.log("hello");
+    if ([...req.body[key]].length == 0) {
+      return res.status(400).json({ msg: key + " " + "cannot be empty" });
+    }
+  }
+
+  // console.log(req.body);
+  Profile.findOneAndUpdate(
+    { user: res.locals.user.sub },
+    { [key]: req.body[key] ? req.body[key].trim().toString() : "" },
+    (err, result) => {
+      if (err) return res.status(500).json({ msg: err.message });
+      else {
+        return res.status(200).json({ msg: "profile updated" });
+      }
+    }
+  );
+
+  // async.parallel(
+  //   {
+  //     save_user: (cb) => {
+  //       Profile.findOneAndUpdate(
+  //         { user: res.locals.user.sub },
+  //         { [key]: req.body[key] ? req.body[key].trim().toString() : "" }
+  //       ).exec(cb);
+  //     },
+  //     save_profile: (cb) => {
+  //       User.findOneAndUpdate(
+  //         { user: res.localss.user.sub },
+  //         { [key]: req.body[key] ? req.body[key].trim().toString() : "" }
+  //       ).exec(cb);
+  //     },
+  //   },
+  //   (err, result) => {
+  //     if (err) return res.status(500).json({ msg: err.message });
+  //     else {
+  //       return res.status(200).json({ msg: "profile updated" });
+  //     }
+  //   }
+  // );
+};

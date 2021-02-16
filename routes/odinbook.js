@@ -97,7 +97,12 @@ router.get("/myprofile", utils.verifyJwt, myProfileController.myProfile_get);
 
 //*maybe don't create a post route just a put route for profile, beacuse there is only one profile to update, and also since you are not posting or creating anything new, you are onyl updating the profile, so I guess PUT route is enough
 //*!can also use for update
+//!now maybe we don't need a post route,
+//!we will use put to update
 router.post("/myprofile", utils.verifyJwt, myProfileController.myProfile_post);
+
+//made few changes to put route,it's different than the post route, in post route we were updating the whole schema where as now we only update one value at a time, because in frontend we have created a save button for every value,
+router.put("/myprofile", utils.verifyJwt, myProfileController.myProfile_put);
 
 // profile
 //* should also have friends list on client side
@@ -144,6 +149,6 @@ router.delete("/user/:userid", utils.verifyJwt, userController.user_delete);
 //login
 router.post("/login", loginController.login_post);
 
-router.post("/isUserAuth", utils.verifyJwt, userController.isUserAuth);
+router.get("/isUserAuth", utils.verifyJwt, userController.isUserAuth);
 
 module.exports = router;

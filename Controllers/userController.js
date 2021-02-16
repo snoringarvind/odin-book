@@ -58,8 +58,8 @@ exports.user_signup = [
           return res.status(403).json({ msg: "username taken" });
         } else {
           const profile = new Profile({
-            fname: req.body.fname.toString(),
-            lname: req.body.lname.toString(),
+            // fname: req.body.fname.toString(),
+            // lname: req.body.lname.toString(),
             profilePhoto: "",
             bannerPhoto: "",
             bio: "",
@@ -85,9 +85,11 @@ exports.user_signup = [
               console.log(result);
               if (err) return res.status(500).json({ msg: err.message });
               else {
+                const jwtData = utils.issueJwt(user);
                 return res.status(200).json({
                   new_user: result.saved_user._id,
                   new_profile_model: result.saved_profile._id,
+                  jwtData: jwtData,
                 });
               }
             }
@@ -224,5 +226,6 @@ exports.user_get_search_list = (req, res, next) => {
 exports.user_get_detail = (req, res, next) => {};
 
 exports.isUserAuth = (req, res, next) => {
+  console.log("hello");
   return res.status(200).json({ msg: "user is authenticated" });
 };

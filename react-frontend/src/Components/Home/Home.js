@@ -28,6 +28,7 @@ import MyFriends from "../MyFriends/MyFriends";
 import UserPost from "../UserDetail/UserPost";
 import UserFriend from "../UserDetail/UserFriend";
 import { OdinBookContext } from "../Context";
+import Chat from "../Chat/Chat";
 
 const Home = () => {
   let location = useLocation();
@@ -143,6 +144,9 @@ const Home = () => {
 
             <Route exact path="/friends">
               <UserFriend path="myfriends" />
+            </Route>
+            <Route path="/chat/:username">
+              <Chat />
             </Route>
           </>
         )}

@@ -2,8 +2,8 @@ const connection = require("../config/database");
 const mongoose = require("mongoose");
 
 const ProfileSchema = mongoose.Schema({
-  fname: { type: String },
-  lname: { type: String },
+  // fname: { type: String },
+  // lname: { type: String },
   // profilePhoto: { data: Buffer, contentType: String },
   // bannerPhoto: { data: Buffer, contentType: String },
   bio: { type: String },

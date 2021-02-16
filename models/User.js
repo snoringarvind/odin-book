@@ -2,6 +2,9 @@ const connection = require("../config/database");
 const mongoose = require("mongoose");
 
 const UserSchema = mongoose.Schema({
+  //!do this in the profile not here
+  //but now I don't want to make any more changes instead we will tweak something in the usercontroller instead
+  //for now let it be, for now the user won't be able to change the name from the screen bcoz we did stupid in frontend
   fname: { type: String, required: true },
   lname: { type: String, required: true },
 

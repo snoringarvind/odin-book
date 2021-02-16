@@ -27,8 +27,10 @@ const UserDetail = () => {
         <div className="user-banner">{params.username}</div>
 
         <div className="name-container">
-          <span>{location.state.fname} </span>
-          <span> {location.state.lname}</span>
+          <div className="name">
+            <span>{location.state.fname} </span>
+            <span> {location.state.lname}</span>
+          </div>
         </div>
       </div>
       <div className="UserNav">

@@ -3,6 +3,8 @@ import React, { createContext, useEffect, useState } from "react";
 import async from "async";
 // import { response } from "express";
 import { Switch, useLocation } from "react-router-dom";
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://localhost:3000";
 
 // require("dotenv").config();
 
@@ -106,6 +108,7 @@ const OdinBookProvider = ({ children }) => {
     }
   };
 
+  let headers;
   const isLogin = async () => {
     const route = "/isUserAuth";
     const method = "GET";
@@ -114,7 +117,8 @@ const OdinBookProvider = ({ children }) => {
     if (jwtData) {
       try {
         const token = jwtData.token;
-        const headers = { authorization: `Bearer ${token}` };
+        headers = { authorization: `Bearer ${token}` };
+        console.log(headers);
 
         const response = await axios({
           url: `${serverUrl}${route}`,
@@ -143,7 +147,26 @@ const OdinBookProvider = ({ children }) => {
   };
   useEffect(() => {
     isLogin();
-  }, []);
+
+    console.log(loading);
+    if (!loading) {
+      console.log(loading);
+      const socket = socketIOClient(ENDPOINT, {
+        withCredentials: true,
+        transportOptions: {
+          polling: {
+            extraHeaders: {
+              // "my-custom-header": headers,
+            },
+          },
+        },
+      });
+      socket.on("connection", (data) => {
+        console.log(data);
+        console.log("connected");
+      });
+    }
+  }, [loading]);
 
   return (
     <OdinBookContext.Provider

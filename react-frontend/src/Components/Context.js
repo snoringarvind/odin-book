@@ -108,6 +108,8 @@ const OdinBookProvider = ({ children }) => {
     }
   };
 
+  const [socket, setSocket] = useState("");
+
   let headers;
   const isLogin = async () => {
     const route = "/isUserAuth";
@@ -150,12 +152,15 @@ const OdinBookProvider = ({ children }) => {
 
     console.log(loading);
     if (jwtData) {
-      console.log(loading);
-      const socket = socketIOClient(ENDPOINT, {
+      const socket12 = socketIOClient(ENDPOINT, {
         withCredentials: true,
       });
+
+      socket12.emit("join", jwtData.user);
+
+      setSocket(socket12);
     }
-  }, [jwtData]);
+  }, []);
 
   return (
     <OdinBookContext.Provider
@@ -178,6 +183,8 @@ const OdinBookProvider = ({ children }) => {
         didMyAboutMountValue: [didMyAboutMount, setdidMyAboutMount],
 
         isAuthValue: [isAuth, setIsAuth],
+
+        socket: socket,
 
         axios_request: axios_request,
       }}

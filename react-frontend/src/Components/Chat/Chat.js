@@ -6,18 +6,9 @@ const ENDPOINT = "http://localhost:3000";
 const Chat = () => {
   const [response, setResponse] = useState("");
 
-  const { jwtData } = useContext(OdinBookContext);
-  // console.log(jwtData);
-  // console.log("hello");
+  const { jwtData, socket } = useContext(OdinBookContext);
 
   const [state, setState] = useState({ msg: "" });
-
-  const socket = socketIOClient(ENDPOINT, {
-    withCredentials: true,
-  });
-
-  socket.emit("connection", jwtData.user);
-  socket.emit("join", jwtData.user);
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -27,26 +18,21 @@ const Chat = () => {
   const submitHandler = (e) => {
     e.preventDefault();
 
-    console.log(state);
-    socket.emit("send-message", {
+    socket.emit("send_message", {
       to: "@coolarvind",
-      from: "@coolkomal",
+      from: jwtData.user,
       msg: state.msg,
     });
   };
 
   useEffect(() => {
-    // console.log(socket);
-    if (socket == null) return;
-
-    // console.log(socket);
-    socket.on("receive-message", (data) => {
+    console.log("hello");
+    socket.on("new_msg", (data) => {
+      // console.log();
+      // if (data.from !== jwtData.user) {
       console.log(data);
+      // }
     });
-
-    socket.on("new_msg", (data) => console.log(data));
-
-    socket.on("nn", (data) => console.log(data));
   });
   return (
     <div className="Chat">

@@ -69,6 +69,7 @@
   background-color: white;
   border-radius: 4px;
   padding: 10px;
+  z-index: 1;
 }
 
 .Hamburger .box-1 a {

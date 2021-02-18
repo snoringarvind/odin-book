@@ -11,7 +11,7 @@ const ENDPOINT = "http://localhost:3000";
 const OdinBookContext = createContext();
 
 const OdinBookProvider = ({ children }) => {
-  console.log(process.env.REACT_APP_API_KEY);
+  // console.log(process.env.REACT_APP_API_KEY);
   // ex. http://localhost:3000/odinbook
   // const [serverUrl] = useState("http://localhost:3000/odinbook");
 
@@ -55,10 +55,10 @@ const OdinBookProvider = ({ children }) => {
     axios_error,
     axios_response,
   }) => {
-    console.log("hello");
+    // console.log("hello");
     // const serverUrl = process.env.serverUrl;
 
-    console.log(jwtData);
+    // console.log(jwtData);
     if (jwtData !== null || route === "/login" || route === "/signup") {
       // console.log("helllo");
       try {
@@ -78,9 +78,8 @@ const OdinBookProvider = ({ children }) => {
           headers: headers || "",
           data: data,
         });
-        console.log(jwtData);
+        // console.log(jwtData);
 
-        console.log(response_data);
         if (route === "/login" || route === "/signup") {
           localStorage.setItem(
             "jwtData",

@@ -168,6 +168,24 @@ const SearchResultCard = ({
           }}
         ></div>
       )}
+
+      {value._id !== jwtData.sub && (
+        <div className="chat-link-container">
+          <Link
+            to={{
+              pathname: "/chat",
+              state: {
+                userid: value._id,
+                fname: value.fname,
+                lname: value.lname,
+                username: value.username,
+              },
+            }}
+          >
+            <div className="chat-btn fab fa-facebook-messenger"></div>
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

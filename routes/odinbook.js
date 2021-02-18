@@ -9,6 +9,7 @@ const myProfileController = require("../Controllers/myProfileController");
 const postsController = require("../Controllers/postsController");
 const profileController = require("../Controllers/profileController");
 const userController = require("../Controllers/userController");
+const chatController = require("../Controllers/chatController");
 
 const utils = require("../lib/utils");
 
@@ -150,5 +151,11 @@ router.delete("/user/:userid", utils.verifyJwt, userController.user_delete);
 router.post("/login", loginController.login_post);
 
 router.get("/isUserAuth", utils.verifyJwt, userController.isUserAuth);
+
+//chat
+//herer userid is of the person to whom I sent the message
+router.put("/chat/:userid", utils.verifyJwt, chatController.chat_put);
+
+router.get("/chat/:userid/:senderid", utils.verifyJwt, chatController.chat_get);
 
 module.exports = router;

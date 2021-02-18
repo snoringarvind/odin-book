@@ -1,0 +1,76 @@
+.Chat {
+  border: 1px solid red;
+  position: relative;
+}
+
+.Chat form {
+  border: 1px solid;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: 10px 20px;
+  border-radius: 4px;
+  background-color: white;
+  height: 9vh;
+  padding: 10px;
+  z-index: 1;
+}
+
+/* to hover send btn next to input */
+
+.Chat .form-group .send-btn button {
+  margin: 0 5px 0 10px;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.Chat .form-group .send-btn {
+  border: 1px solid;
+  position: absolute;
+  right: 0;
+  /* top: 0; */
+  width: 15%;
+  display: flex;
+  justify-content: flex-start;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.Chat .form-group input {
+  position: absolute;
+  /* left: 0; */
+  /* right: 0; */
+  /* top: 0; */
+  width: 83%;
+  padding: 5px 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* for head flex */
+.Chat .head-top {
+  display: flex;
+  border: 1px solid;
+  background-color: white;
+  height: 7vh;
+  align-items: center;
+}
+
+.Chat .profile-picture {
+  border: 1px solid;
+  width: 6vh;
+  height: 6vh;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(255, 230, 232);
+  margin: 0px 10px;
+}
+
+.Chat .name {
+  font-size: 1rem;
+  font-weight: 450;
+  margin: 0 10px 0px 0;
+}

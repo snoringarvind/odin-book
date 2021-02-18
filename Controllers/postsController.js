@@ -18,7 +18,7 @@ exports.newsfeed = async (req, res, next) => {
       "-password -friend"
     );
 
-    console.log(posts);
+    console.log("posts=", posts);
     return res.status(200).json(posts);
   } catch (err) {
     return res.status(500).json({ msg: err.message });

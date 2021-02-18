@@ -1,0 +1,72 @@
+.ChatMap .me {
+  /* border: 1px solid; */
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  margin: 20px;
+}
+
+.ChatMap .person {
+  position: relative;
+  margin: 20px;
+}
+
+.ChatMap {
+  /* margin: 10px; */
+  /* display: flex; */
+  /* border: 1px solid blue; */
+}
+
+.ChatMap:last-child {
+  margin-bottom: 100px;
+}
+
+.ChatMap .left {
+}
+
+.ChatMap .right,
+.ChatMap .left {
+  /* border: 1px solid green; */
+  color: black;
+  padding: 10px;
+  width: fit-content;
+  max-width: 80%;
+  border-radius: 10px;
+  /* border-radius: 10px; */
+}
+
+.ChatMap .right {
+  padding-right: 30px;
+  background-color: rgb(227, 248, 255);
+}
+.ChatMap .left {
+  padding-left: 30px;
+  background-color: white;
+}
+
+.ChatMap .curve-right {
+  /* border: 1px solid red; */
+  height: 100%;
+  width: 20px;
+  float: right;
+  position: absolute;
+  border-radius: 0 0 0 20px;
+  background-color: rgb(231, 231, 231);
+}
+
+.ChatMap .curve-left {
+  /* border: 3px solid green; */
+  height: 100%;
+  width: 20px;
+  float: left;
+  position: absolute;
+  border-radius: 0 0 20px 0px;
+  background-color: rgb(231, 231, 231);
+}
+
+.ChatMap .curve-left::after,
+.ChatMap .curve-right::after {
+  display: table;
+  clear: both;
+  content: "";
+}

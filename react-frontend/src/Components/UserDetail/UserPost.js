@@ -196,7 +196,7 @@ const UserPost = ({ path }) => {
       {getLoading && (
         <div className="loading-container">
           <div className="spinner-border loading" role="status">
-            <span className="sr-only">Loading...</span>
+            <span className="sr-only"></span>
           </div>
         </div>
       )}

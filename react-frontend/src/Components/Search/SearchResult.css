@@ -55,7 +55,8 @@
   color: darkgray;
 }
 
-.SearchResult .add-btn {
+.SearchResult .add-btn,
+.SearchResult .chat-btn {
   cursor: pointer;
   /* border: 1px solid red; */
   width: 2.3rem;
@@ -67,9 +68,11 @@
   align-items: center;
   border-radius: 50%;
   background-color: rgb(236, 236, 236);
+  margin: 0 8px;
 }
 
-.SearchResult .add-btn:hover {
+.SearchResult .add-btn:hover,
+.SearchResult .chat-btn:hover {
   transform: scale(1.01);
   background-color: lightgray;
 }

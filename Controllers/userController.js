@@ -4,6 +4,7 @@ const Comment = require("../models/Comment");
 const async = require("async");
 const Post = require("../models/Post");
 const utils = require("../lib/utils");
+const Chat = require("../models/Chat");
 
 const { body, validationResult } = require("express-validator");
 
@@ -76,10 +77,16 @@ exports.user_signup = [
             user: user._id,
           });
 
+          const chat = new Chat({
+            sender: user._id,
+            messages: [],
+          });
+
           async.parallel(
             {
               saved_user: (cb) => user.save(cb),
               saved_profile: (cb) => profile.save(cb),
+              saved_chat: (cb) => chat.save(cb),
             },
             (err, result) => {
               console.log(result);
@@ -89,6 +96,7 @@ exports.user_signup = [
                 return res.status(200).json({
                   new_user: result.saved_user._id,
                   new_profile_model: result.saved_profile._id,
+                  new_chat_model: result.saved_chat._id,
                   jwtData: jwtData,
                 });
               }

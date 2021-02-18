@@ -44,8 +44,10 @@ const Home = () => {
 
   // console.log(location.pathname);
 
+  console.log(location);
   const path = location.pathname;
 
+  console.log(path);
   useEffect(() => {
     const x = window;
     x.addEventListener("click", (e) => {
@@ -85,7 +87,14 @@ const Home = () => {
   return (
     <div className="Home">
       {/* {!isAuth && path == "/logout" && <Redirect to="/login" />} */}
-      {!isAuth && <Redirect to="/login" />}
+      {!isAuth &&
+        (path === "/signup" ? (
+          <Redirect to="/signup" />
+        ) : (
+          <Redirect to="/login" />
+        ))}
+
+      {/* {!isAuth && path === "/login"} */}
       {isAuth && (path === "/login" || path === "/signup") && (
         <Redirect to="/" />
       )}
@@ -146,7 +155,7 @@ const Home = () => {
             <Route exact path="/friends">
               <UserFriend path="myfriends" />
             </Route>
-            <Route path="/chat/:username">
+            <Route path="/chat">
               <Chat />
             </Route>
           </>

@@ -25,8 +25,8 @@ const ChatCard = ({
     setState(e.target.value);
   };
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  const submitHandler = () => {
+    // e.preventDefault();
 
     // const date = Date.now();
 
@@ -56,20 +56,24 @@ const ChatCard = ({
     };
 
     const cb_response = (response) => {
+      console.log(userid);
       console.log(response);
     };
 
     axios_request({
       route: route,
-      data: {
-        message: state,
-        createdAt: new Date().toISOString(),
-      },
+      data: submitMsg,
       method: method,
       axios_error: cb_error,
       axios_response: cb_response,
     });
   };
+
+  useEffect(() => {
+    if (state !== "") {
+      save_messages_on_database();
+    }
+  }, [submitMsg]);
 
   return (
     <div className="ChatCard">
@@ -85,7 +89,18 @@ const ChatCard = ({
           <input type="text" onChange={changeHandler} name="msg" id="msg" />
 
           <div className="send-btn">
-            <button onClick={submitHandler}>Send</button>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                if (state === "") {
+                  return;
+                } else {
+                  submitHandler();
+                }
+              }}
+            >
+              Send
+            </button>
           </div>
         </div>
       </form>

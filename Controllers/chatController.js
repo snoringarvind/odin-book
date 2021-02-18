@@ -14,7 +14,7 @@ exports.chat_get = (req, res, next) => {
       //since we are only saving the messages we sent , we make a if block to catch an error, if userid == sub
       if (req.params.userid === req.params.senderid) {
         return res
-          .status(200)
+          .status(500)
           .json(
             "wrong request , you can only see the messages you send to your friends, you can't see your own messages"
           );
@@ -38,6 +38,7 @@ exports.chat_put = [
   async (req, res, next) => {
     console.log(req.params.userid);
 
+    console.log(req.body);
     try {
       let query = await Chat.findOne({ sender: res.locals.user.sub });
 
@@ -65,7 +66,6 @@ exports.chat_put = [
         });
       }
 
-      // console.log(query.messages[0].message_container);
       // return;
       Chat.findOneAndUpdate(
         { sender: res.locals.user.sub },

@@ -54,6 +54,8 @@ const Chat = () => {
       await Promise.all([get_responses(), get_my_messages()]);
     };
     h();
+    // get_responses();
+    // get_my_messages();
   }, []);
 
   // get the messages I sent to Komal
@@ -63,11 +65,17 @@ const Chat = () => {
     const method = "GET";
 
     const cb_response = (response) => {
-      let newArr = response.data[0].message_container.map((v) => ({
-        ...v,
-        isOwner: true,
-      }));
-      setResponse(newArr);
+      if (response.data.length !== 0) {
+        let newArr = response.data[0].message_container.map((v) => ({
+          ...v,
+          isOwner: true,
+        }));
+        setResponse(newArr);
+      } else {
+        setResponse([{ message: "", createdAt: "" }]);
+      }
+      console.log(response, "get responses");
+
       setresponseloading(false);
     };
 
@@ -86,11 +94,17 @@ const Chat = () => {
 
   // the messages Komal sent to me
   const get_my_messages = () => {
+    console.log("my messages");
     const route = `/chat/${jwtData.sub}/${userid}`;
     const method = "GET";
 
     const cb_response = (response) => {
-      setMyMsg(response.data[0].message_container);
+      console.log(response, "get my messages");
+      if (response.data.length !== 0) {
+        setMyMsg(response.data[0].message_container);
+      } else {
+        setMyMsg([{ message: "", createdAt: "" }]);
+      }
       setmsgloading(false);
     };
 
@@ -125,6 +139,8 @@ const Chat = () => {
     window.scrollTo(0, document.body.scrollHeight);
   }, [msgArr]);
 
+  console.log(mymsgloading, responseloading);
+  console.log(msgArr);
   return (
     <div className="Chat">
       {/* {!mymsgloading && !responseloading && ( */}
@@ -136,6 +152,7 @@ const Chat = () => {
         msgArr={msgArr}
         setMsgArr={setMsgArr}
       />
+      {/* )} */}
     </div>
   );
 };

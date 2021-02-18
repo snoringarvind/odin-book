@@ -18,7 +18,7 @@ const ChatSchema = mongoose.Schema({
       message_container: [
         {
           message: { type: String },
-          createdAt: { type: Date, default: Date.now },
+          createdAt: { type: String },
         },
       ],
 

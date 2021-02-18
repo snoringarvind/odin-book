@@ -149,15 +149,14 @@ const OdinBookProvider = ({ children }) => {
   useEffect(() => {
     isLogin();
 
+    const socket12 = socketIOClient(ENDPOINT, {
+      withCredentials: true,
+    });
+
+    setSocket(socket12);
     console.log(loading);
     if (jwtData) {
-      const socket12 = socketIOClient(ENDPOINT, {
-        withCredentials: true,
-      });
-
       socket12.emit("join", jwtData.user);
-
-      setSocket(socket12);
     }
   }, []);
 

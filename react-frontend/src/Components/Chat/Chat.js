@@ -61,12 +61,14 @@ const Chat = () => {
   // get the messages I sent to Komal
   const get_responses = () => {
     // sender = jwtData.sub
+    console.log("get responses");
     const route = `/chat/${userid}/${jwtData.sub}`;
     const method = "GET";
 
     const cb_response = (response) => {
+      console.log(response);
       if (response.data.length !== 0) {
-        let newArr = response.data[0].message_container.map((v) => ({
+        let newArr = response.data.message_container.map((v) => ({
           ...v,
           isOwner: true,
         }));
@@ -101,7 +103,7 @@ const Chat = () => {
     const cb_response = (response) => {
       console.log(response, "get my messages");
       if (response.data.length !== 0) {
-        setMyMsg(response.data[0].message_container);
+        setMyMsg(response.data.message_container);
       } else {
         setMyMsg([{ message: "", createdAt: "" }]);
       }
@@ -126,7 +128,14 @@ const Chat = () => {
       let arr = [...response, ...myMsg];
       console.log(arr);
 
-      let sorted = arr.sort((a, b) => b.createdAt - a.createdAt);
+      let sorted = arr.sort((a, b) => {
+        console.log(a, b);
+        return a.createdAt < b.createdAt
+          ? -1
+          : a.createdAt > b.createdAt
+          ? 1
+          : 0;
+      });
       console.log(sorted);
 
       setMsgArr(sorted);
@@ -143,7 +152,6 @@ const Chat = () => {
   console.log(msgArr);
   return (
     <div className="Chat">
-      {/* {!mymsgloading && !responseloading && ( */}
       <ChatCard
         fname={fname}
         lname={lname}
@@ -151,8 +159,9 @@ const Chat = () => {
         username={username}
         msgArr={msgArr}
         setMsgArr={setMsgArr}
+        mymsgloading={mymsgloading}
+        responseloading={responseloading}
       />
-      {/* )} */}
     </div>
   );
 };

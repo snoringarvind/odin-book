@@ -137,6 +137,7 @@ const SearchResultCard = ({
               ? "add-btn fas fa-user-minus"
               : "add-btn fas fa-user-plus"
           }
+          style={{ color: friendBtn[index] ? "red" : "blue" }}
           onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();

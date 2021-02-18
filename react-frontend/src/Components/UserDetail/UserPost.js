@@ -53,8 +53,12 @@ const UserPost = ({ path }) => {
 
   //putting in an if-block since in news feed location.state will be undefined
   let userid;
+  let fname;
+  let lname;
   if (path == "userpost") {
     userid = location.state.userid;
+    fname = location.state.fname;
+    lname = location.state.lname;
   }
 
   const params = useParams();
@@ -136,7 +140,7 @@ const UserPost = ({ path }) => {
     //if the owner then show the post form
     //here owner is the logged in user
     //and the userid is of the person we are browing which will be in the url
-  }, []);
+  }, [location.pathname]);
 
   // console.log(getLoading);
   // console.log(path);
@@ -235,32 +239,49 @@ const UserPost = ({ path }) => {
                 postid={postid}
               />
             )}
-            {result.map((value, index) => {
-              return (
-                <UserPostCard
-                  key={uniqid()}
-                  value={value}
-                  index={index}
-                  setPostid={setPostid}
-                  setUpdateClick={setUpdateClick}
-                  setUpdateData={setUpdateData}
-                  setUpdateIndex={setUpdateIndex}
-                  indexOfCardClicked={indexOfCardClicked}
-                  setindexOfCardClicked={setindexOfCardClicked}
-                  isOwner={isOwner}
-                  setDeleteClick={setDeleteClick}
-                  deleteClick={deleteClick}
-                  likeLength={likeLength}
-                  setLikeLength={setLikeLength}
-                  likeClick={likeClick}
-                  setLikeClick={setLikeClick}
-                  postsLength={result.length}
-                  UserLikedIndex={UserLikedIndex}
-                  setUsersLikedIndex={setUsersLikedIndex}
-                  path={path}
-                />
-              );
-            })}
+            {result.length == 0 ? (
+              <div className="empty-posts">
+                {path == "newsfeed" &&
+                  "Please add friends to see their posts here :)"}
+                {isOwner &&
+                  path !== "newsfeed" &&
+                  "Create new posts to see them here"}
+                {!isOwner && path !== "newsfeed" && (
+                  <>
+                    <span>
+                      {fname} {lname} doesn't have any posts to show :(
+                    </span>
+                  </>
+                )}
+              </div>
+            ) : (
+              result.map((value, index) => {
+                return (
+                  <UserPostCard
+                    key={uniqid()}
+                    value={value}
+                    index={index}
+                    setPostid={setPostid}
+                    setUpdateClick={setUpdateClick}
+                    setUpdateData={setUpdateData}
+                    setUpdateIndex={setUpdateIndex}
+                    indexOfCardClicked={indexOfCardClicked}
+                    setindexOfCardClicked={setindexOfCardClicked}
+                    isOwner={isOwner}
+                    setDeleteClick={setDeleteClick}
+                    deleteClick={deleteClick}
+                    likeLength={likeLength}
+                    setLikeLength={setLikeLength}
+                    likeClick={likeClick}
+                    setLikeClick={setLikeClick}
+                    postsLength={result.length}
+                    UserLikedIndex={UserLikedIndex}
+                    setUsersLikedIndex={setUsersLikedIndex}
+                    path={path}
+                  />
+                );
+              })
+            )}
           </>
         ))}
     </div>

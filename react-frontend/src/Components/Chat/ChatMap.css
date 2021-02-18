@@ -18,7 +18,7 @@
 }
 
 .ChatMap:last-child {
-  margin-bottom: 100px;
+  margin-bottom: 13vh;
 }
 
 .ChatMap .left {
@@ -32,16 +32,17 @@
   width: fit-content;
   max-width: 80%;
   border-radius: 10px;
+  word-wrap: break-word;
   /* border-radius: 10px; */
 }
 
 .ChatMap .right {
   padding-right: 30px;
-  background-color: rgb(227, 248, 255);
+  background-color: rgb(238, 251, 255);
 }
 .ChatMap .left {
   padding-left: 30px;
-  background-color: white;
+  background-color: rgb(241, 241, 241);
 }
 
 .ChatMap .curve-right {
@@ -51,7 +52,7 @@
   float: right;
   position: absolute;
   border-radius: 0 0 0 20px;
-  background-color: rgb(231, 231, 231);
+  background-color: white;
 }
 
 .ChatMap .curve-left {
@@ -61,7 +62,7 @@
   float: left;
   position: absolute;
   border-radius: 0 0 20px 0px;
-  background-color: rgb(231, 231, 231);
+  background-color: white;
 }
 
 .ChatMap .curve-left::after,
@@ -69,4 +70,39 @@
   display: table;
   clear: both;
   content: "";
+}
+
+.ChatMap .right .date-container,
+.ChatMap .left .date-container {
+  /* border: 1px solid; */
+  font-size: 0.8rem;
+  color: rgb(70, 70, 70);
+}
+
+.ChatMap .right .date-container {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.ChatMap .left .date-container {
+  display: flex;
+}
+
+.ChatMap .date-container .date {
+  /* border: 1px solid; */
+  display: flex;
+  align-items: center;
+  background-color: rgb(228, 228, 228);
+  border-radius: 3px;
+  padding: 0 2px;
+}
+
+.ChatMap .date-container .time {
+  /* border: 1px solid; */
+  display: flex;
+  align-items: center;
+  margin: 0 0 0 3px;
+  background-color: rgb(228, 228, 228);
+  border-radius: 3px;
+  padding: 0 2px;
 }

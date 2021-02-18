@@ -54,7 +54,7 @@ const MyPostForm = ({
       setErrors([]);
       setPostLoading(false);
       user_post_response(response);
-      // setCreateClick(false);
+      setCreateClick(false);
       // setUpdateClick(false);
     };
 

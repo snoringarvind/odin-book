@@ -42,8 +42,11 @@ io.sockets.on("connection", (socket) => {
     console.log(username);
 
     socket.on("send_message", (data) => {
-      io.sockets.in(data.to).emit("new_msg", data);
+      // io.sockets.in(data.to).emit("new_msg", data);
+      io.to(data.to).emit("new_msg", data);
     });
+
+    socket.on("disconnect", () => console.log("disconnected", username));
   });
 });
 

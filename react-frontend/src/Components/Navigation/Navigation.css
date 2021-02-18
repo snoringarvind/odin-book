@@ -1,6 +1,9 @@
 .Navigation {
   display: flex;
   /* border: 1px solid; */
+
+  box-shadow: 0.3px 0.3px 4px lightgray, -0.3px -0.3px 4px lightgray,
+    0.3px 0.3px 4px lightgray, -0.3px -0.3px 4px lightgray;
   border-radius: 0 0 4px 4px;
   height: 7vh;
   background-color: white;

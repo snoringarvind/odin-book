@@ -153,9 +153,11 @@ router.post("/login", loginController.login_post);
 router.get("/isUserAuth", utils.verifyJwt, userController.isUserAuth);
 
 //chat
-//herer userid is of the person to whom I sent the message
+//here userid is of the person to whom I sent the message
 router.put("/chat/:userid", utils.verifyJwt, chatController.chat_put);
 
 router.get("/chat/:userid/:senderid", utils.verifyJwt, chatController.chat_get);
 
+//*get chat list
+router.get("/mychat", utils.verifyJwt, chatController.get_mychat_list);
 module.exports = router;

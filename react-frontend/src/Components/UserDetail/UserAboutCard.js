@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
+import { useLocation } from "react-router-dom";
 import { OdinBookContext } from "../Context";
 
 const UseraAboutCard = ({
@@ -12,6 +13,8 @@ const UseraAboutCard = ({
   setee,
   // tooltip,
   // setTooltip,
+  jwtData,
+  userid,
 }) => {
   const { myAboutValue, didMyAboutMountValue, axios_request } = useContext(
     OdinBookContext
@@ -20,23 +23,6 @@ const UseraAboutCard = ({
 
   const [tooltip, setTooltip] = useState(false);
   const [empty_name, setEmpty_name] = useState(false);
-  // const [state, setState] = useState({
-  //   fname: result[objkey],
-  //   lname: result[objkey],
-  //   bio: result[objkey],
-  //   nickName: result[objkey],
-  //   school: result[objkey],
-  //   college: result[objkey],
-  //   working: result[objkey],
-  //   relationshipStatus: result[objkey],
-  //   book: result[objkey],
-  //   food: result[objkey],
-
-  //   gender: result[objkey],
-  //   dob: result[objkey],
-  // });
-
-  console.log(objkey);
 
   const [state, setState] = useState({ [objkey]: ee[objkey] });
   // console.log(state);
@@ -64,8 +50,6 @@ const UseraAboutCard = ({
 
     const { name, value } = e.target;
 
-    setState({ ...state, [name]: value });
-
     if (element.tagName == "INPUT") {
       const element_id = element.id;
       const arr = [...value];
@@ -74,17 +58,21 @@ const UseraAboutCard = ({
         console.log(element_id);
         if (arr.length >= 30) {
           setTooltip(true);
+          return;
         } else {
           setTooltip(false);
         }
       } else if (element_id == "food" || element_id == "book") {
-        if (arr.length >= 30) {
+        if (arr.length >= 50) {
           setTooltip(true);
+          return;
         } else {
           setTooltip(false);
         }
       }
     }
+
+    setState({ ...state, [name]: value });
   };
 
   const submitHandler = (e) => {
@@ -198,6 +186,7 @@ const UseraAboutCard = ({
                 id="relationshipStatus"
                 name="relationshipStatus"
                 onChange={changeHandler}
+                defaultValue={ee[objkey]}
               >
                 <option value="Status">Status</option>
                 <option value="Married">Married</option>
@@ -225,7 +214,7 @@ const UseraAboutCard = ({
               </select>
             )}
           </div>
-          {clickIndex !== index && (
+          {userid === jwtData.sub && clickIndex !== index && (
             <div
               className="edit-icon fas fa-edit"
               onClick={(e) => {
@@ -236,7 +225,7 @@ const UseraAboutCard = ({
               }}
             ></div>
           )}
-          {clickIndex == index && (
+          {jwtData.sub === userid && clickIndex == index && (
             <div
               id={`save-icon-${index}`}
               className="save-icon fas fa-save"

@@ -1,7 +1,7 @@
-import { set } from "mongoose";
 import React, { useContext, useEffect, useState } from "react";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { OdinBookContext } from "../Context";
+
 const UserFriendCard = ({
   value,
   index,
@@ -87,30 +87,43 @@ const UserFriendCard = ({
         </Link>
         <div className="username">{value.username}</div>
       </div>
-      <div
-        className="add-btn"
-        onClick={() => {
-          if (jwtData.sub != userid) {
-            friendBtn[index] = !friendBtn[index];
-            setFriendBtn(friendBtn);
-            setpp(!pp);
-          }
-          clickHandler();
-        }}
-      >
-        {(jwtData.sub == userid || path === "myfriends") && (
-          <div className="add-btn fas fa-user-minus"></div>
-        )}
-        {jwtData.sub !== userid && path !== "myfriends" && (
-          <div
-            className={
-              friendBtn[index]
-                ? "add-btn fas fa-user-minus"
-                : "add-btn fas fa-user-plus"
+      {jwtData.sub !== value._id && (
+        <div
+          className="add-btn"
+          style={{
+            color:
+              path == "myfriends"
+                ? "red"
+                : jwtData.sub === userid
+                ? "red"
+                : friendBtn[index]
+                ? "red"
+                : "blue",
+          }}
+          onClick={() => {
+            if (jwtData.sub != userid) {
+              friendBtn[index] = !friendBtn[index];
+              setFriendBtn(friendBtn);
+              setpp(!pp);
             }
-          ></div>
-        )}
-      </div>
+            clickHandler();
+          }}
+        >
+          {(jwtData.sub == userid || path === "myfriends") && (
+            <div className="add-btn fas fa-user-minus"></div>
+          )}
+          {jwtData.sub !== userid && path !== "myfriends" && (
+            <div
+              // style={{ color: "blue" }}
+              className={
+                friendBtn[index]
+                  ? "add-btn fas fa-user-minus"
+                  : "add-btn fas fa-user-plus"
+              }
+            ></div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

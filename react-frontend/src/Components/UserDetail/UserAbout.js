@@ -6,9 +6,12 @@ import uniqid from "uniqid";
 import "./UserAbout.css";
 
 const UserAbout = () => {
-  const { myAboutValue, didMyAboutMountValue, axios_request } = useContext(
-    OdinBookContext
-  );
+  const {
+    myAboutValue,
+    didMyAboutMountValue,
+    axios_request,
+    jwtData,
+  } = useContext(OdinBookContext);
   const [myAbout, setMyAbout] = myAboutValue;
   const [didMyAboutMount, setdidMyAboutMount] = didMyAboutMountValue;
 
@@ -54,8 +57,6 @@ const UserAbout = () => {
     });
   };
 
-  const { jwtData } = useContext(OdinBookContext);
-
   useEffect(() => {
     console.log(jwtData.sub, userid);
     if (jwtData.sub !== userid) {
@@ -69,7 +70,7 @@ const UserAbout = () => {
         setGetLoading(false);
       }
     }
-  }, []);
+  }, [location.pathname]);
 
   let g;
   if (result) {
@@ -110,7 +111,13 @@ const UserAbout = () => {
 
   return (
     <div className="UserAbout">
-      {getLoading && "loading..."}
+      {getLoading && (
+        <div className="loading-container">
+          <div className="spinner-border loading" role="status">
+            <span className="sr-only"></span>
+          </div>
+        </div>
+      )}
       {!getLoading &&
         (error ? (
           <div className="error">{error}</div>
@@ -129,6 +136,8 @@ const UserAbout = () => {
                 setee={setee}
                 tooltip={tooltip}
                 setTooltip={setTooltip}
+                userid={userid}
+                jwtData={jwtData}
               />
             );
           })

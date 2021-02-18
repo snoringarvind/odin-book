@@ -5,6 +5,8 @@
   margin: 10px 20px;
   background-color: white;
   border-radius: 4px;
+  box-shadow: 0.3px 0.3px 4px lightgray, -0.3px -0.3px 4px lightgray,
+    0.3px 0.3px 4px lightgray, -0.3px -0.3px 4px lightgray;
 }
 
 .UserPost .UserPostCard .head .profile-picture {
@@ -184,4 +186,17 @@
   /* padding: 10px 0; */
   /* margin-bottom: 10px; */
   color: rgb(56, 56, 56);
+}
+
+.UserPost .empty-posts {
+  /* border: 1px solid; */
+  margin: 10px 20px;
+  background-color: white;
+  height: 20vh;
+  display: flex;
+  justify-content: center;
+  border-radius: 4px;
+  font-size: 1.3rem;
+  align-items: center;
+  box-shadow: 0.3px 0.3px 4px darkgray, -0.3px -0.3px 4px darkgray;
 }

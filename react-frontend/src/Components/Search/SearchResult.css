@@ -40,7 +40,7 @@
 
 .SearchResult .name-container {
   margin-right: 30px;
-  border: 1px solid;
+  /* border: 1px solid green; */
   flex-basis: 100%;
 }
 .SearchResult .name-container .name {
@@ -49,6 +49,12 @@
 
   font-weight: 430;
   font-family: "Times New Roman", Times, serif;
+}
+
+.SearchResult .name-container a {
+  /* border: 1px solid red; */
+  display: block;
+  width: fit-content;
 }
 
 .SearchResult .username {
@@ -75,4 +81,8 @@
 .SearchResult .chat-btn:hover {
   transform: scale(1.01);
   background-color: lightgray;
+}
+
+.SearchResult .chat-btn {
+  color: blue;
 }

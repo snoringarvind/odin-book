@@ -8,8 +8,9 @@ exports.chat_get = (req, res, next) => {
     if (err) return res.status(500).json({ msg: err.message });
     else {
       // console.log(result);
-      console.log(res.locals.user.sub);
-      console.log(req.params.userid);
+      // console.log(res.locals.user.sub);
+      // console.log(req.params.userid);
+      // console.log(result, 13);
 
       //since we are only saving the messages we sent , we make a if block to catch an error, if userid == sub
       if (req.params.userid === req.params.senderid) {
@@ -21,12 +22,24 @@ exports.chat_get = (req, res, next) => {
       }
 
       if (result.messages.length === 0) {
+        console.log("true, 24");
         return res.status(200).json([]);
       }
+
+      let notInclude = true;
+      // here's a case if in the for loop there's no match it means the other person haven't send any messages to this guy till now ..
+      //in such case we send an empty array meaning no messages have beeen sent from other person to this guy.
       for (let i = 0; i < result.messages.length; i++) {
         if (result.messages[i].user == req.params.userid) {
-          return res.status(200).json(result.messages);
+          console.log("29", result);
+          console.log(req.params.userid, result.messages[i].user);
+          notInclude = false;
+          return res.status(200).json(result.messages[i]);
         }
+      }
+
+      if (notInclude) {
+        return res.status(200).json([]);
       }
     }
   });
@@ -47,25 +60,32 @@ exports.chat_put = [
 
       console.log(query);
 
+      //if not include then create one
+      let notInclude = true;
+
+      // return;
       //for now I can't figure out mongoose filters so I am using for loops to manually filter.
       for (let i = 0; i < query.messages.length; i++) {
+        console.log(req.params.userid, query.messages[i].user);
         if (query.messages[i].user == req.params.userid) {
+          console.log(i);
           query.messages[i].message_container.push({
             message: message,
             createdAt: createdAt,
           });
+          notInclude = false;
           break;
         }
       }
 
-      if (query.messages.length == 0) {
-        console.log(query.messages);
+      if (notInclude) {
         query.messages.push({
           message_container: [{ message: message, createdAt: createdAt }],
           user: req.params.userid,
         });
       }
 
+      // console.log(query.messages[1].message_container);
       // return;
       Chat.findOneAndUpdate(
         { sender: res.locals.user.sub },
@@ -83,3 +103,15 @@ exports.chat_put = [
     }
   },
 ];
+
+//to display the list of conversation with users
+exports.get_mychat_list = (req, res, next) => {
+  Chat.findOne({ sender: res.locals.user.sub })
+    .populate("messages.user", "fname lname username")
+    .exec((err, result) => {
+      if (err) return res.status(500).json({ msg: err.message });
+      else {
+        return res.status(200).json(result);
+      }
+    });
+};

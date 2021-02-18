@@ -97,16 +97,32 @@ const UserFriend = ({ path }) => {
     }
 
     // get_my_friend_list();
-  }, []);
+  }, [location.pathname]);
 
   // console.log(myFriendList);
   // console.log(result);
   return (
     <div className="UserFriend">
-      {getLoading && "loading.."}
+      {getLoading && (
+        <div className="loading-container">
+          <div className="spinner-border loading" role="status">
+            <span className="sr-only"></span>
+          </div>
+        </div>
+      )}
       {!getLoading &&
         (error ? (
           <div className="error">{error}</div>
+        ) : result.length == 0 ? (
+          <div className="empty">
+            <div>No friends to show.</div>
+            {(path == "myfriends" || jwtData.sub == userid) && (
+              <>
+                <div>You can add them by searching their name :)</div>
+                <div>To search with username, please prefix with '@' :)</div>
+              </>
+            )}
+          </div>
         ) : (
           result.map((value, index) => {
             return (

@@ -3,6 +3,7 @@ import { OdinBookContext } from "../Context";
 import ChatMap from "./ChatMap";
 import uniqid from "uniqid";
 import axios from "axios";
+import { response } from "express";
 
 const ChatCard = ({
   fname,
@@ -15,6 +16,8 @@ const ChatCard = ({
   // setResponse,
   msgArr,
   setMsgArr,
+  responseLoading,
+  mymsgloading,
 }) => {
   console.log("chatcard");
   const [state, setState] = useState("");
@@ -105,9 +108,18 @@ const ChatCard = ({
         </div>
       </form>
 
-      {msgArr.map((value, index) => {
-        return <ChatMap value={value} index={index} key={uniqid()} />;
-      })}
+      {mymsgloading && responseLoading && (
+        <div className="loading-container">
+          <div className="spinner-border loading" role="status">
+            <span className="sr-only"></span>
+          </div>
+        </div>
+      )}
+      {!mymsgloading &&
+        !responseLoading &&
+        msgArr.map((value, index) => {
+          return <ChatMap value={value} index={index} key={uniqid()} />;
+        })}
     </div>
   );
 };

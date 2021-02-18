@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import UserNav from "./UserNav";
 import {
   BrowserRouter as Router,
@@ -7,11 +7,13 @@ import {
   useParams,
   useLocation,
   useHistory,
+  Link,
 } from "react-router-dom";
 import UserAbout from "./UserAbout";
 import UserPost from "./UserPost";
 import UserFriend from "./UserFriend";
 import "./UserDetail.css";
+import { OdinBookContext } from "../Context";
 
 const UserDetail = () => {
   const location = useLocation();
@@ -21,10 +23,42 @@ const UserDetail = () => {
   const history = useHistory();
   console.log(history);
 
+  const { jwtData } = useContext(OdinBookContext);
+
+  let userid;
+  let fname;
+  let lname;
+  let username;
+  if (location.state.userid) {
+    fname = location.state.fname;
+    lname = location.state.lname;
+    username = location.state.username;
+    userid = location.state.userid;
+  }
+
   return (
     <div className="UserDetail">
       <div className="user-banner-container">
-        <div className="user-banner">{params.username}</div>
+        <div className="user-banner">
+          {params.username}
+          {userid && userid !== jwtData.sub && (
+            <div className="chat-link-container">
+              <Link
+                to={{
+                  pathname: "/chat",
+                  state: {
+                    userid: userid,
+                    fname: fname,
+                    lname: lname,
+                    username: username,
+                  },
+                }}
+              >
+                <div className="chat-btn fab fa-facebook-messenger"></div>
+              </Link>
+            </div>
+          )}
+        </div>
 
         <div className="name-container">
           <div className="name">

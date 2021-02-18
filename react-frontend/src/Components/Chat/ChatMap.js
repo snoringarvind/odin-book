@@ -13,9 +13,6 @@ const ChatMap = ({ value, index }) => {
     splityear = [...yearstr];
   }
 
-  // useEffect(() => {
-  // }, [value]);
-
   return (
     <div className="ChatMap">
       {value.message !== "" && (
@@ -35,9 +32,16 @@ const ChatMap = ({ value, index }) => {
               </div>
               <div className="time">
                 <span>
-                  {d.getHours() > 12 ? d.getHours() - 12 : d.getHours()}-
+                  {d.getHours() > 12
+                    ? d.getHours() - 12
+                    : d.getHours() === 0
+                    ? 12
+                    : d.getHours()}
+                  :
                 </span>
-                <span>{d.getMinutes()} </span>
+                <span>
+                  {d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes()}{" "}
+                </span>
                 <span>{d.getHours() > 12 ? "pm" : "am"}</span>
               </div>
             </div>

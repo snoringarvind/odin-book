@@ -11,6 +11,7 @@
   font-weight: 450;
   text-shadow: 0.3px 0.3px 5px black;
   background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
+  position: relative;
 }
 
 .UserDetail .user-banner-container {
@@ -23,6 +24,18 @@
   padding: 20px;
   font-size: large;
   font-weight: 450;
-  /* border-radius: 0 0 5px 5px; */
   border-bottom: 1px solid darkgray;
+}
+
+.UserDetail .user-banner-container .user-banner .chat-btn {
+  /* float: right; */
+  /* width: fit-content; */
+  /* border: 1px solid; */
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  font-size: 2rem;
+  padding: 20px;
+  color: blue;
+  /* background-color: white; */
 }

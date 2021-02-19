@@ -3,7 +3,6 @@ import { OdinBookContext } from "../Context";
 import ChatMap from "./ChatMap";
 import uniqid from "uniqid";
 import axios from "axios";
-import { response } from "express";
 
 const ChatCard = ({
   fname,

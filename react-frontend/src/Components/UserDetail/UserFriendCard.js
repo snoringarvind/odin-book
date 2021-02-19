@@ -101,7 +101,7 @@ const UserFriendCard = ({
                 : "blue",
           }}
           onClick={() => {
-            if (jwtData.sub != userid) {
+            if (jwtData.sub !== userid) {
               friendBtn[index] = !friendBtn[index];
               setFriendBtn(friendBtn);
               setpp(!pp);
@@ -122,6 +122,24 @@ const UserFriendCard = ({
               }
             ></div>
           )}
+        </div>
+      )}
+      {/* value._id woh idividual friend ka id hain and userid jiska profile visit kar rahe hain uska id hain */}
+      {jwtData.sub !== value._id && (
+        <div className="chat-link-container">
+          <Link
+            to={{
+              pathname: "/chat",
+              state: {
+                userid: value._id,
+                fname: value.fname,
+                lname: value.lname,
+                username: value.username,
+              },
+            }}
+          >
+            <div className="chat-btn fab fa-facebook-messenger"></div>
+          </Link>
         </div>
       )}
     </div>

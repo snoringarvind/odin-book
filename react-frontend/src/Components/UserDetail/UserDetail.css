@@ -27,15 +27,21 @@
   border-bottom: 1px solid darkgray;
 }
 
-.UserDetail .user-banner-container .user-banner .chat-btn {
-  /* float: right; */
+.UserDetail .user-banner-container .user-banner .chat-link-container a,
+.UserDetail .user-banner-container .user-banner .UserDetailFriendBtn .add-btn {
+  margin: 20px;
+  font-size: 2rem;
+  cursor: pointer;
+  /* border: 1px solid; */
   /* width: fit-content; */
+}
+
+.UserDetail .user-banner-container .user-banner .banner-btn {
   /* border: 1px solid; */
   position: absolute;
   bottom: 0;
   right: 0;
-  font-size: 2rem;
-  padding: 20px;
-  color: blue;
-  /* background-color: white; */
+  /* width: fit-content; */
+  display: flex;
+  align-items: center;
 }

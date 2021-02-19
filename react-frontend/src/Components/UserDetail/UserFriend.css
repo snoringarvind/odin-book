@@ -71,7 +71,8 @@
   color: darkgray;
 }
 
-.UserFriend .add-btn {
+.UserFriend .add-btn,
+.UserFriend .chat-btn {
   cursor: pointer;
   /* border: 1px solid red; */
   width: 2.3rem;
@@ -79,6 +80,7 @@
   min-height: 2.3rem;
   height: 2.3rem;
   display: flex;
+  margin: 0 10px;
   justify-content: center;
   align-items: center;
   border-radius: 50%;

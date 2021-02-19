@@ -14,6 +14,7 @@ import UserPost from "./UserPost";
 import UserFriend from "./UserFriend";
 import "./UserDetail.css";
 import { OdinBookContext } from "../Context";
+import UserDetailFriendBtn from "./UserDetailFriendBtn";
 
 const UserDetail = () => {
   const location = useLocation();
@@ -41,23 +42,26 @@ const UserDetail = () => {
       <div className="user-banner-container">
         <div className="user-banner">
           {params.username}
-          {userid && userid !== jwtData.sub && (
-            <div className="chat-link-container">
-              <Link
-                to={{
-                  pathname: "/chat",
-                  state: {
-                    userid: userid,
-                    fname: fname,
-                    lname: lname,
-                    username: username,
-                  },
-                }}
-              >
-                <div className="chat-btn fab fa-facebook-messenger"></div>
-              </Link>
-            </div>
-          )}
+          <div className="banner-btn">
+            {userid && userid !== jwtData.sub && (
+              <div className="chat-link-container">
+                <Link
+                  to={{
+                    pathname: "/chat",
+                    state: {
+                      userid: userid,
+                      fname: fname,
+                      lname: lname,
+                      username: username,
+                    },
+                  }}
+                >
+                  <div className="chat-btn fab fa-facebook-messenger"></div>
+                </Link>
+              </div>
+            )}
+            {userid && userid !== jwtData.sub && <UserDetailFriendBtn />}
+          </div>
         </div>
 
         <div className="name-container">

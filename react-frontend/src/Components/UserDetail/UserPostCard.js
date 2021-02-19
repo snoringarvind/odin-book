@@ -3,7 +3,7 @@ import CommentCard from "../CommentCard/CommentCard";
 import uniqid from "uniqid";
 import UserLikes from "./UserLikes";
 import { OdinBookContext } from "../Context";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 import CommentCreate from "../Comment/CommentCreate";
 
 const UserPostCard = ({
@@ -127,8 +127,20 @@ const UserPostCard = ({
         </div>
         <div className="name-container">
           <div className="name">
-            <span>{fname ? fname : value.user.fname} </span>
-            <span>{lname ? lname : value.user.lname}</span>
+            <Link
+              to={{
+                pathname: `/user/${value.user.username}/posts`,
+                state: {
+                  userid: value.user._id,
+                  fname: value.user.fname,
+                  lname: value.user.lname,
+                  username: value.user.username,
+                },
+              }}
+            >
+              <span>{fname ? fname : value.user.fname} </span>
+              <span>{lname ? lname : value.user.lname}</span>
+            </Link>
           </div>
 
           <div className="username">

@@ -127,6 +127,7 @@ const UserDetailFriendBtn = () => {
   return (
     <div className="UserDetailFriendBtn">
       <div
+        style={{ color: isFriend ? "red" : "blue" }}
         className={
           isFriend ? "add-btn fas fa-user-minus" : "add-btn fas fa-user-plus"
         }

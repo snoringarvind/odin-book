@@ -29,13 +29,19 @@
   margin-right: 30px;
   /* border: 1px solid; */
   flex-basis: 100%;
+  line-height: 110%;
 }
 .UserPost .UserPostCard .head .name-container .name {
-  /* border: 1px solid; */
+  /* border: 1px solid red; */
   font-size: 1.3rem;
-
+  width: fit-content;
   font-weight: 430;
   font-family: "Times New Roman", Times, serif;
+}
+
+.UserPost .UserPostCard .head .name-container .name a {
+  display: block;
+  text-decoration: none;
 }
 
 .UserPost .UserPostCard .head .username {
@@ -44,7 +50,7 @@
 
 .UserPost .UserPostCard .head {
   display: flex;
-  /* border: 1px solid; */
+  border: 1px solid;
   align-items: center;
   margin-bottom: 10px;
 }

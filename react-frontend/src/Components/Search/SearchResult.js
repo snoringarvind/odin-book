@@ -43,6 +43,7 @@ const SearchResult = () => {
     const cb_response = (response) => {
       console.log(response);
       setGetLoading(false);
+      setSearchBarState({ search: "" });
       if (!Array.isArray(response.data)) {
         setResult([response.data]);
       } else {

@@ -42,6 +42,7 @@
   margin-right: 30px;
   /* border: 1px solid green; */
   flex-basis: 100%;
+  line-height: 110%;
 }
 .SearchResult .name-container .name {
   /* border: 1px solid; */
@@ -55,6 +56,7 @@
   /* border: 1px solid red; */
   display: block;
   width: fit-content;
+  text-decoration: none;
 }
 
 .SearchResult .username {

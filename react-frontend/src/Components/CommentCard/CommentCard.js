@@ -19,11 +19,18 @@ const CommentCard = ({
   setpp,
 }) => {
   console.log(comment);
+  console.log(path);
 
   const { jwtData } = useContext(OdinBookContext);
 
   // const [isChanged, setIsChanged] = useState(false);
 
+  const location = useLocation();
+  let userid;
+  if (location.state) {
+    userid = location.state.userid;
+  }
+  console.log(comment.user._id, jwtData.sub, path);
   // console.log(isChanged);
   // useEffect(() => {}, [isChanged]);
   console.log(commentOptionIndex);
@@ -36,7 +43,8 @@ const CommentCard = ({
       </div>
       <div className="comment-container">
         <div className="name">
-          {path !== "userpost" && (
+          {((path == "userpost" && comment.user._id !== jwtData.sub) ||
+            path == "newsfeed") && (
             <Link
               to={{
                 pathname: `/user/${comment.user.username}/posts`,
@@ -52,7 +60,7 @@ const CommentCard = ({
               <span>{comment.user.lname}</span>
             </Link>
           )}
-          {path === "userpost" && (
+          {path === "userpost" && comment.user._id === jwtData.sub && (
             <>
               <span>{comment.user.fname} </span>
               <span>{comment.user.lname}</span>

@@ -18,8 +18,8 @@ const CommentCard = ({
   pp,
   setpp,
 }) => {
-  console.log(comment);
-  console.log(path);
+  // console.log(comment);
+  // console.log(path);
 
   const { jwtData } = useContext(OdinBookContext);
 
@@ -30,10 +30,10 @@ const CommentCard = ({
   if (location.state) {
     userid = location.state.userid;
   }
-  console.log(comment.user._id, jwtData.sub, path);
+  // console.log(comment.user._id, jwtData.sub, path);
   // console.log(isChanged);
   // useEffect(() => {}, [isChanged]);
-  console.log(commentOptionIndex);
+  // console.log(commentOptionIndex);
   const [commentUpdateClick, setCommentUpdateClick] = useState(false);
   const [commentDeleteClick, setCommentDeleteClick] = useState(false);
   return (

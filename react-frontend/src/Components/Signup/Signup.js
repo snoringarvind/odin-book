@@ -1,9 +1,12 @@
 import React, { useContext, useState } from "react";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
+import "./Signup.css";
+import { Redirect } from "react-router-dom";
 
 const Signup = () => {
   const { axios_request } = useContext(OdinBookContext);
+  const [signupClick, setSignupClick] = useState(false);
 
   const [error, setError] = useState("");
   const [errors, setErrors] = useState([]);
@@ -68,6 +71,7 @@ const Signup = () => {
       {error && <div className="error">{error}</div>}
       {!error && (
         <form>
+          <div className="head">Signup</div>
           <div className="form-group">
             <label htmlFor="fname">First Name:</label>
             <input
@@ -113,20 +117,33 @@ const Signup = () => {
             />
           </div>
           {display_errors()}
-          <div className="login-btn">
-            <button
+          <div className="buttons">
+            <div className="signup-btn">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (!postLoading) {
+                    return axios_signup();
+                  } else {
+                    return;
+                  }
+                }}
+              >
+                {postLoading ? "signing-in" : "Sign-up"}
+              </button>
+            </div>
+            <div
+              className="login-btn"
               onClick={(e) => {
                 e.preventDefault();
-                if (!postLoading) {
-                  return axios_signup();
-                } else {
-                  return;
-                }
+                setSignupClick(true);
               }}
             >
-              {postLoading ? "signing-in" : "Sign-up"}
-            </button>
+              <button>Login</button>
+            </div>
           </div>
+
+          {signupClick && <Redirect to="/login" />}
         </form>
       )}
     </div>

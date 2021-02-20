@@ -12,7 +12,6 @@ const CommentForm = ({
   method,
   updateValue,
 }) => {
-  console.log(updateValue);
   const { jwtData, axios_request } = useContext(OdinBookContext);
   const [state, setState] = useState({
     comment: updateValue ? updateValue : "",
@@ -23,17 +22,27 @@ const CommentForm = ({
   const post_comment = (e) => {
     e.preventDefault();
 
-    // setNewCommentLoading(true);
-
     console.log(updateValue);
     let element;
-    if (updateValue !== undefined) {
-      element = document.querySelector(`#post-${postIndex}`);
-      const remove_empty = element.querySelector(".empty");
+    element = document.querySelector(`#post-${postIndex}`);
+    console.log(postIndex);
+
+    if (element) {
+      const remove_empty = element.querySelector(`#post-${postIndex} .empty`);
       if (remove_empty) {
         remove_empty.style.display = "none";
       }
     }
+
+    setNewCommentLoading(true);
+
+    console.log(element);
+    if (element) {
+      const height = element.scrollHeight;
+      console.log(height);
+      element.scrollTop = height;
+    }
+
     const cb_error = (err) => {
       console.log(err);
       if (err.response) {
@@ -44,21 +53,20 @@ const CommentForm = ({
       }
     };
     const cb_response = (response) => {
-      // setComments(response.data);
       setErrors([]);
       setState({ comment: "" });
-      // console.log(comments);
       console.log(response.data);
       setComments(response.data);
 
-      if (updateValue !== undefined) {
+      if (element) {
         const height = element.scrollHeight;
         console.log(height);
+        console.log("helloooooo");
+        console.log(element);
         element.scrollTop = height;
       }
-      // setNewCommentLoading(false);
-      // console.log([response.data.comment_list].concat(comments.comment_list));
-      // setComments([response.data].concat(comments));
+
+      setNewCommentLoading(false);
     };
 
     axios_request({

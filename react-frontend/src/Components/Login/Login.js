@@ -2,10 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 import { Redirect, useHistory } from "react-router-dom";
+import "./Login.css";
 
 const Login = () => {
   const { axios_request, isAuthValue } = useContext(OdinBookContext);
   const [isAuth, setIsAuth] = isAuthValue;
+  const [isloginClick, setIsLoginClick] = useState(false);
 
   const [state, setState] = useState({ username: "", password: "" });
   const [errors, setErrors] = useState([]);
@@ -72,6 +74,7 @@ const Login = () => {
       {error && <div className="error">{error}</div>}
       {!error && (
         <form>
+          <div className="head"> Login</div>
           <div className="form-group">
             <label htmlFor="username">Username:</label>
             <input
@@ -95,20 +98,33 @@ const Login = () => {
             />
           </div>
           {display_errors()}
-          <div className="login-btn">
-            <button
+          <div className="buttons">
+            <div className="login-btn">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (!postLoading) {
+                    return axios_login();
+                  } else {
+                    return;
+                  }
+                }}
+              >
+                {postLoading ? "Logging-in" : "Log-in"}
+              </button>
+            </div>
+            <div
+              className="signup-btn"
               onClick={(e) => {
                 e.preventDefault();
-                if (!postLoading) {
-                  return axios_login();
-                } else {
-                  return;
-                }
+                setIsLoginClick(true);
               }}
             >
-              {postLoading ? "Logging-in" : "Log-in"}
-            </button>
+              <button>Sign-up</button>
+            </div>
           </div>
+
+          {isloginClick && <Redirect to="/signup" />}
         </form>
       )}
     </div>

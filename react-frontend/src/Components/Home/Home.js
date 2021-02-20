@@ -87,7 +87,7 @@ const Home = () => {
   }, []);
   return (
     <div className="Home">
-      {/* {!isAuth && path == "/logout" && <Redirect to="/login" />} */}
+      {!isAuth && <div className="odin-book">OdinBook</div>}
       {!isAuth &&
         (path === "/signup" ? (
           <Redirect to="/signup" />

@@ -159,5 +159,5 @@ router.put("/chat/:userid", utils.verifyJwt, chatController.chat_put);
 router.get("/chat/:userid/:senderid", utils.verifyJwt, chatController.chat_get);
 
 //*get chat list
-router.get("/mychat", utils.verifyJwt, chatController.get_mychat_list);
+router.get("/mychat", utils.verifyJwt, chatController.put_mychat_list);
 module.exports = router;

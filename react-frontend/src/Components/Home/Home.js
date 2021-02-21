@@ -29,7 +29,6 @@ import UserPost from "../UserDetail/UserPost";
 import UserFriend from "../UserDetail/UserFriend";
 import { OdinBookContext } from "../Context";
 import Chat from "../Chat/Chat";
-import ChatList from "../Chat/ChatList";
 
 const Home = () => {
   let location = useLocation();

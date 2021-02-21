@@ -1,23 +1,19 @@
 const { body, validationResult, query } = require("express-validator");
 const { Mongoose } = require("mongoose");
 const Chat = require("../models/Chat");
+const ChatList = require("../models/ChatList");
 
 exports.chat_get = (req, res, next) => {
   //this way by 'req.params.senderid' we can get ours and the other person's chat
   Chat.findOne({ sender: req.params.senderid }).exec((err, result) => {
     if (err) return res.status(500).json({ msg: err.message });
     else {
-      // console.log(result);
-      // console.log(res.locals.user.sub);
-      // console.log(req.params.userid);
-      // console.log(result, 13);
-
       //since we are only saving the messages we sent , we make a if block to catch an error, if userid == sub
       if (req.params.userid === req.params.senderid) {
         return res
           .status(500)
           .json(
-            "wrong request , you can only see the messages you send to your friends, you can't see your own messages"
+            "wrong request , only your friends can see your messages, you can't see your own messages"
           );
       }
 
@@ -105,13 +101,84 @@ exports.chat_put = [
 ];
 
 //to display the list of conversation with users
-exports.get_mychat_list = (req, res, next) => {
-  Chat.findOne({ sender: res.locals.user.sub })
-    .populate("messages.user", "fname lname username")
-    .exec((err, result) => {
-      if (err) return res.status(500).json({ msg: err.message });
-      else {
-        return res.status(200).json(result);
+exports.put_mychat_list = (req, res, next) => {
+  try {
+    if (req.params.senderid != res.locals.user.sub) {
+      let query = ChatList.findOne({ sender: req.params.senderid });
+
+      let notInclude = true;
+
+      // if we are not first time receving te message from this user then instead of appending the user we will only update the isread.
+      for (let i = 0; i < query.received.length; i++) {
+        if (query.received[i].user == req.params.userid) {
+          notInclude = false;
+
+          const isread = req.body.isread;
+          if (isread == true) {
+            // if true then empty the array since we don't show how many messages are read, it will be absurd if we do that
+            query.received[i].isread = [];
+            query.received[i].isread.push(true);
+          } else {
+            query.received[i].isread.push(false);
+          }
+          break;
+        }
       }
-    });
+
+      //if we are first time receving the message from this user.
+      if (notInclude) {
+        query.received.push({ user: req.params.userid, isread: [false] });
+      }
+
+      ChatList.findOneAndUpdate(
+        { sender: req.params.senderid },
+        { received: query.received },
+        { new: true },
+        (err, result) => {
+          if (err) return res.status(500).json({ msg: err.message });
+          else {
+            return res.status(200).json(result);
+          }
+        }
+      );
+    } else {
+      let query = ChatList.findOne({ sender: req.params.senderid });
+      //delete the user once we get their reply.
+
+      //alreay agar mere sent mein Komal ka naam hain toh I don't need to update the sent
+      const isInclude = query.sent.includes(req.params.userid);
+
+      if (isInclude) {
+        for (let i = 0; i < query.received.length; i++) {
+          //if i already have Komal in received then I don't need to remove her from sent
+          if (query.received[i].user === req.params.userid) {
+            for (let i = 0; i < query.sent.length; i++) {
+              if (query.sent[i] == req.params.userid) {
+                query.sent.splice(i, 1);
+                break;
+              }
+            }
+          }
+        }
+        //but if she is not in receive then I need don't need to update the sent.
+      } else {
+        //but if she is not in sent then I need to add her in sent
+        query.sent.push(req.params.userid);
+      }
+
+      ChatList.findOneAndUpdate(
+        { sender: req.params.senderid },
+        { query: query.sent },
+        { new: true },
+        (err, result) => {
+          if (err) return res.status(500).json({ msg: err.message });
+          else {
+            return res.status(200).json(result);
+          }
+        }
+      );
+    }
+  } catch (err) {
+    return res.status(500).json({ msg: err.message });
+  }
 };

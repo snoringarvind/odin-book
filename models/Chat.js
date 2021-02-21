@@ -11,6 +11,7 @@ const ChatSchema = mongoose.Schema({
   messages: [
     {
       //this is the user to whom I sent the message
+      //saving the message which I sent and saving their userid
       //so I will only fetch the messages which I have sent.
       //similarly the person will also only fetch messages which they have sent
       //and now we have the conversation from both

@@ -74,6 +74,7 @@ const Chat = () => {
         }));
         setResponse(newArr);
       } else {
+        //it might happen that there are no sent messages.
         setResponse([{ message: "", createdAt: "" }]);
       }
       console.log(response, "get responses");
@@ -105,6 +106,7 @@ const Chat = () => {
       if (response.data.length !== 0) {
         setMyMsg(response.data.message_container);
       } else {
+        //it might happen that there are no response msgs and only ond side messages.
         setMyMsg([{ message: "", createdAt: "" }]);
       }
       setmsgloading(false);

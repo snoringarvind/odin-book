@@ -1,6 +1,6 @@
 .Login {
   /* border: 1px solid; */
-  height: 93vh;
+  min-height: 93vh;
   position: relative;
   background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
 }
@@ -37,12 +37,14 @@
 }
 
 .Login .form-group {
-  margin: 10px 0;
+  margin: 20px 0;
+  /* border: 1px solid; */
 }
 
 .Login .form-group label {
   font-size: 1.2rem;
   font-weight: bold;
+  display: block;
 }
 
 .Login .login-btn button,

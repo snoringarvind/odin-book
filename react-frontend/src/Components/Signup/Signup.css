@@ -1,6 +1,6 @@
 .Signup {
   border: 1px solid;
-  height: 93vh;
+  min-height: 93vh;
   position: relative;
   background-image: linear-gradient(to top, #fff1eb 0%, #ace0f9 100%);
 }
@@ -43,6 +43,7 @@
 .Signup .form-group label {
   font-size: 1.2rem;
   font-weight: bold;
+  display: block;
 }
 
 .Signup .signup-btn button,

@@ -4,29 +4,31 @@ exports.put_isread_true = async (req, res, next) => {
   try {
     const query = await Isread.findOne({ sender: res.locals.user.sub });
 
-    let notInclude = true;
-    for (let i = 0; i < query.users.length; i++) {
-      if (query.users[i].user.toString() == req.params.userid.toString()) {
-        notInclude = false;
-        query.users[i].isread = [];
-        query.users[i].isread.push(true);
+    // console.log(query, 7);
+    // if (query.users.length == 0) {
+    //   return res.status(200).json({ msg: "no msgs to set to isread true" });
+    // }
+    const in_users_index = query.users.findIndex(
+      (x) => x.user.toString() === req.params.userid.toString()
+    );
 
-        Isread.findOneAndUpdate(
-          { sender: res.locals.user.sub },
-          { users: query.users },
-          { new: true },
-          (err, result) => {
-            if (err) return res.status(500).json({ msg: err.message });
-            else {
-              return res.status(200).json(result);
-            }
+    // console.log(in_users_index);
+    if (in_users_index != -1) {
+      query.users[in_users_index].isread = [];
+      query.users[in_users_index].isread.push(true);
+      Isread.findOneAndUpdate(
+        { sender: res.locals.user.sub },
+        { users: query.users },
+        { new: true },
+        (err, result) => {
+          // console.log(result);
+          if (err) return res.status(500).json({ msg: err.message });
+          else {
+            return res.status(200).json(result);
           }
-        );
-        break;
-      }
-    }
-
-    if (notInclude) {
+        }
+      );
+    } else {
       return res
         .status(200)
         .json({ msg: "no msgs sent by this user to set to read true" });
@@ -39,19 +41,17 @@ exports.put_isread_true = async (req, res, next) => {
 exports.put_isread_false = async (req, res, next) => {
   try {
     const query = await Isread.findOne({ sender: req.params.senderid });
+    // console.log(query, 38);
+    const in_users_index = query.users.findIndex((x) => {
+      // console.log(x, 40);
+      return x.user.toString() === res.locals.user.sub.toString();
+    });
 
-    let notInclude = true;
-    for (let i = 0; i < query.users.length; i++) {
-      if (query.users[i].user.toString() == res.locals.user.sub.toString()) {
-        notInclude = false;
+    // console.log(in_users_index, 43);
 
-        query.users[i].isread.push(false);
-
-        break;
-      }
-    }
-
-    if (notInclude) {
+    if (in_users_index !== -1) {
+      query.users[in_users_index].isread.push(false);
+    } else {
       query.users.push({ user: res.locals.user.sub, isread: false });
     }
 
@@ -67,6 +67,7 @@ exports.put_isread_false = async (req, res, next) => {
       }
     );
   } catch (err) {
+    // console.log(err, 64);
     return res.status(500).json({ msg: err.message });
   }
 };

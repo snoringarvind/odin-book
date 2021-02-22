@@ -82,7 +82,7 @@ const ChatCard = ({
 
     axios_request({
       route: route,
-      data: "",
+      data: { last_msg: new Date().toISOString() },
       method: method,
       axios_error: cb_error,
       axios_response: cb_response,
@@ -104,7 +104,7 @@ const ChatCard = ({
 
     axios_request({
       route: route,
-      data: "",
+      data: { last_msg: new Date().toISOString() },
       method: method,
       axios_error: cb_error,
       axios_response: cb_response,

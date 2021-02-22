@@ -5,6 +5,8 @@ const async = require("async");
 const Post = require("../models/Post");
 const utils = require("../lib/utils");
 const Chat = require("../models/Chat");
+const ChatList = require("../models/ChatList");
+const Isread = require("../models/Isread");
 
 const { body, validationResult } = require("express-validator");
 
@@ -82,11 +84,23 @@ exports.user_signup = [
             messages: [],
           });
 
+          const chatList = new ChatList({
+            sender: user._id,
+            received: [],
+            sent: [],
+          });
+
+          const isread = new Isread({
+            sender: user._id,
+            users: [],
+          });
           async.parallel(
             {
               saved_user: (cb) => user.save(cb),
               saved_profile: (cb) => profile.save(cb),
               saved_chat: (cb) => chat.save(cb),
+              saved_chat_list: (cb) => chatList.save(cb),
+              saved_isread: (cb) => isread.save(cb),
             },
             (err, result) => {
               console.log(result);
@@ -97,6 +111,8 @@ exports.user_signup = [
                   new_user: result.saved_user._id,
                   new_profile_model: result.saved_profile._id,
                   new_chat_model: result.saved_chat._id,
+                  new_chat_list_model: result.saved_chat_list,
+                  new_isread_model: result.saved_isread,
                   jwtData: jwtData,
                 });
               }

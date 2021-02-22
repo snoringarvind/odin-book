@@ -71,9 +71,67 @@ const ChatCard = ({
     });
   };
 
+  //save my name in komal's (people from who I received message)
+  const save_received = () => {
+    const route = `/mychat/${jwtData.sub}/${userid}`;
+    const method = "PUT";
+
+    const cb_error = (err) => {};
+
+    const cb_response = (response) => {};
+
+    axios_request({
+      route: route,
+      data: "",
+      method: method,
+      axios_error: cb_error,
+      axios_response: cb_response,
+    });
+  };
+
+  //save Komal's name in my sent list.
+  //if she already in received then we don't need this function
+  //we can find this out with if the messages from both are not null
+  //we will not call this request if the length of messages<=2;
+  //we will call this only once because we need to delete the name from the list
+  const save_sent = () => {
+    const route = `/mychat/${userid}/${jwtData.sub}`;
+    const method = "PUT";
+
+    const cb_error = (err) => {};
+
+    const cb_response = (response) => {};
+
+    axios_request({
+      route: route,
+      data: "",
+      method: method,
+      axios_error: cb_error,
+      axios_response: cb_response,
+    });
+  };
+
+  const save_isread_false = () => {
+    const route = `/isreadfalse/${userid}`;
+    const method = "PUT";
+
+    const cb_error = (err) => {};
+
+    const cb_response = (response) => {};
+
+    axios_request({
+      route: route,
+      data: "",
+      method: method,
+      axios_response: cb_response,
+      axios_error: cb_error,
+    });
+  };
   useEffect(() => {
     if (state !== "") {
       save_messages_on_database();
+      save_received();
+      save_sent();
     }
   }, [submitMsg]);
 
@@ -97,6 +155,7 @@ const ChatCard = ({
                 if (state === "") {
                   return;
                 } else {
+                  save_isread_false();
                   submitHandler();
                 }
               }}

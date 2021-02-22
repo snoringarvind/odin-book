@@ -29,6 +29,7 @@ import UserPost from "../UserDetail/UserPost";
 import UserFriend from "../UserDetail/UserFriend";
 import { OdinBookContext } from "../Context";
 import Chat from "../Chat/Chat";
+import ChatList from "../ChatList/ChatList";
 
 const Home = () => {
   let location = useLocation();
@@ -111,7 +112,7 @@ const Home = () => {
 
               {/* mychat will show the list of conversations */}
               {/*for now keeping chat list aside */}
-              {/* <Navigation to="/mychat" label="fab fa-facebook-messenger" /> */}
+              <Navigation to="/mychat" label="fab fa-facebook-messenger" />
 
               {/* width 32% */}
               <div
@@ -154,16 +155,15 @@ const Home = () => {
             <Route path="/logout">
               <Logout />
             </Route>
-
             <Route exact path="/friends">
               <UserFriend path="myfriends" />
             </Route>
             <Route path="/chat">
               <Chat />
             </Route>
-            {/* <Route path="/mychat">
+            <Route path="/mychat">
               <ChatList />
-            </Route> */}
+            </Route>
           </>
         )}
 

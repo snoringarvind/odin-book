@@ -10,6 +10,8 @@ const postsController = require("../Controllers/postsController");
 const profileController = require("../Controllers/profileController");
 const userController = require("../Controllers/userController");
 const chatController = require("../Controllers/chatController");
+const chatListController = require("../Controllers/chatListController");
+const isreadController = require("../Controllers/isreadController");
 
 const utils = require("../lib/utils");
 
@@ -159,5 +161,24 @@ router.put("/chat/:userid", utils.verifyJwt, chatController.chat_put);
 router.get("/chat/:userid/:senderid", utils.verifyJwt, chatController.chat_get);
 
 //*get chat list
-router.get("/mychat", utils.verifyJwt, chatController.put_mychat_list);
+router.put(
+  "/mychat/:userid/:senderid",
+  utils.verifyJwt,
+  chatListController.put_mychat_list
+);
+router.get("/mychat", utils.verifyJwt, chatListController.get_mychat_list);
+
+//*isread;
+router.put(
+  "/isreadtrue/:userid",
+  utils.verifyJwt,
+  isreadController.put_isread_true
+);
+router.put(
+  "/isreadfalse/:senderid",
+  utils.verifyJwt,
+  isreadController.put_isread_false
+);
+
+router.get("/isread", utils.verifyJwt, isreadController.get_isread);
 module.exports = router;

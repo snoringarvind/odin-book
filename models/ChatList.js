@@ -15,19 +15,14 @@ const ChatListSchema = mongoose.Schema({
 
   //the  list of users from whom I received messages.
   //and also saving if I have read their messages or not
-  received: [
-    {
-      user: { type: mongoose.Schema.Types.ObjectId },
-      isread: [{ type: Boolean }],
-    },
-  ],
+  received: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 
   //this is the id we are also saving in 'Chat' model
   //the list of users to whom I have sent the messages.
   //*here we don one thing instead of saving all the users, we save only the names of the users who have not replied
   //so this way we won't have unnecessary duplicate names in recevived as well as sent
   // delete the user from sent once we get their reply.
-  sent: [{ type: mongoose.Schema.Types.ObjectId }],
+  sent: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 const ChatListModel = connection.model("ChatList", ChatListSchema);

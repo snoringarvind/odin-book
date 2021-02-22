@@ -56,6 +56,8 @@ const Chat = () => {
     h();
     // get_responses();
     // get_my_messages();
+
+    save_isreadtrue();
   }, []);
 
   // get the messages I sent to Komal
@@ -144,7 +146,21 @@ const Chat = () => {
     }
   }, [mymsgloading, responseloading]);
 
-  console.log(mymsgloading, responseloading);
+  const save_isreadtrue = () => {
+    const route = `/isreadtrue/${userid}`;
+    const method = "PUT";
+    const cb_error = (err) => {};
+
+    const cb_response = (response) => {};
+
+    axios_request({
+      route: route,
+      data: "",
+      method: method,
+      axios_error: cb_error,
+      axios_response: cb_response,
+    });
+  };
 
   useEffect(() => {
     window.scrollTo(0, document.body.scrollHeight);

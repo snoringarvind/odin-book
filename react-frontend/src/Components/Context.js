@@ -43,14 +43,10 @@ const OdinBookProvider = ({ children }) => {
   const [isRead, setIsRead] = useState([]);
   const [didMyChatListMount, setDidMyChatListMount] = useState(true);
 
-  //for isread change
-  const [isreadchange, setisreadchange] = useState(false);
-
   const [loading, setLoading] = useState(true);
 
   const [isAuth, setIsAuth] = useState(false);
 
-  const [isSocketSet, setisSocketSet] = useState(false);
   // let jwt = JSON.parse(localStorage.getItem("jwtData"));
   const [jwtData, setJwtData] = useState(
     JSON.parse(localStorage.getItem("jwtData"))
@@ -163,37 +159,12 @@ const OdinBookProvider = ({ children }) => {
       withCredentials: true,
     });
 
-    setisSocketSet(true);
     setSocket(socket12);
     console.log(loading);
     if (jwtData) {
       socket12.emit("join", jwtData.user);
     }
   }, []);
-
-  console.log(myChatList);
-  // useEffect(() => {
-  // if (isSocketSet) {
-  // socket.on("new_msg", (data) => {
-  //   const check = myChatList.findIndex(
-  //     (x) => x.user._id === data.from.userid
-  //   );
-  //   if (check !== -1) {
-  //     myChatList[check].last_msg = new Date().toISOString();
-  //   } else {
-  //     myChatList.push({
-  //       last_msg: new Date().toISOString(),
-  //       user: {
-  //         fname: data.from.fname,
-  //         lname: data.from.lname,
-  //         username: data.from.username,
-  //         userid: data.from.userid,
-  //       },
-  //     });
-  //   }
-  // });
-  // }
-  // }, [socket]);
 
   return (
     <OdinBookContext.Provider

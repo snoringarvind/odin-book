@@ -9,13 +9,9 @@ import ChatCard from "./ChatCard";
 const Chat = () => {
   const location = useLocation();
 
-  const {
-    axios_request,
-    jwtData,
-    socket,
-    myChatListValue,
-    isReadValue,
-  } = useContext(OdinBookContext);
+  const { axios_request, jwtData, socket, isReadValue } = useContext(
+    OdinBookContext
+  );
 
   //this detail are of the person on whose chat btn we clicked
   const fname = location.state.fname;
@@ -34,7 +30,6 @@ const Chat = () => {
 
   const [myMsg, setMyMsg] = useState([]);
 
-  const [myChatList, setMyChatList] = myChatListValue;
   const [isRead, setIsRead] = isReadValue;
 
   useEffect(() => {
@@ -169,13 +164,14 @@ const Chat = () => {
     });
 
     if (isRead.length > 0) {
-      console.log(isRead);
       const is_read_index = isRead.findIndex((x) => x.user === userid);
       if (is_read_index !== -1) {
         isRead[is_read_index].isread = [];
         isRead[is_read_index].isread.push(true);
+        setIsRead(isRead);
       }
     }
+    //else will be... there are no messages to set to read=true
   };
 
   useEffect(() => {

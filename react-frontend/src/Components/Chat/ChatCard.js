@@ -35,6 +35,7 @@ const ChatCard = ({
     setState(e.target.value);
   };
 
+  console.log(msgArr);
   const submitHandler = () => {
     // e.preventDefault();
 
@@ -104,6 +105,7 @@ const ChatCard = ({
     });
   };
 
+  //!we are doing save_received and save_sent from the user who sent message and not by socket.io because if the other user is not online then he wont be able to make updates on his sent_received object.
   //arvind to komal msg sent
   //save my name in komal's (people from who I received message)
   const save_received = () => {

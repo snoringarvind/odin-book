@@ -1,6 +1,7 @@
 .ChatList {
   display: block;
-  min-height: 89vh;
+  min-height: 88vh;
+  border: 1px solid red;
   margin: 2vh;
   border-radius: 5px;
   box-shadow: 0.3px 0.3px 4px lightgray, -0.3px -0.3px 4px lightgray,

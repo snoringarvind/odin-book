@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 
 import uniqid from "uniqid";
 import "./CommentForm.css";
@@ -7,24 +7,38 @@ import { OdinBookContext } from "../Context";
 const CommentForm = ({
   setComments,
   postIndex,
-  setNewCommentLoading,
   route,
   method,
   updateValue,
+  comments,
+  pp,
+  setpp,
 }) => {
   const { jwtData, axios_request } = useContext(OdinBookContext);
-  const [state, setState] = useState({
-    comment: updateValue ? updateValue : "",
-  });
+
+  console.log(comments);
+  const valueRef = useRef();
+
   const [errors, setErrors] = useState([]);
   const [error, setError] = useState("");
 
-  const post_comment = (e) => {
-    e.preventDefault();
-
-    console.log(updateValue);
+  const post_comment = () => {
     let element;
     element = document.querySelector(`#post-${postIndex}`);
+
+    comments.comment_list.push({
+      comment: valueRef.current.value,
+      user: {
+        fname: jwtData.fname,
+        lname: jwtData.lname,
+        username: jwtData.user,
+        _id: jwtData.sub,
+      },
+    });
+
+    setComments(comments);
+    setpp(!pp);
+
     console.log(postIndex);
 
     if (element) {
@@ -34,14 +48,9 @@ const CommentForm = ({
       }
     }
 
-    setNewCommentLoading(true);
+    // setNewCommentLoading(true);
 
     console.log(element);
-    if (element) {
-      const height = element.scrollHeight;
-      console.log(height);
-      element.scrollTop = height;
-    }
 
     const cb_error = (err) => {
       console.log(err);
@@ -54,34 +63,18 @@ const CommentForm = ({
     };
     const cb_response = (response) => {
       setErrors([]);
-      setState({ comment: "" });
-      console.log(response.data);
-      setComments(response.data);
-
-      if (element) {
-        const height = element.scrollHeight;
-        console.log(height);
-        console.log("helloooooo");
-        console.log(element);
-        element.scrollTop = height;
-      }
-
-      setNewCommentLoading(false);
     };
 
+    // console.log(valueRef.current.value);
     axios_request({
       route: route,
-      data: state,
+      data: { comment: valueRef.current.value },
       method: method,
       axios_error: cb_error,
       axios_response: cb_response,
     });
-    setState({ comment: "" });
-  };
 
-  const changeHandler = (e) => {
-    const { name, value } = e.target;
-    setState({ ...state, [name]: value });
+    valueRef.current.value = "";
   };
 
   const display_errors = () => {
@@ -98,6 +91,7 @@ const CommentForm = ({
     return <ul className="errors">{arr}</ul>;
   };
 
+  console.log(valueRef);
   return (
     <div className="CommentForm">
       {error && <div className="error">{error}</div>}
@@ -106,14 +100,26 @@ const CommentForm = ({
           <div className="profile-picture">
             {[jwtData.fname[0].toLowerCase()]}
           </div>
-          <form onSubmit={post_comment} autoComplete="off">
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              console.log(valueRef);
+
+              if (valueRef.current.value == "") {
+                return;
+              } else {
+                console.log(valueRef.current.value);
+                post_comment();
+              }
+            }}
+            autoComplete="off"
+          >
             <input
               type="text"
               name="comment"
               id="comment"
               placeholder="Write a comment..."
-              value={state.comment}
-              onChange={changeHandler}
+              ref={valueRef}
             />
           </form>
           {display_errors()}

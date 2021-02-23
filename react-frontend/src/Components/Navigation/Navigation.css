@@ -8,7 +8,11 @@
   height: 7vh;
   background-color: white;
   width: 100%;
-
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
   box-shadow: 0.3px 0.3px 5px lightgray;
 }
 
@@ -63,8 +67,8 @@
   position: relative;
 }
 .Home .Hamburger {
-  position: absolute;
-  top: 7.3vh;
+  position: fixed;
+  top: 7vh;
   right: 20px;
   box-shadow: 0.3px 0.3px 5px darkgray, -0.3px -0.3px 5px darkgray;
   /* border: 1px solid yellow; */

@@ -73,6 +73,12 @@
   align-items: center;
   box-shadow: 0.3px 0.3px 4px lightgray, -0.3px -0.3px 4px lightgray,
     0.3px 0.3px 4px lightgray, -0.3px -0.3px 4px lightgray;
+
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 7vh;
+  z-index: 1;
 }
 
 .Chat .profile-picture {

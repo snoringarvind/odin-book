@@ -5,7 +5,11 @@ const CommentCreate = ({
   postid,
   setComments,
   postIndex,
-  setNewCommentLoading,
+  // setNewCommentLoading,
+  comments,
+
+  pp,
+  setpp,
 }) => {
   const route = `/post/${postid}/comment`;
   const method = "POST";
@@ -16,7 +20,9 @@ const CommentCreate = ({
         postIndex={postIndex}
         route={route}
         method={method}
-        setNewCommentLoading={setNewCommentLoading}
+        comments={comments}
+        pp={pp}
+        setpp={setpp}
       />
     </div>
   );

@@ -36,6 +36,7 @@ const CommentCard = ({
   // console.log(commentOptionIndex);
   const [commentUpdateClick, setCommentUpdateClick] = useState(false);
   const [commentDeleteClick, setCommentDeleteClick] = useState(false);
+
   return (
     <div className="CommentCard">
       <div className="profile-picture">

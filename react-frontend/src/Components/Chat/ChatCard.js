@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import { OdinBookContext } from "../Context";
 import ChatMap from "./ChatMap";
 import uniqid from "uniqid";
@@ -19,21 +19,14 @@ const ChatCard = ({
   mymsgloading,
 }) => {
   console.log("chatcard");
-  const [state, setState] = useState("");
-  const [submitMsg, setSubmitMsg] = useState({});
 
-  const {
-    jwtData,
-    socket,
-    axios_request,
-    myChatListValue,
-    isReadValue,
-  } = useContext(OdinBookContext);
+  const valueRef = useRef();
+
+  const { jwtData, socket, axios_request, myChatListValue } = useContext(
+    OdinBookContext
+  );
 
   const [myChatList, setMyChatList] = myChatListValue;
-  const changeHandler = (e) => {
-    setState(e.target.value);
-  };
 
   console.log(msgArr);
   const submitHandler = () => {
@@ -43,11 +36,15 @@ const ChatCard = ({
 
     // setMyMsg([...myMsg, { msg: state, date: date }]);
 
-    setSubmitMsg({ message: state, createdAt: new Date().toISOString() });
+    // setSubmitMsg({ message: state, createdAt: new Date().toISOString() });
 
     setMsgArr([
       ...msgArr,
-      { message: state, createdAt: new Date().toISOString(), isOwner: true },
+      {
+        message: valueRef.current.value,
+        createdAt: new Date().toISOString(),
+        isOwner: true,
+      },
     ]);
 
     socket.emit("send_message", {
@@ -58,7 +55,7 @@ const ChatCard = ({
         username: jwtData.user,
         userid: jwtData.sub,
       },
-      message: state,
+      message: valueRef.current.value,
       createdAt: new Date().toISOString(),
     });
 
@@ -81,9 +78,11 @@ const ChatCard = ({
     );
 
     setMyChatList(sort_arr);
+
+    valueRef.current.value = "";
   };
 
-  const save_messages_on_database = () => {
+  const save_messages_on_database = (msg) => {
     const route = `/chat/${userid}`;
     const method = "PUT";
 
@@ -98,7 +97,7 @@ const ChatCard = ({
 
     axios_request({
       route: route,
-      data: submitMsg,
+      data: msg,
       method: method,
       axios_error: cb_error,
       axios_response: cb_response,
@@ -168,14 +167,7 @@ const ChatCard = ({
       axios_error: cb_error,
     });
   };
-  useEffect(() => {
-    if (state !== "") {
-      save_messages_on_database();
-      save_received();
-      save_sent();
-    }
-  }, [submitMsg]);
-
+  console.log(valueRef);
   return (
     <div className="ChatCard">
       <div className="head-top">
@@ -187,16 +179,28 @@ const ChatCard = ({
       </div>
       <form>
         <div className="form-group">
-          <input type="text" onChange={changeHandler} name="msg" id="msg" />
+          <input
+            type="text"
+            // onChange={changeHandler}
+            ref={valueRef}
+            name="msg"
+            id="msg"
+          />
 
           <div className="send-btn">
             <button
               onClick={(e) => {
                 e.preventDefault();
-                if (state === "") {
+                if (valueRef.current.value === "") {
                   return;
                 } else {
                   save_isread_false();
+                  save_received();
+                  save_sent();
+                  save_messages_on_database({
+                    message: valueRef.current.value,
+                    createdAt: new Date().toISOString(),
+                  });
                   submitHandler();
                 }
               }}

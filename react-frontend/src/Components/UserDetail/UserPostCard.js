@@ -33,7 +33,7 @@ const UserPostCard = ({
   const [comments, setComments] = useState([]);
   const [commentIconClicked, setCommentIconClicked] = useState(false);
   const [commentsLoading, setCommentsLoading] = useState(true);
-  const [newCommentLoading, setNewCommentLoading] = useState(false);
+  // const [newCommentLoading, setNewCommentLoading] = useState(false);
   const [onlyOneClick, setonlyOneClick] = useState(true);
 
   const [commentOptionIndex, setCommentOptionIndex] = useState(null);
@@ -43,10 +43,12 @@ const UserPostCard = ({
   let fname;
   let lname;
   let username;
+  let userid;
   if (path == "userpost") {
     fname = location.state.fname;
     lname = location.state.lname;
     username = location.state.username;
+    userid = location.state.userid;
   }
 
   const like_post = (postid) => {
@@ -116,7 +118,6 @@ const UserPostCard = ({
     );
   }, []);
   // console.log(comments);
-
   return (
     <div className="UserPostCard">
       <div className="head">
@@ -303,8 +304,8 @@ const UserPostCard = ({
               ))}
             </>
           ))}
-
-        <div>{newCommentLoading && "loading..."}</div>
+        {/* 
+        <div>{newCommentLoading && "loading..."}</div> */}
       </div>
       {commentIconClicked && (
         <CommentCreate
@@ -312,8 +313,9 @@ const UserPostCard = ({
           key={uniqid()}
           setComments={setComments}
           comments={comments}
-          setNewCommentLoading={setNewCommentLoading}
           postIndex={index}
+          pp={pp}
+          setpp={setpp}
         />
       )}
     </div>

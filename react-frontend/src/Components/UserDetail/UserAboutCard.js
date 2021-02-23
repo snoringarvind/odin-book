@@ -11,8 +11,6 @@ const UseraAboutCard = ({
   setResult,
   ee,
   setee,
-  // tooltip,
-  // setTooltip,
   jwtData,
   userid,
 }) => {

@@ -3,15 +3,29 @@ import { OdinBookContext } from "../Context";
 import ChatListCard from "./ChatListCard";
 import uniqid from "uniqid";
 import "./ChatList.css";
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://localhost:3000";
 
 const ChatList = () => {
-  const { axios_request, jwtData } = useContext(OdinBookContext);
+  const {
+    axios_request,
+    jwtData,
+    myChatListValue,
+    didMyChatListMountValue,
+    isReadValue,
+    socket,
+  } = useContext(OdinBookContext);
 
-  const [chatListResponse, setChatListResponse] = useState([]);
-  const [isRead, setIsRead] = useState([]);
+  const [isRead, setIsRead] = isReadValue;
+
+  const [myChatList, setMyChatList] = myChatListValue;
+  const [didMyChatListMount, setDidMyChatListMount] = didMyChatListMountValue;
 
   const [chatListLoading, setChatListLoading] = useState(true);
   const [isreadLoading, setIsreadLoading] = useState(true);
+
+  const [tempIsread, settempIsread] = useState([]);
+  const [ischange, setischange] = useState(false);
 
   const get_chat_list = () => {
     const route = `/mychat`;
@@ -43,7 +57,7 @@ const ChatList = () => {
         return b.last_msg < a.last_msg ? -1 : b.last_msg > a.last_msg ? 1 : 0;
       });
 
-      setChatListResponse(sort_arr);
+      setMyChatList(sort_arr);
 
       setChatListLoading(false);
     };
@@ -63,8 +77,8 @@ const ChatList = () => {
 
     const cb_error = (err) => {};
     const cb_response = (response) => {
-      console.log(response);
-      setIsRead(response.data);
+      console.log(response.data.users);
+      setIsRead(response.data.users);
       setIsreadLoading(false);
     };
 
@@ -78,16 +92,76 @@ const ChatList = () => {
   };
 
   useEffect(() => {
-    get_chat_list();
-    get_isread();
-  }, []);
+    console.log(didMyChatListMount);
+    if (didMyChatListMount) {
+      get_chat_list();
+      get_isread();
+      setDidMyChatListMount(false);
+    } else {
+      setIsreadLoading(false);
+      setChatListLoading(false);
+    }
+  }, [ischange]);
 
-  console.log(chatListResponse);
+  useEffect(() => {
+    socket.on("new_msg", (data) => {
+      console.log(data);
+
+      settempIsread(data);
+    });
+  }, [socket]);
+
+  useEffect(() => {
+    if (tempIsread.length !== 0) {
+      console.log(tempIsread);
+      if (isRead.length > 0) {
+        const is_read_index = isRead.findIndex(
+          (x) => x.user === tempIsread.from.userid
+        );
+        if (is_read_index !== -1) {
+          if (isRead[is_read_index].isread[0] === true) {
+            isRead[is_read_index].isread.splice(0, 1);
+          }
+          isRead[is_read_index].isread.push(false);
+        } else {
+          isRead.push({ user: tempIsread.from.userid, isread: [false] });
+        }
+        setIsRead(isRead);
+      }
+
+      const check = myChatList.findIndex(
+        (x) => x.user._id === tempIsread.from.userid
+      );
+      if (check !== -1) {
+        myChatList[check].last_msg = new Date().toISOString();
+      } else {
+        myChatList.push({
+          last_msg: new Date().toISOString(),
+          user: {
+            fname: tempIsread.from.fname,
+            lname: tempIsread.from.lname,
+            username: tempIsread.from.username,
+            userid: tempIsread.from.userid,
+          },
+        });
+      }
+
+      const sort_arr = myChatList.sort((a, b) =>
+        b.last_msg < a.last_msg ? -1 : b.last_msg > a.last_msg ? 1 : 0
+      );
+
+      setMyChatList(sort_arr);
+      setischange(!ischange);
+    }
+  }, [tempIsread]);
+
+  console.log(myChatList);
+  console.log(isRead);
   return (
     <div className="ChatList">
       {!chatListLoading &&
         !isreadLoading &&
-        chatListResponse.map((value, index) => (
+        myChatList.map((value, index) => (
           <ChatListCard
             value={value}
             index={index}

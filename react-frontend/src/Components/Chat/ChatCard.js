@@ -22,7 +22,15 @@ const ChatCard = ({
   const [state, setState] = useState("");
   const [submitMsg, setSubmitMsg] = useState({});
 
-  const { jwtData, socket, axios_request } = useContext(OdinBookContext);
+  const {
+    jwtData,
+    socket,
+    axios_request,
+    myChatListValue,
+    isReadValue,
+  } = useContext(OdinBookContext);
+
+  const [myChatList, setMyChatList] = myChatListValue;
   const changeHandler = (e) => {
     setState(e.target.value);
   };
@@ -43,10 +51,35 @@ const ChatCard = ({
 
     socket.emit("send_message", {
       to: username,
-      from: jwtData.user,
+      from: {
+        fname: jwtData.fname,
+        lname: jwtData.lname,
+        username: jwtData.user,
+        userid: jwtData.sub,
+      },
       message: state,
       createdAt: new Date().toISOString(),
     });
+
+    const check = myChatList.findIndex((x) => x.user._id == userid);
+    if (check !== -1) {
+      myChatList[check].last_msg = new Date().toString();
+    } else {
+      myChatList.push({
+        last_msg: new Date().toISOString(),
+        user: {
+          fname: fname,
+          lname: lname,
+          username: username,
+          userid: userid,
+        },
+      });
+    }
+    const sort_arr = myChatList.sort((a, b) =>
+      b.last_msg < a.last_msg ? -1 : b.last_msg > a.last_msg ? 1 : 0
+    );
+
+    setMyChatList(sort_arr);
   };
 
   const save_messages_on_database = () => {
@@ -71,11 +104,13 @@ const ChatCard = ({
     });
   };
 
+  //arvind to komal msg sent
   //save my name in komal's (people from who I received message)
   const save_received = () => {
     const route = `/mychat/${jwtData.sub}/${userid}`;
     const method = "PUT";
 
+    console.log("hello");
     const cb_error = (err) => {};
 
     const cb_response = (response) => {};
@@ -98,6 +133,7 @@ const ChatCard = ({
     const route = `/mychat/${userid}/${jwtData.sub}`;
     const method = "PUT";
 
+    console.log("hello");
     const cb_error = (err) => {};
 
     const cb_response = (response) => {};
@@ -109,12 +145,15 @@ const ChatCard = ({
       axios_error: cb_error,
       axios_response: cb_response,
     });
+
+    console.log(userid);
   };
 
   const save_isread_false = () => {
     const route = `/isreadfalse/${userid}`;
     const method = "PUT";
 
+    console.log("hello");
     const cb_error = (err) => {};
 
     const cb_response = (response) => {};

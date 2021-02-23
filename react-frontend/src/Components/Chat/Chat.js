@@ -9,7 +9,13 @@ import ChatCard from "./ChatCard";
 const Chat = () => {
   const location = useLocation();
 
-  const { axios_request, jwtData, socket } = useContext(OdinBookContext);
+  const {
+    axios_request,
+    jwtData,
+    socket,
+    myChatListValue,
+    isReadValue,
+  } = useContext(OdinBookContext);
 
   //this detail are of the person on whose chat btn we clicked
   const fname = location.state.fname;
@@ -28,17 +34,18 @@ const Chat = () => {
 
   const [myMsg, setMyMsg] = useState([]);
 
+  const [myChatList, setMyChatList] = myChatListValue;
+  const [isRead, setIsRead] = isReadValue;
+
   useEffect(() => {
     socket.on("new_msg", (data) => {
-      console.log(data.msg);
+      console.log(data);
 
       setTempResponse([
         ...tempResponse,
         { message: data.message, createdAt: data.createdAt },
       ]);
     });
-
-    // console.log(curResponse);
   }, [socket]);
 
   console.log(msgArr);
@@ -133,7 +140,7 @@ const Chat = () => {
       console.log(arr);
 
       let sorted = arr.sort((a, b) => {
-        console.log(a, b);
+        // console.log(a, b);
         return a.createdAt < b.createdAt
           ? -1
           : a.createdAt > b.createdAt
@@ -160,6 +167,15 @@ const Chat = () => {
       axios_error: cb_error,
       axios_response: cb_response,
     });
+
+    if (isRead.length > 0) {
+      console.log(isRead);
+      const is_read_index = isRead.findIndex((x) => x.user === userid);
+      if (is_read_index !== -1) {
+        isRead[is_read_index].isread = [];
+        isRead[is_read_index].isread.push(true);
+      }
+    }
   };
 
   useEffect(() => {

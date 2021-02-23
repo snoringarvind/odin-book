@@ -4,15 +4,17 @@ import { Link } from "react-router-dom";
 
 const ChatListCard = ({ value, index, isRead }) => {
   let no_unread_msgs;
-  for (let i = 0; i < isRead.users.length; i++) {
-    if (isRead.users[i].user === value.user._id) {
-      if (isRead.users[i].isread[0] == true) {
+  for (let i = 0; i < isRead.length; i++) {
+    if (isRead[i].user === value.user._id) {
+      if (isRead[i].isread[0] == true) {
         break;
       } else {
-        no_unread_msgs = isRead.users[i].isread.length;
+        no_unread_msgs = isRead[i].isread.length;
       }
     }
   }
+
+  console.log(isRead);
 
   const minute = new Date(value.last_msg).getMinutes();
   const hour = new Date(value.last_msg).getHours();

@@ -50,6 +50,9 @@ exports.put_isread_false = async (req, res, next) => {
     // console.log(in_users_index, 43);
 
     if (in_users_index !== -1) {
+      if (query.users[in_users_index].isread[0] === true) {
+        query.users[in_users_index].isread.splice(0, 1);
+      }
       query.users[in_users_index].isread.push(false);
     } else {
       query.users.push({ user: res.locals.user.sub, isread: false });

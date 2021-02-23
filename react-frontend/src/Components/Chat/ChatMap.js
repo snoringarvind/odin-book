@@ -40,7 +40,7 @@ const ChatMap = ({ value, index }) => {
                   :
                 </span>
                 <span>
-                  {d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes()}{" "}
+                  {d.getMinutes() < 10 ? "0" + d.getMinutes() : d.getMinutes()}
                 </span>
                 <span>{d.getHours() > 12 ? "pm" : "am"}</span>
               </div>

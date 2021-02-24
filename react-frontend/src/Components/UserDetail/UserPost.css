@@ -198,14 +198,14 @@
 .UserPost .empty-posts {
   /* border: 1px solid; */
   margin: 10px 20px;
-  background-color: white;
+  /* background-color: white; */
   height: 20vh;
   display: flex;
   justify-content: center;
   border-radius: 4px;
   font-size: 1.3rem;
   align-items: center;
-  box-shadow: 0.3px 0.3px 4px darkgray, -0.3px -0.3px 4px darkgray;
+  /* box-shadow: 0.3px 0.3px 4px darkgray, -0.3px -0.3px 4px darkgray; */
 }
 
 .UserPost:not(.UserPost.myaccount) {

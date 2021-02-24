@@ -65,7 +65,7 @@
 }
 
 .SearchResult .username {
-  color: darkgray;
+  color: rgb(70, 70, 70);
 }
 
 .SearchResult .add-btn,

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 import "./Signup.css";
@@ -12,12 +12,10 @@ const Signup = () => {
   const [errors, setErrors] = useState([]);
   const [postLoading, setPostLoading] = useState(false);
 
-  const [state, setState] = useState({
-    fname: "",
-    lname: "",
-    username: "",
-    password: "",
-  });
+  const ref_fname = useRef();
+  const ref_lname = useRef();
+  const ref_username = useRef();
+  const ref_password = useRef();
 
   const axios_signup = () => {
     setPostLoading(true);
@@ -40,16 +38,16 @@ const Signup = () => {
 
     axios_request({
       route: signup_route,
-      data: state,
+      data: {
+        fname: ref_fname.current.value,
+        lname: ref_lname.current.value,
+        username: ref_username.current.value,
+        password: ref_password.current.value,
+      },
       method: signup_method,
       axios_error: cb_error,
       axios_response: cb_response,
     });
-  };
-
-  const changeHandler = (e) => {
-    const { name, value } = e.target;
-    setState({ ...state, [name]: value });
   };
 
   const display_errors = () => {
@@ -79,8 +77,7 @@ const Signup = () => {
               name="fname"
               id="fname"
               placeholder="Enter your First Name"
-              onChange={changeHandler}
-              value={state.fname}
+              ref={ref_fname}
             />
           </div>
           <div className="form-group">
@@ -90,8 +87,7 @@ const Signup = () => {
               name="lname"
               id="lname"
               placeholder="Enter your Last Name"
-              onChange={changeHandler}
-              value={state.lname}
+              ref={ref_lname}
             />
           </div>
           <div className="form-group">
@@ -101,8 +97,7 @@ const Signup = () => {
               name="username"
               id="username"
               placeholder="Enter your username"
-              onChange={changeHandler}
-              value={state.username}
+              ref={ref_username}
             />
           </div>
           <div className="form-group">
@@ -112,8 +107,7 @@ const Signup = () => {
               name="password"
               id="password"
               placeholder="Enter your password"
-              onChange={(e) => changeHandler(e)}
-              value={state.password}
+              ref={ref_password}
             />
           </div>
           {display_errors()}

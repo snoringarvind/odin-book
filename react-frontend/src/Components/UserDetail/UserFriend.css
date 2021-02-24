@@ -23,11 +23,14 @@
   font-weight: bold;
 }
 .UserFriend {
-  margin: 2vh;
+  /* min-height: 85vh; */
+  margin: 9vh 2vh 2vh 2vh;
+  /* overflow-y: auto; */
+  /* min-height: 89vh; */
   background-color: white;
   border-radius: 5px;
-  /* min-height: 83vh; */
-  /* border: 1px solid lightgray; */
+  min-height: 91vh;
+  /* border: 1px solid blue; */
   padding: 20px;
   box-shadow: 0.3px 0.3px 4px lightgray, -0.3px -0.3px 4px lightgray,
     0.3px 0.3px 4px lightgray, -0.3px -0.3px 4px lightgray;
@@ -90,4 +93,27 @@
 .UserFriend .add-btn:hover {
   transform: scale(1.01);
   background-color: lightgray;
+}
+
+.UserFriend:not(.UserFriend.myaccount) {
+  overflow-y: auto;
+  min-height: 89vh;
+}
+.UserFriend.myaccount {
+  /* border: 1px solid green; */
+  margin-top: 0;
+  overflow-y: hidden;
+}
+
+.UserFriend .empty-friends {
+  margin: 10px 20px;
+  background-color: white;
+  /* height: 20vh; */
+  padding: 20px 0px 20px 10px;
+  /* display: flex; */
+  /* justify-content: center; */
+  border-radius: 4px;
+  font-size: 1.1rem;
+  /* align-items: center; */
+  /* box-shadow: 0.3px 0.3px 4px darkgray, -0.3px -0.3px 4px darkgray; */
 }

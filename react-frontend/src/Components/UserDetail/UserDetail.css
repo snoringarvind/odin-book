@@ -45,3 +45,9 @@
   display: flex;
   align-items: center;
 }
+
+.UserDetail {
+  margin-top: 7vh;
+  height: 93vh;
+  overflow-y: auto;
+}

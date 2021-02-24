@@ -13,7 +13,7 @@ const Logout = () => {
     <div className="Logout">
       {localStorage.clear()}
 
-      {/* {window.location.reload()} */}
+      {window.location.reload()}
     </div>
   );
 };

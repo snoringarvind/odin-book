@@ -1,26 +1,28 @@
 import { concatSeries } from "async";
-import React, { useContext, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import { Link, Redirect, useHistory, useParams } from "react-router-dom";
 import { OdinBookContext } from "../Context";
 import "./SearchBar.css";
 
 const SearchBar = () => {
-  const { searchBarStateValue, searchValue } = useContext(OdinBookContext);
-  const [searchBarState, setSearchBarState] = searchBarStateValue;
+  const { searchValue } = useContext(OdinBookContext);
   const [searchValueChange, setSearchValueChange] = searchValue;
 
   const history = useHistory();
 
-  const changeHandler = (e) => {
-    const { name, value } = e.target;
-    setSearchBarState({ ...searchBarState, [name]: value });
-  };
-
   const submitHandler = (e) => {
     e.preventDefault();
+    console.log(ref_name.current.value);
     setSearchValueChange(true);
-    return history.push(`/search/${searchBarState.search}`);
+    if (ref_name.current.value === "") {
+      return;
+    } else {
+      console.log(ref_name.current.value);
+      return history.push(`/search/${ref_name.current.value}`);
+    }
   };
+
+  const ref_name = useRef();
 
   return (
     <div className="SearchBar">
@@ -29,8 +31,7 @@ const SearchBar = () => {
           type="text"
           id="search"
           name="search"
-          onChange={changeHandler}
-          value={searchBarState.search}
+          ref={ref_name}
           placeholder="Search Odinbook"
         />
       </form>

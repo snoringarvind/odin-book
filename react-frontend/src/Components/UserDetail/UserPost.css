@@ -121,6 +121,7 @@
   /* border: 1px solid green; */
   font-weight: bold;
   font-family: cursive;
+  font-size: 1.5rem;
 }
 
 .UserPost .post-content {
@@ -205,4 +206,19 @@
   font-size: 1.3rem;
   align-items: center;
   box-shadow: 0.3px 0.3px 4px darkgray, -0.3px -0.3px 4px darkgray;
+}
+
+.UserPost:not(.UserPost.myaccount) {
+  /* border: 1px solid red; */
+  margin-top: 7vh;
+  min-height: 93vh;
+  overflow-y: auto;
+}
+
+.UserPost.myaccount {
+  margin-top: 0;
+  /* border: 1px solid green; */
+  overflow-y: hidden;
+  /* min-height: 100vh; */
+  /* height: 100vh; */
 }

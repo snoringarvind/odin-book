@@ -1,11 +1,11 @@
 .Home {
   /* width: 80vw; */
-  min-height: 93vh;
-  border: 1px solid black;
+  /* min-height: 93vh; */
+  /* border: 1px solid black; */
   margin-left: auto;
   margin-right: auto;
   position: relative;
-  margin-top: 7vh;
+  /* margin-top: 7vh; */
   /* background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%); */
 }
 

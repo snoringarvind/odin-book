@@ -36,13 +36,13 @@ const ChatList = () => {
     };
 
     const cb_response = (response) => {
-      console.log(response);
+      // console.log(response);
       const a = response.data.received;
       const b = response.data.sent;
-      console.log(b);
+      // console.log(b);
       if (b.length > 0) {
         a.forEach((value) => {
-          console.log(value);
+          // console.log(value);
           const dupl_index = b.findIndex((x) => x.user._id === value.user._id);
           if (dupl_index !== -1) {
             b.splice(dupl_index, 1);
@@ -53,7 +53,7 @@ const ChatList = () => {
       const c = [...a, ...b];
 
       const sort_arr = c.sort((a, b) => {
-        console.log(a.last_msg);
+        // console.log(a.last_msg);
         return b.last_msg < a.last_msg ? -1 : b.last_msg > a.last_msg ? 1 : 0;
       });
 
@@ -77,7 +77,7 @@ const ChatList = () => {
 
     const cb_error = (err) => {};
     const cb_response = (response) => {
-      console.log(response.data.users);
+      // console.log(response.data.users);
       setIsRead(response.data.users);
       setIsreadLoading(false);
     };
@@ -92,7 +92,7 @@ const ChatList = () => {
   };
 
   useEffect(() => {
-    console.log(didMyChatListMount);
+    // console.log(didMyChatListMount);
     if (didMyChatListMount) {
       get_chat_list();
       get_isread();
@@ -105,7 +105,7 @@ const ChatList = () => {
 
   useEffect(() => {
     socket.on("new_msg", (data) => {
-      console.log(data);
+      // console.log(data);
 
       settempIsread(data);
     });
@@ -113,25 +113,28 @@ const ChatList = () => {
 
   useEffect(() => {
     if (tempIsread.length !== 0) {
-      console.log(tempIsread);
-      if (isRead.length > 0) {
-        const is_read_index = isRead.findIndex(
-          (x) => x.user === tempIsread.from.userid
-        );
-        if (is_read_index !== -1) {
-          if (isRead[is_read_index].isread[0] === true) {
-            isRead[is_read_index].isread.splice(0, 1);
-          }
-          isRead[is_read_index].isread.push(false);
-        } else {
-          isRead.push({ user: tempIsread.from.userid, isread: [false] });
+      console.log("tempisread=", tempIsread);
+      console.log("isread=", isRead);
+
+      const is_read_index = isRead.findIndex(
+        (x) => x.user === tempIsread.from.userid
+      );
+      console.log("is-read-index=", is_read_index);
+      if (is_read_index !== -1) {
+        if (isRead[is_read_index].isread[0] === true) {
+          isRead[is_read_index].isread.splice(0, 1);
         }
-        setIsRead(isRead);
+        isRead[is_read_index].isread.push(false);
+      } else {
+        isRead.push({ user: tempIsread.from.userid, isread: [false] });
       }
+      setIsRead(isRead);
 
       const check = myChatList.findIndex(
         (x) => x.user._id === tempIsread.from.userid
       );
+      console.log("check=", check);
+      console.log(myChatList);
       if (check !== -1) {
         myChatList[check].last_msg = new Date().toISOString();
       } else {
@@ -141,7 +144,7 @@ const ChatList = () => {
             fname: tempIsread.from.fname,
             lname: tempIsread.from.lname,
             username: tempIsread.from.username,
-            userid: tempIsread.from.userid,
+            _id: tempIsread.from.userid,
           },
         });
       }
@@ -156,18 +159,31 @@ const ChatList = () => {
   }, [tempIsread]);
 
   console.log(myChatList);
-  console.log(isRead);
+  // console.log(isRead);
   return (
     <div className="ChatList">
+      {chatListLoading && isreadLoading && (
+        <div className="loading-container">
+          <div className="spinner-border loading" role="status">
+            <span className="sr-only"></span>
+          </div>
+        </div>
+      )}
       {!chatListLoading &&
         !isreadLoading &&
-        myChatList.map((value, index) => (
-          <ChatListCard
-            value={value}
-            index={index}
-            key={uniqid()}
-            isRead={isRead}
-          />
+        (myChatList.length === 0 ? (
+          <div className="empty-chatlist">
+            Please start a conversation with someone to see it here.
+          </div>
+        ) : (
+          myChatList.map((value, index) => (
+            <ChatListCard
+              value={value}
+              index={index}
+              key={uniqid()}
+              isRead={isRead}
+            />
+          ))
         ))}
     </div>
   );

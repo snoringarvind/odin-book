@@ -15,11 +15,16 @@
   font-weight: bold;
 }
 .SearchResult {
-  margin: 2vh;
+  margin: 9vh 2vh 2vh 2vh;
+  height: 89vh;
+  overflow-y: auto;
   background-color: white;
   border-radius: 5px;
   /* min-height: 83vh; */
-  border: 1px solid lightgray;
+  /* border: 1px solid lightgray; */
+
+  box-shadow: 0.3px 0.3px 4px lightgray, -0.3px -0.3px 4px lightgray,
+    0.3px 0.3px 4px lightgray, -0.3px -0.3px 4px lightgray;
   padding: 20px;
 }
 .SearchResult .profile-picture {

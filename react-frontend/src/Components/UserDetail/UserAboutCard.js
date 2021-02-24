@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { OdinBookContext } from "../Context";
 
@@ -23,6 +23,12 @@ const UseraAboutCard = ({
   const [empty_name, setEmpty_name] = useState(false);
 
   const [state, setState] = useState({ [objkey]: ee[objkey] });
+
+  const arr = { [objkey]: useRef() };
+  console.log(arr);
+
+  console.log(objkey);
+
   // console.log(state);
   const str = {
     // fname: "First Name",

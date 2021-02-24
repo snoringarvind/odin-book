@@ -8,6 +8,7 @@ import "./UserPost.css";
 import MyPostUpdate from "../MyPosts/MyPostUpdate";
 import UserPostCard from "./UserPostCard";
 import MyPostDelete from "../MyPosts/MyPostDelete";
+import WelcomeMsg from "../WelcomeMsg/WelcomeMsg";
 
 const UserPost = ({ path }) => {
   // console.log(path);
@@ -18,15 +19,19 @@ const UserPost = ({ path }) => {
     didMyPostsMountValue,
     myNewsFeedValue,
     didMyNewsFeedMountValue,
+    myFriendsValue,
   } = useContext(OdinBookContext);
   const [myPosts, setMyPosts] = myPostsValue;
   const [myNewsfeed, setMyNewsFeed] = myNewsFeedValue;
   const [didMyNewsFeedMount, setDidMyNewsFeedMount] = didMyNewsFeedMountValue;
   const [didMyPostsMount, setDidMyPostsMount] = didMyPostsMountValue;
 
+  const [myFriends, setMyFriends] = myFriendsValue;
+
   const [error, setError] = useState("");
   const [getLoading, setGetLoading] = useState(true);
 
+  const [isWelcomeMsgClick, setIsWelcomeMsgClick] = useState(false);
   //herer result is the post list
   const [result, setResult] = useState([]);
 
@@ -49,8 +54,9 @@ const UserPost = ({ path }) => {
 
   const location = useLocation();
 
-  // console.log(location);
-
+  console.log(location);
+  const history = useHistory();
+  console.log(history);
   //putting in an if-block since in news feed location.state will be undefined
   let userid;
   let fname;
@@ -100,6 +106,7 @@ const UserPost = ({ path }) => {
   };
 
   // console.log(path);
+  console.log(updateIndex);
 
   useEffect(() => {
     // console.log(userid);
@@ -133,14 +140,14 @@ const UserPost = ({ path }) => {
         // console.log("hello");
       }
     }
-
-    // setLikeLength([]);
-    // console.log(getLoading);
-
-    //if the owner then show the post form
-    //here owner is the logged in user
-    //and the userid is of the person we are browing which will be in the url
   }, [location.pathname]);
+
+  // useEffect(() => {
+  //   if (path === "newsfeed") {
+  //     get_posts();
+  //     setIsOwner(false);
+  //   }
+  // }, [myFriends]);
 
   // console.log(getLoading);
   // console.log(path);
@@ -159,8 +166,9 @@ const UserPost = ({ path }) => {
     // setNewPost([...result, response.data.save_post]);
     // console.log(response.data.save_post);
     // console.log(result);
-    // console.log(response);
+    console.log("response", response);
     setResult([response.data].concat(result));
+    setMyPosts([response.data].concat(myPosts));
     console.log([response.data].concat(result));
 
     // result.unshift(response.data);
@@ -170,6 +178,8 @@ const UserPost = ({ path }) => {
     // console.log(response);
     result[updateIndex] = response.data;
     setResult(result);
+    myPosts[updateIndex] = response.data;
+    setMyPosts(myPosts);
   };
 
   //uding updateindex for update and delete same
@@ -178,8 +188,12 @@ const UserPost = ({ path }) => {
     //as soon as we get the response delete the post from the screen
 
     console.log(result);
+    console.log(updateIndex);
     result.splice(updateIndex, 1);
     setResult(result);
+
+    myPosts.splice(updateIndex, 1);
+    setMyPosts(myPosts);
 
     //we are doing this here bcoz jab tak child component mein value change nahi hota parent component re-render nahi hoga.
     //MyPostDelete meinn setDelteClick mein same component mein hi deleteClick value change karna pad raha tha isliye UserPost re-render nahi ho raha tha.
@@ -192,11 +206,42 @@ const UserPost = ({ path }) => {
   const [likeClick, setLikeClick] = useState([]);
   const [UserLikedIndex, setUsersLikedIndex] = useState(null);
 
+  // console.log(myPosts);
+  // console.log(path);
+  // console.log(location.pathname);
+
+  console.log(location);
+  // console.log(location.state.from);
+  console.log(path);
+
+  useEffect(() => {
+    if (location.state) {
+      if (
+        location.state.from === "/login" ||
+        location.state.from === "/signup"
+      ) {
+        const elemnt_welcome_msg = document.querySelector(
+          "#welcome_msg_unique"
+        );
+        if (elemnt_welcome_msg) {
+          elemnt_welcome_msg.addEventListener("click", (e) => {
+            setIsWelcomeMsgClick(true);
+          });
+        }
+      }
+    }
+  }, []);
   return (
-    <div className="UserPost">
+    <div className={path == "userpost" ? "UserPost myaccount" : "UserPost"}>
       {/* doing path=='newsfeed' herer bcoz for a second it shows loading even if we are loading the data from state */}
       {/* maybe we will show loading even for newsfeed for a second. */}
       {/* {getLoading && path !== "newsfeed" && "loading"} */}
+      {!isWelcomeMsgClick &&
+        location.state &&
+        (location.state.from === "/login" ||
+          location.state.from === "/signup") &&
+        path === "newsfeed" && <WelcomeMsg />}
+
       {getLoading && (
         <div className="loading-container">
           <div className="spinner-border loading" role="status">

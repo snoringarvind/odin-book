@@ -7,12 +7,9 @@ import axios from "axios";
 import SearchResultCard from "./SearchResultCard";
 
 const SearchResult = () => {
-  const { searchValue, searchBarStateValue, axios_request } = useContext(
-    OdinBookContext
-  );
+  const { searchValue, axios_request } = useContext(OdinBookContext);
 
   const [searchValueChange, setSearchValueChange] = searchValue;
-  const [searchBarState, setSearchBarState] = searchBarStateValue;
 
   const [friendBtn, setFriendBtn] = useState([]);
 
@@ -20,17 +17,18 @@ const SearchResult = () => {
 
   const [error, setError] = useState("");
 
-  const user_list_route = `/user/search/${params.name}`;
-
   const [getLoading, setGetLoading] = useState(true);
 
   const [result, setResult] = useState([]);
 
-  const user_list_method = "GET";
   const make_server_request = () => {
     // friendBtn.splice(0, friendBtn.length);
     // setFriendBtn(friendBtn);
     // console.log(friendBtn);
+
+    const user_list_route = `/user/search/${params.name}`;
+    const user_list_method = "GET";
+
     const cb_error = (err) => {
       if (err.response) {
         console.log(err.response.data);
@@ -43,12 +41,13 @@ const SearchResult = () => {
     const cb_response = (response) => {
       console.log(response);
       setGetLoading(false);
-      setSearchBarState({ search: "" });
       if (!Array.isArray(response.data)) {
         setResult([response.data]);
       } else {
         setResult(response.data);
       }
+      const h = Array(response.data.length).fill(false);
+      setFriendBtn(h);
     };
 
     axios_request({
@@ -63,7 +62,6 @@ const SearchResult = () => {
   useEffect(() => {
     if (searchValueChange === true) {
       make_server_request();
-      // get_my_friend_list();
 
       setSearchValueChange(false);
     }
@@ -72,12 +70,14 @@ const SearchResult = () => {
   useEffect(() => {
     if (!searchValueChange) {
       if (params) {
+        // console.log("skdksjdskdjskdjsdk");
+        //to prefill the search bar with the value in the url incase the user refrehes the page
+        const element = document.querySelector("#search");
+        element.value = params.name;
+        // console.log(params);
         make_server_request();
-        // get_my_friend_list();
       }
     }
-    //to prefil the search bar in case the user realoads the page
-    setSearchBarState({ search: params.name });
   }, []);
 
   let arrg = [];

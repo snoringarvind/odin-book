@@ -15,8 +15,8 @@ const ChatCard = ({
   // setResponse,
   msgArr,
   setMsgArr,
-  responseLoading,
-  mymsgloading,
+  // responseLoading,
+  // mymsgloading,
 }) => {
   console.log("chatcard");
 
@@ -59,9 +59,9 @@ const ChatCard = ({
       createdAt: new Date().toISOString(),
     });
 
-    const check = myChatList.findIndex((x) => x.user._id == userid);
+    const check = myChatList.findIndex((x) => x.user._id === userid);
     if (check !== -1) {
-      myChatList[check].last_msg = new Date().toString();
+      myChatList[check].last_msg = new Date().toISOString();
     } else {
       myChatList.push({
         last_msg: new Date().toISOString(),
@@ -69,7 +69,7 @@ const ChatCard = ({
           fname: fname,
           lname: lname,
           username: username,
-          userid: userid,
+          _id: userid,
         },
       });
     }
@@ -90,6 +90,7 @@ const ChatCard = ({
       console.log(err);
     };
 
+    console.log("msg=", msg);
     const cb_response = (response) => {
       console.log(userid);
       console.log(response);
@@ -211,18 +212,11 @@ const ChatCard = ({
         </div>
       </form>
 
-      {mymsgloading && responseLoading && (
-        <div className="loading-container">
-          <div className="spinner-border loading" role="status">
-            <span className="sr-only"></span>
-          </div>
-        </div>
-      )}
-      {!mymsgloading &&
-        !responseLoading &&
-        msgArr.map((value, index) => {
+      <div className="chat-map-container">
+        {msgArr.map((value, index) => {
           return <ChatMap value={value} index={index} key={uniqid()} />;
         })}
+      </div>
     </div>
   );
 };

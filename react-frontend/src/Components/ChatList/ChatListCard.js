@@ -14,7 +14,7 @@ const ChatListCard = ({ value, index, isRead }) => {
     }
   }
 
-  console.log(isRead);
+  // console.log(isRead);
 
   const minute = new Date(value.last_msg).getMinutes();
   const hour = new Date(value.last_msg).getHours();

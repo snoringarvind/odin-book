@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 import { Redirect, useHistory } from "react-router-dom";
@@ -9,7 +9,8 @@ const Login = () => {
   const [isAuth, setIsAuth] = isAuthValue;
   const [isloginClick, setIsLoginClick] = useState(false);
 
-  const [state, setState] = useState({ username: "", password: "" });
+  const refUsername = useRef();
+  const refPassword = useRef();
   const [errors, setErrors] = useState([]);
   const [error, setError] = useState("");
   const [postLoading, setPostLoading] = useState(false);
@@ -35,16 +36,14 @@ const Login = () => {
 
     axios_request({
       route: login_route,
-      data: state,
+      data: {
+        username: refUsername.current.value,
+        password: refPassword.current.value,
+      },
       method: login_method,
       axios_error: cb_error,
       axios_response: cb_response,
     });
-  };
-
-  const changeHandler = (e) => {
-    const { name, value } = e.target;
-    setState({ ...state, [name]: value });
   };
 
   const display_errors = () => {
@@ -82,8 +81,7 @@ const Login = () => {
               name="username"
               id="username"
               placeholder="Enter your username"
-              onChange={changeHandler}
-              value={state.username}
+              ref={refUsername}
             />
           </div>
           <div className="form-group">
@@ -93,8 +91,7 @@ const Login = () => {
               name="password"
               id="password"
               placeholder="Enter your password"
-              onChange={(e) => changeHandler(e)}
-              value={state.password}
+              ref={refPassword}
             />
           </div>
           {display_errors()}
@@ -103,10 +100,15 @@ const Login = () => {
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                  if (!postLoading) {
-                    return axios_login();
-                  } else {
+                  if (postLoading) {
                     return;
+                  } else if (
+                    refUsername.current.value === "" ||
+                    refPassword.current.value === ""
+                  ) {
+                    return;
+                  } else {
+                    return axios_login();
                   }
                 }}
               >

@@ -175,23 +175,35 @@ const Chat = () => {
   };
 
   useEffect(() => {
-    window.scrollTo(0, document.body.scrollHeight);
+    const element = document.querySelector(".Chat");
+    console.log(element);
+    const height = element.scrollHeight;
+    console.log(height);
+    element.scrollTo(0, height);
   }, [msgArr]);
 
   console.log(mymsgloading, responseloading);
   console.log(msgArr);
   return (
     <div className="Chat">
-      <ChatCard
-        fname={fname}
-        lname={lname}
-        userid={userid}
-        username={username}
-        msgArr={msgArr}
-        setMsgArr={setMsgArr}
-        mymsgloading={mymsgloading}
-        responseloading={responseloading}
-      />
+      {mymsgloading && responseloading && (
+        <div className="loading-container">
+          <div className="spinner-border loading" role="status">
+            <span className="sr-only"></span>
+          </div>
+        </div>
+      )}
+      {!mymsgloading && !responseloading && (
+        <ChatCard
+          fname={fname}
+          lname={lname}
+          userid={userid}
+          username={username}
+          msgArr={msgArr}
+          setMsgArr={setMsgArr}
+          responseloading={responseloading}
+        />
+      )}
     </div>
   );
 };

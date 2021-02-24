@@ -17,6 +17,9 @@ const UserFriendCard = ({
   // console.log("params", params);
   // const history = useHistory();
   // console.log("histroy", history);
+  console.log(friendBtn[index]);
+
+  const [myFriendsIndex, setMyFriendsIndex] = useState(null);
 
   const { jwtData, myFriendsValue, axios_request } = useContext(
     OdinBookContext
@@ -59,11 +62,43 @@ const UserFriendCard = ({
       setMyFriends(myFriends);
       setIsChanged(!isChanged);
     }
+
+    if (jwtData.sub !== userid) {
+      // console.log(myFriendsIndex);
+
+      console.log(friendBtn[index]);
+      if (friendBtn[index] == false) {
+        const get_index = myFriends.findIndex(
+          (x) => x.username == value.username
+        );
+        if (get_index !== -1) {
+          console.log(get_index);
+          myFriends.splice(get_index, 1);
+          setMyFriends(myFriends);
+        }
+      } else {
+        myFriends.push(value);
+      }
+      console.log(myFriends);
+    }
   };
 
   const [pp, setpp] = useState(false);
 
-  console.log(path);
+  useEffect(() => {
+    const check = myFriends.findIndex((x) => x.username === value.username);
+    console.log(check);
+    if (check !== -1) {
+      friendBtn[index] = true;
+      setFriendBtn(friendBtn);
+      // setMyFriendsIndex(check);
+    }
+    setpp(!pp);
+  }, []);
+
+  console.log(friendBtn[index]);
+
+  // console.log(path);
   return (
     <div className="UserFriendCard">
       {" "}
@@ -101,11 +136,10 @@ const UserFriendCard = ({
                 : "blue",
           }}
           onClick={() => {
-            if (jwtData.sub !== userid) {
-              friendBtn[index] = !friendBtn[index];
-              setFriendBtn(friendBtn);
-              setpp(!pp);
-            }
+            friendBtn[index] = !friendBtn[index];
+            setFriendBtn(friendBtn);
+            setpp(!pp);
+
             clickHandler();
           }}
         >

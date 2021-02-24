@@ -37,6 +37,7 @@ const CommentForm = ({
     });
 
     setComments(comments);
+
     setpp(!pp);
 
     console.log(postIndex);

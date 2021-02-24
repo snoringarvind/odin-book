@@ -1,8 +1,3 @@
-.Chat {
-  /* border: 1px solid red; */
-  position: relative;
-}
-
 .Chat form {
   /* border: 1px solid; */
   box-shadow: 0.3px 0.3px 4px lightgray, -0.3px -0.3px 4px lightgray,
@@ -64,6 +59,10 @@
   outline: none;
 }
 
+.Home .Hamburger {
+  z-index: 1;
+}
+
 /* for head flex */
 .Chat .head-top {
   display: flex;
@@ -78,7 +77,7 @@
   left: 0;
   right: 0;
   top: 7vh;
-  z-index: 1;
+  /* z-index: 1; */
 }
 
 .Chat .profile-picture {
@@ -97,4 +96,13 @@
   font-size: 1rem;
   font-weight: 450;
   margin: 0 10px 0px 0;
+}
+.Chat {
+  /* border: 1px solid green; */
+  height: 86vh;
+  margin-top: 14vh;
+  position: relative;
+  overflow-y: auto;
+  width: 100%;
+  padding: 0;
 }

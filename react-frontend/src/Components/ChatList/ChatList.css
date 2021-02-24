@@ -1,8 +1,9 @@
 .ChatList {
   display: block;
-  min-height: 88vh;
-  border: 1px solid red;
-  margin: 2vh;
+  height: 89vh;
+  overflow-y: auto;
+  /* border: 1px solid red; */
+  margin: 9vh 2vh 2vh 2vh;
   border-radius: 5px;
   box-shadow: 0.3px 0.3px 4px lightgray, -0.3px -0.3px 4px lightgray,
     0.3px 0.3px 4px lightgray, -0.3px -0.3px 4px lightgray;
@@ -19,6 +20,7 @@
   height: 8vh;
   align-items: center;
   align-items: center;
+  /* padding: 50px 0;  */
 }
 
 .ChatList .profile-picture {
@@ -88,4 +90,17 @@
   align-items: center;
   background-color: blue;
   color: white;
+}
+
+.ChatList .empty-chatlist {
+  margin: 10px 20px;
+  background-color: white;
+  /* height: 20vh; */
+  padding: 20px 0px 20px 10px;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* border-radius: 4px; */
+  font-size: 1.1rem;
+  /* align-items: center; */
+  /* box-shadow: 0.3px 0.3px 4px darkgray, -0.3px -0.3px 4px darkgray; */
 }

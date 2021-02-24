@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import {
   Redirect,
   Route,
@@ -30,6 +30,7 @@ import UserFriend from "../UserDetail/UserFriend";
 import { OdinBookContext } from "../Context";
 import Chat from "../Chat/Chat";
 import ChatList from "../ChatList/ChatList";
+import WelcomeMsg from "../WelcomeMsg/WelcomeMsg";
 
 const Home = () => {
   let location = useLocation();
@@ -47,6 +48,12 @@ const Home = () => {
 
   console.log(location);
   const path = location.pathname;
+
+  const ref_isClick = useRef();
+
+  if (ref_isClick.current) {
+    console.log(ref_isClick.current);
+  }
 
   console.log(path);
   useEffect(() => {
@@ -85,6 +92,8 @@ const Home = () => {
       }
     });
   }, []);
+
+  console.log(path);
   return (
     <div className="Home">
       {!isAuth && <div className="odin-book">OdinBook</div>}
@@ -95,9 +104,11 @@ const Home = () => {
           <Redirect to="/login" />
         ))}
 
+      {/* {isAuth && (path === "/login" || path === "/signup") && <WelcomeMsg />} */}
+
       {/* {!isAuth && path === "/login"} */}
       {isAuth && (path === "/login" || path === "/signup") && (
-        <Redirect to="/" />
+        <Redirect to={{ pathname: "/", state: { from: path } }} />
       )}
 
       {isAuth && (
@@ -121,12 +132,10 @@ const Home = () => {
                 }}
                 className="drop-btn "
                 onClick={(e) => {
+                  e.stopPropagation();
                   setIsclick(!isClick);
                 }}
-                onBlur={(e) => {
-                  // console.log(e);
-                  // console.log("hello blur");
-                }}
+                ref={ref_isClick}
               >
                 {isClick ? (
                   <div className="close-icon fas fa-times-circle"></div>

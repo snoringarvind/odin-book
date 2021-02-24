@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { OdinBookContext } from "../Context";
 import uniqid from "uniqid";
 import { useHistory, useLocation, useParams } from "react-router-dom";
@@ -16,10 +16,6 @@ const MyPostForm = ({
   setUpdateClick,
 }) => {
   const { axios_request } = useContext(OdinBookContext);
-  const [state, setState] = useState({
-    title: update_value ? update_value.title : "",
-    content_text: update_value ? update_value.content_text : "",
-  });
 
   const [error, setError] = useState("");
   const [errors, setErrors] = useState([]);
@@ -28,15 +24,18 @@ const MyPostForm = ({
 
   const history = useHistory();
 
-  const changeHandler = (e) => {
-    const { value, name } = e.target;
+  const refTitle = useRef();
+  const refContenText = useRef();
 
-    setState({ ...state, [name]: value });
-  };
+  console.log(refTitle);
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  useEffect(() => {
+    refTitle.current.value = update_value ? update_value.title : "";
+    refContenText.current.value = update_value ? update_value.content_text : "";
+  }, []);
+  console.log(update_value);
 
+  const submitHandler = () => {
     setPostLoading(true);
     const axios_error = (err) => {
       if (err.response) {
@@ -58,9 +57,13 @@ const MyPostForm = ({
       // setUpdateClick(false);
     };
 
+    console.log(refTitle.current.value);
     axios_request({
       route: route,
-      data: state,
+      data: {
+        title: refTitle.current.value,
+        content_text: refContenText.current.value,
+      },
       method: method,
       axios_error: axios_error,
       axios_response: axios_response,
@@ -115,8 +118,7 @@ const MyPostForm = ({
                 type="text"
                 placeholder="Enter your post title"
                 name="title"
-                value={state.title}
-                onChange={changeHandler}
+                ref={refTitle}
               />
             </div>
             <div className="form-group">
@@ -126,8 +128,8 @@ const MyPostForm = ({
                 id="content_text"
                 name="content_text"
                 placeholder="Add text"
-                value={state.content_text}
-                onChange={changeHandler}
+                ref={refContenText}
+                // value={}
               />
             </div>
             {display_errors()}
@@ -136,10 +138,10 @@ const MyPostForm = ({
                 onClick={(e) => {
                   e.preventDefault();
                   //to prevent multiple clicks
-                  if (!postLoading) {
-                    submitHandler(e);
-                  } else {
+                  if (postLoading) {
                     return;
+                  } else {
+                    submitHandler();
                   }
                 }}
               >

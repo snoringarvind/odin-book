@@ -24,8 +24,8 @@ const UserPostCard = ({
   likeClick,
   setLikeClick,
   postsLength,
-  UserLikedIndex,
-  setUsersLikedIndex,
+  // UserLikedIndex,
+  // setUsersLikedIndex,
   path,
 }) => {
   const [cardError, setCardError] = useState("");
@@ -38,6 +38,8 @@ const UserPostCard = ({
 
   const [commentOptionIndex, setCommentOptionIndex] = useState(null);
   const { jwtData, axios_request } = useContext(OdinBookContext);
+
+  const [userLikedIndex, setUsersLikedIndex] = useState(null);
 
   const location = useLocation();
   let fname;
@@ -118,6 +120,19 @@ const UserPostCard = ({
     );
   }, []);
   // console.log(comments);
+
+  useEffect(() => {
+    const element = document.querySelector(`#post-${index}`);
+
+    console.log(element);
+    if (element) {
+      console.log(element);
+      const height = element.scrollHeight;
+      console.log(height);
+      element.scrollTo(0, height);
+    }
+  }, [pp, commentIconClicked, commentsLoading]);
+
   return (
     <div className="UserPostCard">
       <div className="head">
@@ -227,8 +242,12 @@ const UserPostCard = ({
         <span> </span>
         <span> {likeLength[index] == 1 ? "like" : "likes"}</span>
       </div>
-      {UserLikedIndex === index && (
-        <UserLikes postid={value._id} setUsersLikedIndex={setUsersLikedIndex} />
+      {userLikedIndex === index && (
+        <UserLikes
+          postid={value._id}
+          userid={value.user._id}
+          setUsersLikedIndex={setUsersLikedIndex}
+        />
       )}
       <div className="card-footer">
         <div

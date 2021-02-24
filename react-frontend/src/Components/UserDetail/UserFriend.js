@@ -24,9 +24,14 @@ const UserFriend = ({ path }) => {
   const [myFriends, setMyFriends] = myFriendsValue;
   const location = useLocation();
   let userid;
+  let username;
+  let fname;
+  let lname;
   //since there will be no location.state for myfriends route.
   if (path != "myfriends") {
     userid = location.state.userid;
+    fname = location.state.fname;
+    lname = location.state.lname;
   }
 
   // const params = useParams();
@@ -34,12 +39,15 @@ const UserFriend = ({ path }) => {
   // const history = useHistory();
   // console.log("histroy", history);
 
+  // console.log(path);
   const make_server_request = () => {
     let friend_list_route;
     if (path == "myfriends") {
       friend_list_route = `/friend/${jwtData.sub}`;
+      console.log(path);
     } else {
       friend_list_route = `/friend/${userid}`;
+      console.log(userid);
     }
     const friend_list_method = "GET";
 
@@ -55,7 +63,7 @@ const UserFriend = ({ path }) => {
         if (userid == jwtData.sub) {
           setMyFriends(response.data);
         } else {
-          const h = Array(response.data.length).fill(true);
+          const h = Array(response.data.length).fill(false);
           setFriendBtn(h);
         }
       }
@@ -101,8 +109,11 @@ const UserFriend = ({ path }) => {
 
   // console.log(myFriendList);
   // console.log(result);
+  console.log(path);
   return (
-    <div className="UserFriend">
+    <div
+      className={path === "myfriends" ? "UserFriend" : "UserFriend myaccount"}
+    >
       {getLoading && (
         <div className="loading-container">
           <div className="spinner-border loading" role="status">
@@ -113,14 +124,20 @@ const UserFriend = ({ path }) => {
       {!getLoading &&
         (error ? (
           <div className="error">{error}</div>
-        ) : result.length == 0 ? (
-          <div className="empty">
-            <div>No friends to show.</div>
-            {(path == "myfriends" || jwtData.sub == userid) && (
-              <>
+        ) : result.length === 0 ? (
+          <div className="empty-friends">
+            {path !== "myfriends" && jwtData.sub !== userid && (
+              <div>
+                <span>{fname} </span> <span>{lname} </span>
+                <span>has no friends on OdinBook :(</span>
+              </div>
+            )}
+            {(path === "myfriends" || jwtData.sub === userid) && (
+              <div>
+                <div>You don't have any friends to show.</div>
                 <div>You can add them by searching their name :)</div>
                 <div>To search with username, please prefix with '@' :)</div>
-              </>
+              </div>
             )}
           </div>
         ) : (

@@ -3,25 +3,16 @@
   display: flex;
   justify-content: flex-end;
   position: relative;
-  margin: 20px;
+  margin: 20px 0;
 }
 
 .ChatMap .person {
   position: relative;
-  margin: 20px;
-}
-
-.ChatMap {
-  /* margin: 10px; */
-  /* display: flex; */
-  /* border: 1px solid blue; */
+  margin: 20px 0;
 }
 
 .ChatMap:last-child {
   margin-bottom: 13vh;
-}
-
-.ChatMap .left {
 }
 
 .ChatMap .right,
@@ -105,4 +96,12 @@
   background-color: rgb(228, 228, 228);
   border-radius: 3px;
   padding: 0 2px;
+}
+
+.ChatMap {
+  /* left: 0; */
+  /* right: 0; */
+  /* top: 0; */
+  /* border: 1px solid; */
+  /* position: absolute; */
 }

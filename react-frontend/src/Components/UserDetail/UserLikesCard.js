@@ -12,14 +12,18 @@ const UserLikesCard = ({
 }) => {
   const [pp, setpp] = useState(false);
   const { axios_request, jwtData } = useContext(OdinBookContext);
+  const [error, setError] = useState("");
 
   const clickHandler = () => {
     const route = `/friend/${value._id}`;
     const method = "POST";
 
     const cb_error = (err) => {
-      //!using same state to set Error
-      // setError(err.message);
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
     };
 
     const cb_response = (response) => {
@@ -63,32 +67,41 @@ const UserLikesCard = ({
 
   return (
     <div className="UserLikesCard">
-      <div className="profile-picture">{[...value.fname[0].toLowerCase()]}</div>
-      <div className="name">
-        <span>{value.fname}</span>
-        <span>{value.lname}</span>
-      </div>
-      {jwtData.sub !== value._id && (
-        <div
-          className="add-btn-container"
-          onClick={() => {
-            friendBtn[index] = !friendBtn[index];
-            setFriendBtn(friendBtn);
-            setpp(!pp);
-            clickHandler();
-          }}
-          style={{
-            color: friendBtn[index] ? "red" : "blue",
-          }}
-        >
-          <div
-            className={
-              friendBtn[index]
-                ? "add-btn fas fa-user-minus"
-                : "add-btn fas fa-user-plus"
-            }
-          ></div>
-        </div>
+      {error && <div className="error">{error}</div>}
+
+      {!error && (
+        <>
+          {" "}
+          <div className="profile-picture">
+            {[...value.fname[0].toLowerCase()]}
+          </div>
+          <div className="name">
+            <span>{value.fname}</span>
+            <span>{value.lname}</span>
+          </div>
+          {jwtData.sub !== value._id && (
+            <div
+              className="add-btn-container"
+              onClick={() => {
+                friendBtn[index] = !friendBtn[index];
+                setFriendBtn(friendBtn);
+                setpp(!pp);
+                clickHandler();
+              }}
+              style={{
+                color: friendBtn[index] ? "red" : "blue",
+              }}
+            >
+              <div
+                className={
+                  friendBtn[index]
+                    ? "add-btn fas fa-user-minus"
+                    : "add-btn fas fa-user-plus"
+                }
+              ></div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

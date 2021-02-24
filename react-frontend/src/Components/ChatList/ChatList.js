@@ -4,6 +4,7 @@ import ChatListCard from "./ChatListCard";
 import uniqid from "uniqid";
 import "./ChatList.css";
 import socketIOClient from "socket.io-client";
+import { response } from "express";
 const ENDPOINT = "http://localhost:3000";
 
 const ChatList = () => {
@@ -26,13 +27,18 @@ const ChatList = () => {
 
   const [tempIsread, settempIsread] = useState([]);
   const [ischange, setischange] = useState(false);
+  const [error, setError] = useState("");
 
   const get_chat_list = () => {
     const route = `/mychat`;
     const method = "GET";
 
     const cb_error = (err) => {
-      console.log(err);
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
     };
 
     const cb_response = (response) => {
@@ -75,7 +81,13 @@ const ChatList = () => {
     const route = "/isread";
     const method = "GET";
 
-    const cb_error = (err) => {};
+    const cb_error = (err) => {
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
+    };
     const cb_response = (response) => {
       // console.log(response.data.users);
       setIsRead(response.data.users);
@@ -162,29 +174,34 @@ const ChatList = () => {
   // console.log(isRead);
   return (
     <div className="ChatList">
-      {chatListLoading && isreadLoading && (
-        <div className="loading-container">
-          <div className="spinner-border loading" role="status">
-            <span className="sr-only"></span>
-          </div>
-        </div>
+      {error && <div className="errorr">{error}</div>}
+      {!error && (
+        <>
+          {chatListLoading && isreadLoading && (
+            <div className="loading-container">
+              <div className="spinner-border loading" role="status">
+                <span className="sr-only"></span>
+              </div>
+            </div>
+          )}
+          {!chatListLoading &&
+            !isreadLoading &&
+            (myChatList.length === 0 ? (
+              <div className="empty-chatlist">
+                Please start a conversation with someone to see it here.
+              </div>
+            ) : (
+              myChatList.map((value, index) => (
+                <ChatListCard
+                  value={value}
+                  index={index}
+                  key={uniqid()}
+                  isRead={isRead}
+                />
+              ))
+            ))}
+        </>
       )}
-      {!chatListLoading &&
-        !isreadLoading &&
-        (myChatList.length === 0 ? (
-          <div className="empty-chatlist">
-            Please start a conversation with someone to see it here.
-          </div>
-        ) : (
-          myChatList.map((value, index) => (
-            <ChatListCard
-              value={value}
-              index={index}
-              key={uniqid()}
-              isRead={isRead}
-            />
-          ))
-        ))}
     </div>
   );
 };

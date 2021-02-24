@@ -22,6 +22,8 @@ const ChatCard = ({
 
   const valueRef = useRef();
 
+  const [error, setError] = useState("");
+
   const { jwtData, socket, axios_request, myChatListValue } = useContext(
     OdinBookContext
   );
@@ -87,7 +89,11 @@ const ChatCard = ({
     const method = "PUT";
 
     const cb_error = (err) => {
-      console.log(err);
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
     };
 
     console.log("msg=", msg);
@@ -113,7 +119,13 @@ const ChatCard = ({
     const method = "PUT";
 
     console.log("hello");
-    const cb_error = (err) => {};
+    const cb_error = (err) => {
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
+    };
 
     const cb_response = (response) => {};
 
@@ -136,7 +148,13 @@ const ChatCard = ({
     const method = "PUT";
 
     console.log("hello");
-    const cb_error = (err) => {};
+    const cb_error = (err) => {
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
+    };
 
     const cb_response = (response) => {};
 
@@ -156,7 +174,13 @@ const ChatCard = ({
     const method = "PUT";
 
     console.log("hello");
-    const cb_error = (err) => {};
+    const cb_error = (err) => {
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
+    };
 
     const cb_response = (response) => {};
 
@@ -171,52 +195,57 @@ const ChatCard = ({
   console.log(valueRef);
   return (
     <div className="ChatCard">
-      <div className="head-top">
-        <div className="profile-picture">{[...fname][0].toLowerCase()}</div>
-        <div className="name">
-          <span>{fname} </span>
-          <span>{lname}</span>
-        </div>
-      </div>
-      <form>
-        <div className="form-group">
-          <input
-            type="text"
-            // onChange={changeHandler}
-            ref={valueRef}
-            name="msg"
-            id="msg"
-          />
-
-          <div className="send-btn">
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                if (valueRef.current.value === "") {
-                  return;
-                } else {
-                  save_isread_false();
-                  save_received();
-                  save_sent();
-                  save_messages_on_database({
-                    message: valueRef.current.value,
-                    createdAt: new Date().toISOString(),
-                  });
-                  submitHandler();
-                }
-              }}
-            >
-              Send
-            </button>
+      {error && <div className="error">{error}</div>}
+      {!error && (
+        <>
+          <div className="head-top">
+            <div className="profile-picture">{[...fname][0].toLowerCase()}</div>
+            <div className="name">
+              <span>{fname} </span>
+              <span>{lname}</span>
+            </div>
           </div>
-        </div>
-      </form>
+          <form>
+            <div className="form-group">
+              <input
+                type="text"
+                // onChange={changeHandler}
+                ref={valueRef}
+                name="msg"
+                id="msg"
+              />
 
-      <div className="chat-map-container">
-        {msgArr.map((value, index) => {
-          return <ChatMap value={value} index={index} key={uniqid()} />;
-        })}
-      </div>
+              <div className="send-btn">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (valueRef.current.value === "") {
+                      return;
+                    } else {
+                      save_isread_false();
+                      save_received();
+                      save_sent();
+                      save_messages_on_database({
+                        message: valueRef.current.value,
+                        createdAt: new Date().toISOString(),
+                      });
+                      submitHandler();
+                    }
+                  }}
+                >
+                  Send
+                </button>
+              </div>
+            </div>
+          </form>
+
+          <div className="chat-map-container">
+            {msgArr.map((value, index) => {
+              return <ChatMap value={value} index={index} key={uniqid()} />;
+            })}
+          </div>
+        </>
+      )}
     </div>
   );
 };

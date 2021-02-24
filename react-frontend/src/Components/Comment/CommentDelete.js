@@ -34,7 +34,11 @@ const CommentDelete = ({
     setpp(!pp);
     setCommentOptionIndex(null);
     const cb_error = (err) => {
-      setError(err.message);
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
       setPostLoading(false);
     };
 
@@ -55,10 +59,6 @@ const CommentDelete = ({
     // console.log(isChanged);
   };
 
-  const deleteHandler = () => {
-    make_server_request();
-  };
-
   useEffect(() => {
     make_server_request();
   }, []);
@@ -67,45 +67,12 @@ const CommentDelete = ({
   // console.log(isChanged);
   return (
     <div className="CommentDelete">
-      {/* {error && (
+      {error && (
         <div className="error">
           <div>{error}</div>
-          <div>Please try refreshing the Page</div>
+          <div>Please try refreshing the Page :(</div>
         </div>
       )}
-      {!error && (
-        <div className="dialog-box">
-          <p className="confitm-msg">
-            Are you sure want to delete this comment?
-          </p>
-          <div className="btn">
-            <button
-              className="dlt-btn"
-              onClick={(e) => {
-                e.preventDefault();
-                if (!postLoading) {
-                  setPostLoading(true);
-                  deleteHandler();
-                } else {
-                  return;
-                }
-              }}
-            >
-              {!postLoading ? "Delete" : "Deleting comment...."}
-            </button>
-
-            <button
-              className="cancel-btn"
-              onClick={(e) => {
-                e.preventDefault();
-                setCommentDeleteClick(false);
-              }}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 };

@@ -7,7 +7,6 @@ import { OdinBookContext } from "../Context";
 const SearchResultCard = ({
   value,
   index,
-  setError,
   result,
   friendBtn,
   setFriendBtn,
@@ -19,6 +18,7 @@ const SearchResultCard = ({
   const [myFriends, setMyFriends] = myFriendsValue;
 
   const [myFriendsIndex, setMyFriendsIndex] = useState(null);
+  const [error, setError] = useState("");
 
   //removes friend
   const clickHandler = () => {
@@ -28,8 +28,11 @@ const SearchResultCard = ({
     const method = "POST";
 
     const cb_error = (err) => {
-      //!using same state to set Error
-      setError(err.message);
+      if (err.response) {
+        console.log(err.response.data);
+      } else {
+        setError(err.message);
+      }
     };
 
     const cb_response = (response) => {
@@ -77,69 +80,76 @@ const SearchResultCard = ({
   console.log(myFriendsIndex);
   return (
     <div className="SearchResultCard">
-      <div className="profile-picture">{[...value.fname[0].toLowerCase()]}</div>
-      <div
-        className="name-container"
-        onClick={(e) => {
-          e.stopPropagation();
-          e.preventDefault();
-          element.value = "";
-        }}
-      >
-        <Link
-          to={{
-            pathname: `/user/${value.username}/posts`,
-            state: {
-              userid: value._id,
-              fname: value.fname,
-              lname: value.lname,
-              username: value.username,
-            },
-          }}
-        >
-          <div className="name">
-            <span>{value.fname} </span>
-            <span>{value.lname}</span>
+      {error && <div className="error">{error}</div>}
+      {!error && (
+        <>
+          <div className="profile-picture">
+            {[...value.fname[0].toLowerCase()]}
           </div>
-        </Link>
-        <div className="username">{value.username}</div>
-      </div>
-      {value._id !== jwtData.sub && (
-        <div
-          className={
-            friendBtn[index]
-              ? "add-btn fas fa-user-minus"
-              : "add-btn fas fa-user-plus"
-          }
-          style={{ color: friendBtn[index] ? "red" : "blue" }}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-
-            friendBtn[index] = !friendBtn[index];
-            setFriendBtn(friendBtn);
-            setpp(!pp);
-            clickHandler();
-          }}
-        ></div>
-      )}
-
-      {value._id !== jwtData.sub && (
-        <div className="chat-link-container">
-          <Link
-            to={{
-              pathname: "/chat",
-              state: {
-                userid: value._id,
-                fname: value.fname,
-                lname: value.lname,
-                username: value.username,
-              },
+          <div
+            className="name-container"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              element.value = "";
             }}
           >
-            <div className="chat-btn fab fa-facebook-messenger"></div>
-          </Link>
-        </div>
+            <Link
+              to={{
+                pathname: `/user/${value.username}/posts`,
+                state: {
+                  userid: value._id,
+                  fname: value.fname,
+                  lname: value.lname,
+                  username: value.username,
+                },
+              }}
+            >
+              <div className="name">
+                <span>{value.fname} </span>
+                <span>{value.lname}</span>
+              </div>
+            </Link>
+            <div className="username">{value.username}</div>
+          </div>
+          {value._id !== jwtData.sub && (
+            <div
+              className={
+                friendBtn[index]
+                  ? "add-btn fas fa-user-minus"
+                  : "add-btn fas fa-user-plus"
+              }
+              style={{ color: friendBtn[index] ? "red" : "blue" }}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                friendBtn[index] = !friendBtn[index];
+                setFriendBtn(friendBtn);
+                setpp(!pp);
+                clickHandler();
+              }}
+            ></div>
+          )}
+
+          {value._id !== jwtData.sub && (
+            <div className="chat-link-container">
+              <Link
+                to={{
+                  pathname: "/chat",
+                  state: {
+                    userid: value._id,
+                    fname: value.fname,
+                    lname: value.lname,
+                    username: value.username,
+                  },
+                }}
+              >
+                <div className="chat-btn fab fa-facebook-messenger"></div>
+              </Link>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

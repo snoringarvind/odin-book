@@ -34,7 +34,11 @@ const UserLikes = ({ postid, setUsersLikedIndex, userid }) => {
     const route = `/post/${postid}/like`;
     const method = "GET";
     const cb_error = (err) => {
-      setError(err.message);
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
     };
 
     const cb_response = (response) => {
@@ -86,32 +90,36 @@ const UserLikes = ({ postid, setUsersLikedIndex, userid }) => {
 
   return (
     <div className="UserLikes">
-      <div className="box">
-        <div className='form-close-btn fas fa-times-circle"'>
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setUsersLikedIndex(null);
-            }}
-            className="fas fa-times-circle"
-          ></button>
+      {error && <div className="error">{error}</div>}
+
+      {!error && (
+        <div className="box">
+          <div className='form-close-btn fas fa-times-circle"'>
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                setUsersLikedIndex(null);
+              }}
+              className="fas fa-times-circle"
+            ></button>
+          </div>
+          {likeList.map((value, index) => {
+            return (
+              <UserLikesCard
+                value={value}
+                index={index}
+                key={uniqid()}
+                friendBtn={friendBtn}
+                setFriendBtn={setFriendBtn}
+                myFriends={myFriends}
+                setMyFriends={setMyFriends}
+                userid={userid}
+              />
+            );
+          })}
         </div>
-        {likeList.map((value, index) => {
-          return (
-            <UserLikesCard
-              value={value}
-              index={index}
-              key={uniqid()}
-              friendBtn={friendBtn}
-              setFriendBtn={setFriendBtn}
-              myFriends={myFriends}
-              setMyFriends={setMyFriends}
-              userid={userid}
-            />
-          );
-        })}
-      </div>
+      )}
     </div>
   );
 };

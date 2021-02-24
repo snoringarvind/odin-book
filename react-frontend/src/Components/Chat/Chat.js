@@ -9,6 +9,8 @@ import ChatCard from "./ChatCard";
 const Chat = () => {
   const location = useLocation();
 
+  const [error, setError] = useState("");
+
   const { axios_request, jwtData, socket, isReadValue } = useContext(
     OdinBookContext
   );
@@ -86,8 +88,12 @@ const Chat = () => {
       setresponseloading(false);
     };
 
-    const cb_error = (error) => {
-      console.log(error);
+    const cb_error = (err) => {
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
     };
 
     axios_request({
@@ -116,8 +122,12 @@ const Chat = () => {
       setmsgloading(false);
     };
 
-    const cb_error = (error) => {
-      console.log(error);
+    const cb_error = (err) => {
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
     };
 
     axios_request({
@@ -151,7 +161,13 @@ const Chat = () => {
   const save_isreadtrue = () => {
     const route = `/isreadtrue/${userid}`;
     const method = "PUT";
-    const cb_error = (err) => {};
+    const cb_error = (err) => {
+      if (error.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
+    };
 
     const cb_response = (response) => {};
 
@@ -186,23 +202,28 @@ const Chat = () => {
   console.log(msgArr);
   return (
     <div className="Chat">
-      {mymsgloading && responseloading && (
-        <div className="loading-container">
-          <div className="spinner-border loading" role="status">
-            <span className="sr-only"></span>
-          </div>
-        </div>
-      )}
-      {!mymsgloading && !responseloading && (
-        <ChatCard
-          fname={fname}
-          lname={lname}
-          userid={userid}
-          username={username}
-          msgArr={msgArr}
-          setMsgArr={setMsgArr}
-          responseloading={responseloading}
-        />
+      {error && <div className="error">{error}</div>}
+      {!error && (
+        <>
+          {mymsgloading && responseloading && (
+            <div className="loading-container">
+              <div className="spinner-border loading" role="status">
+                <span className="sr-only"></span>
+              </div>
+            </div>
+          )}
+          {!mymsgloading && !responseloading && (
+            <ChatCard
+              fname={fname}
+              lname={lname}
+              userid={userid}
+              username={username}
+              msgArr={msgArr}
+              setMsgArr={setMsgArr}
+              responseloading={responseloading}
+            />
+          )}
+        </>
       )}
     </div>
   );

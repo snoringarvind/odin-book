@@ -52,7 +52,11 @@ const UserFriend = ({ path }) => {
     const friend_list_method = "GET";
 
     const cb_error = (err) => {
-      setError(err.message);
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
       setGetLoading(false);
     };
 
@@ -114,50 +118,55 @@ const UserFriend = ({ path }) => {
     <div
       className={path === "myfriends" ? "UserFriend" : "UserFriend myaccount"}
     >
-      {getLoading && (
-        <div className="loading-container">
-          <div className="spinner-border loading" role="status">
-            <span className="sr-only"></span>
-          </div>
-        </div>
+      {error && <div className="error">{error}</div>}
+      {!error && (
+        <>
+          {getLoading && (
+            <div className="loading-container">
+              <div className="spinner-border loading" role="status">
+                <span className="sr-only"></span>
+              </div>
+            </div>
+          )}
+          {!getLoading &&
+            (result.length === 0 ? (
+              <div className="empty-friends">
+                {path !== "myfriends" && jwtData.sub !== userid && (
+                  <div>
+                    <span>{fname} </span> <span>{lname} </span>
+                    <span>has no friends on OdinBook :(</span>
+                  </div>
+                )}
+                {(path === "myfriends" || jwtData.sub === userid) && (
+                  <div>
+                    <div>You don't have any friends to show.</div>
+                    <div>You can add them by searching their name :)</div>
+                    <div>
+                      To search with username, please prefix with '@' :)
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : (
+              result.map((value, index) => {
+                return (
+                  <UserFriendCard
+                    value={value}
+                    index={index}
+                    setError={setError}
+                    key={uniqid()}
+                    friendBtn={friendBtn}
+                    setFriendBtn={setFriendBtn}
+                    userid={userid}
+                    isChanged={isChanged}
+                    setIsChanged={setIsChanged}
+                    path={path}
+                  />
+                );
+              })
+            ))}
+        </>
       )}
-      {!getLoading &&
-        (error ? (
-          <div className="error">{error}</div>
-        ) : result.length === 0 ? (
-          <div className="empty-friends">
-            {path !== "myfriends" && jwtData.sub !== userid && (
-              <div>
-                <span>{fname} </span> <span>{lname} </span>
-                <span>has no friends on OdinBook :(</span>
-              </div>
-            )}
-            {(path === "myfriends" || jwtData.sub === userid) && (
-              <div>
-                <div>You don't have any friends to show.</div>
-                <div>You can add them by searching their name :)</div>
-                <div>To search with username, please prefix with '@' :)</div>
-              </div>
-            )}
-          </div>
-        ) : (
-          result.map((value, index) => {
-            return (
-              <UserFriendCard
-                value={value}
-                index={index}
-                setError={setError}
-                key={uniqid()}
-                friendBtn={friendBtn}
-                setFriendBtn={setFriendBtn}
-                userid={userid}
-                isChanged={isChanged}
-                setIsChanged={setIsChanged}
-                path={path}
-              />
-            );
-          })
-        ))}
     </div>
   );
 };

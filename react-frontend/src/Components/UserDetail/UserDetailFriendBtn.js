@@ -1,4 +1,5 @@
 import { concatSeries } from "async";
+import { set } from "mongoose";
 import React, { useContext, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { OdinBookContext } from "../Context";
@@ -20,6 +21,7 @@ const UserDetailFriendBtn = () => {
 
   const [didMyFriendsMount, setDidMyFriendsMount] = didMyFriendsMountValue;
   const [myFriends, setMyFriends] = myFriendsValue;
+  const [error, setError] = useState("");
 
   const [isFriend, setIsFriend] = useState([]);
   const [index, setIndex] = useState(null);
@@ -32,7 +34,11 @@ const UserDetailFriendBtn = () => {
     const method = "GET";
 
     const cb_error = (err) => {
-      console.log(err.message);
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
     };
 
     const cb_response = (response) => {
@@ -77,7 +83,11 @@ const UserDetailFriendBtn = () => {
     const method = "POST";
 
     const cb_error = (err) => {
-      console.log(err.message);
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
     };
 
     const cb_response = (response) => {
@@ -126,17 +136,20 @@ const UserDetailFriendBtn = () => {
 
   return (
     <div className="UserDetailFriendBtn">
-      <div
-        style={{ color: isFriend ? "red" : "blue" }}
-        className={
-          isFriend ? "add-btn fas fa-user-minus" : "add-btn fas fa-user-plus"
-        }
-        onClick={(e) => {
-          e.preventDefault();
-          post_friend_value();
-          setIsFriend(!isFriend);
-        }}
-      ></div>
+      {error && <div className="error">{error}</div>}
+      {!error && (
+        <div
+          style={{ color: isFriend ? "red" : "blue" }}
+          className={
+            isFriend ? "add-btn fas fa-user-minus" : "add-btn fas fa-user-plus"
+          }
+          onClick={(e) => {
+            e.preventDefault();
+            post_friend_value();
+            setIsFriend(!isFriend);
+          }}
+        ></div>
+      )}
     </div>
   );
 };

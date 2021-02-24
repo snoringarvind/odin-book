@@ -44,7 +44,11 @@ const UserAbout = () => {
       setGetLoading(false);
     };
     const cb_error = (err) => {
-      setError(err.message);
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
       setGetLoading(false);
     };
 
@@ -111,37 +115,38 @@ const UserAbout = () => {
 
   return (
     <div className="UserAbout">
-      {getLoading && (
-        <div className="loading-container">
-          <div className="spinner-border loading" role="status">
-            <span className="sr-only"></span>
-          </div>
-        </div>
+      {error && <div className="error">{error}</div>}
+      {!error && (
+        <>
+          {getLoading && (
+            <div className="loading-container">
+              <div className="spinner-border loading" role="status">
+                <span className="sr-only"></span>
+              </div>
+            </div>
+          )}
+          {!getLoading &&
+            g.map((value, index) => {
+              return (
+                <UseraAboutCard
+                  key={uniqid()}
+                  objkey={value}
+                  index={index}
+                  clickIndex={clickIndex}
+                  setClickIndex={setClickIndex}
+                  result={result}
+                  setResult={setResult}
+                  ee={ee}
+                  setee={setee}
+                  tooltip={tooltip}
+                  setTooltip={setTooltip}
+                  userid={userid}
+                  jwtData={jwtData}
+                />
+              );
+            })}
+        </>
       )}
-      {!getLoading &&
-        (error ? (
-          <div className="error">{error}</div>
-        ) : (
-          g.map((value, index) => {
-            return (
-              <UseraAboutCard
-                key={uniqid()}
-                objkey={value}
-                index={index}
-                clickIndex={clickIndex}
-                setClickIndex={setClickIndex}
-                result={result}
-                setResult={setResult}
-                ee={ee}
-                setee={setee}
-                tooltip={tooltip}
-                setTooltip={setTooltip}
-                userid={userid}
-                jwtData={jwtData}
-              />
-            );
-          })
-        ))}
     </div>
   );
 };

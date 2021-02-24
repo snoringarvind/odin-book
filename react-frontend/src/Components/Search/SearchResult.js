@@ -86,29 +86,31 @@ const SearchResult = () => {
 
   return (
     <div className="SearchResult">
-      {getLoading && "loading..."}
-      {!getLoading &&
-        (error ? (
-          <div className="error">{error}</div>
-        ) : result.length == 0 ? (
-          <div className="empty">No users found with this query :(</div>
-        ) : (
-          result.map((value, index) => {
-            return (
-              <SearchResultCard
-                value={value}
-                index={index}
-                setResult={setResult}
-                result={result}
-                setError={setError}
-                key={uniqid()}
-                friendBtn={friendBtn}
-                setFriendBtn={setFriendBtn}
-                arrg={arrg}
-              />
-            );
-          })
-        ))}
+      {error && <div className="error">{error}</div>}
+      {!error && (
+        <>
+          {getLoading && "loading..."}
+          {!getLoading &&
+            (result.length == 0 ? (
+              <div className="empty">No users found with this query :(</div>
+            ) : (
+              result.map((value, index) => {
+                return (
+                  <SearchResultCard
+                    value={value}
+                    index={index}
+                    setResult={setResult}
+                    result={result}
+                    key={uniqid()}
+                    friendBtn={friendBtn}
+                    setFriendBtn={setFriendBtn}
+                    arrg={arrg}
+                  />
+                );
+              })
+            ))}
+        </>
+      )}
     </div>
   );
 };

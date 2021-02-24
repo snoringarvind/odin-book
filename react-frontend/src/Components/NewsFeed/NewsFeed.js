@@ -23,7 +23,11 @@ const NewsFeed = () => {
 
   const make_server_request = () => {
     const cb_error = (err) => {
-      setError(err.message);
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
       setGetLoading(false);
     };
 

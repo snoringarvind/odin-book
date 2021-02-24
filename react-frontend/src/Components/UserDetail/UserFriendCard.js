@@ -5,7 +5,6 @@ import { OdinBookContext } from "../Context";
 const UserFriendCard = ({
   value,
   index,
-  setError,
   friendBtn,
   setFriendBtn,
   userid,
@@ -20,6 +19,7 @@ const UserFriendCard = ({
   console.log(friendBtn[index]);
 
   const [myFriendsIndex, setMyFriendsIndex] = useState(null);
+  const [error, setError] = useState("");
 
   const { jwtData, myFriendsValue, axios_request } = useContext(
     OdinBookContext
@@ -40,8 +40,11 @@ const UserFriendCard = ({
     const method = "POST";
 
     const cb_error = (err) => {
-      //!using same state to set Error
-      setError(err.message);
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
     };
 
     const cb_response = (response) => {

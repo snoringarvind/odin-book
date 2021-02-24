@@ -57,7 +57,11 @@ const UserPostCard = ({
     const like_post_route = `/post/${postid}/like`;
     const like_post_method = "POST";
     const cb_error = (err) => {
-      setCardError(err.message);
+      if (err.response) {
+        setCardError(err.response.data);
+      } else {
+        setCardError(err.message);
+      }
     };
     const cb_response = (response) => {
       console.log(response);
@@ -77,7 +81,11 @@ const UserPostCard = ({
     const comments_method = "GET";
 
     const cb_error = (err) => {
-      setCommentError(err.mesage);
+      if (err.response) {
+        setCommentError(err.response.data);
+      } else {
+        setCommentError(err.mesage);
+      }
       setCommentsLoading(false);
     };
     const cb_response = (response) => {
@@ -228,26 +236,31 @@ const UserPostCard = ({
         <div className="post-title">{value.title}</div>
         <div className="post-content">{value.content_text}</div>
       </div>
-      <div
-        className="no-like"
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setUsersLikedIndex(index);
-          // setpp(!pp);
-        }}
-      >
-        {/* <span>{likeLength[index]} </span> */}
-        <span>{likeLength[index]} </span>
-        <span> </span>
-        <span> {likeLength[index] == 1 ? "like" : "likes"}</span>
-      </div>
-      {userLikedIndex === index && (
-        <UserLikes
-          postid={value._id}
-          userid={value.user._id}
-          setUsersLikedIndex={setUsersLikedIndex}
-        />
+      {!cardError && <div className="error">{cardError}</div>}
+      {cardError && (
+        <>
+          <div
+            className="no-like"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setUsersLikedIndex(index);
+              // setpp(!pp);
+            }}
+          >
+            {/* <span>{likeLength[index]} </span> */}
+            <span>{likeLength[index]} </span>
+            <span> </span>
+            <span> {likeLength[index] == 1 ? "like" : "likes"}</span>
+          </div>
+          {userLikedIndex === index && (
+            <UserLikes
+              postid={value._id}
+              userid={value.user._id}
+              setUsersLikedIndex={setUsersLikedIndex}
+            />
+          )}
+        </>
       )}
       <div className="card-footer">
         <div

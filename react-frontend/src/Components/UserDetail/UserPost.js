@@ -80,7 +80,12 @@ const UserPost = ({ path }) => {
 
     const post_list_method = "GET";
     const cb_error = (err) => {
-      setError(err.mesage);
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
+
       setGetLoading(false);
     };
     const cb_response = (response) => {
@@ -148,19 +153,6 @@ const UserPost = ({ path }) => {
   //     setIsOwner(false);
   //   }
   // }, [myFriends]);
-
-  // console.log(getLoading);
-  // console.log(path);
-  // console.log(myNewsfeed);
-  // console.log(result);
-
-  // console.log("hello");
-  // useEffect(() => {
-  //   setLikeLength([]);
-  // }, [likeLength]);
-  // useEffect(() => {
-  //   if(indexOfCardClicked)
-  // }, [optionClick]);
 
   const post_create_response = (response) => {
     // setNewPost([...result, response.data.save_post]);
@@ -233,102 +225,104 @@ const UserPost = ({ path }) => {
   }, []);
   return (
     <div className={path == "userpost" ? "UserPost myaccount" : "UserPost"}>
-      {/* doing path=='newsfeed' herer bcoz for a second it shows loading even if we are loading the data from state */}
-      {/* maybe we will show loading even for newsfeed for a second. */}
-      {/* {getLoading && path !== "newsfeed" && "loading"} */}
-      {!isWelcomeMsgClick &&
-        location.state &&
-        (location.state.from === "/login" ||
-          location.state.from === "/signup") &&
-        path === "newsfeed" && <WelcomeMsg />}
-
-      {getLoading && (
-        <div className="loading-container">
-          <div className="spinner-border loading" role="status">
-            <span className="sr-only"></span>
-          </div>
-        </div>
-      )}
-      {!getLoading &&
-        (error ? (
-          <div className="error">{error}</div>
-        ) : (
-          <>
-            {isOwner && (
-              <div>
-                <MypostCreate
-                  user_post_response={post_create_response}
-                  createClick={createClick}
-                  setCreateClick={setCreateClick}
-                />
+      {error && <div className="error">{error}</div>}
+      {!error && (
+        <>
+          {" "}
+          {/* doing path=='newsfeed' herer bcoz for a second it shows loading even if we are loading the data from state */}
+          {/* maybe we will show loading even for newsfeed for a second. */}
+          {/* {getLoading && path !== "newsfeed" && "loading"} */}
+          {!isWelcomeMsgClick &&
+            location.state &&
+            (location.state.from === "/login" ||
+              location.state.from === "/signup") &&
+            path === "newsfeed" && <WelcomeMsg />}
+          {getLoading && (
+            <div className="loading-container">
+              <div className="spinner-border loading" role="status">
+                <span className="sr-only"></span>
               </div>
-            )}
-            {updateClick && (
-              <div>
-                <MyPostUpdate
-                  postid={postid}
-                  updateClick={updateClick}
-                  setUpdateClick={setUpdateClick}
-                  updateData={updateData}
-                  // createClick={createClick}
-                  // setCreateClick={setCreateClick}
-                  user_post_response={post_update_response}
-                />
-              </div>
-            )}
-            {deleteClick && (
-              <MyPostDelete
-                setDeleteClick={setDeleteClick}
-                deleteClick={deleteClick}
-                user_delete_response={post_delete_repsonse}
-                postid={postid}
-              />
-            )}
-            {result.length == 0 ? (
-              <div className="empty-posts">
-                {path == "newsfeed" &&
-                  "Please add friends to see their posts here :)"}
-                {isOwner &&
-                  path !== "newsfeed" &&
-                  "Create new posts to see them here"}
-                {!isOwner && path !== "newsfeed" && (
-                  <>
-                    <span>
-                      {fname} {lname} doesn't have any posts to show :(
-                    </span>
-                  </>
-                )}
-              </div>
-            ) : (
-              result.map((value, index) => {
-                return (
-                  <UserPostCard
-                    key={uniqid()}
-                    value={value}
-                    index={index}
-                    setPostid={setPostid}
-                    setUpdateClick={setUpdateClick}
-                    setUpdateData={setUpdateData}
-                    setUpdateIndex={setUpdateIndex}
-                    indexOfCardClicked={indexOfCardClicked}
-                    setindexOfCardClicked={setindexOfCardClicked}
-                    isOwner={isOwner}
-                    setDeleteClick={setDeleteClick}
-                    deleteClick={deleteClick}
-                    likeLength={likeLength}
-                    setLikeLength={setLikeLength}
-                    likeClick={likeClick}
-                    setLikeClick={setLikeClick}
-                    postsLength={result.length}
-                    UserLikedIndex={UserLikedIndex}
-                    setUsersLikedIndex={setUsersLikedIndex}
-                    path={path}
+            </div>
+          )}
+          {!getLoading && (
+            <>
+              {isOwner && (
+                <div>
+                  <MypostCreate
+                    user_post_response={post_create_response}
+                    createClick={createClick}
+                    setCreateClick={setCreateClick}
                   />
-                );
-              })
-            )}
-          </>
-        ))}
+                </div>
+              )}
+              {updateClick && (
+                <div>
+                  <MyPostUpdate
+                    postid={postid}
+                    updateClick={updateClick}
+                    setUpdateClick={setUpdateClick}
+                    updateData={updateData}
+                    // createClick={createClick}
+                    // setCreateClick={setCreateClick}
+                    user_post_response={post_update_response}
+                  />
+                </div>
+              )}
+              {deleteClick && (
+                <MyPostDelete
+                  setDeleteClick={setDeleteClick}
+                  deleteClick={deleteClick}
+                  user_delete_response={post_delete_repsonse}
+                  postid={postid}
+                />
+              )}
+              {result.length == 0 ? (
+                <div className="empty-posts">
+                  {path == "newsfeed" &&
+                    "Please add friends to see their posts here :)"}
+                  {isOwner &&
+                    path !== "newsfeed" &&
+                    "Create new posts to see them here"}
+                  {!isOwner && path !== "newsfeed" && (
+                    <>
+                      <span>
+                        {fname} {lname} doesn't have any posts to show :(
+                      </span>
+                    </>
+                  )}
+                </div>
+              ) : (
+                result.map((value, index) => {
+                  return (
+                    <UserPostCard
+                      key={uniqid()}
+                      value={value}
+                      index={index}
+                      setPostid={setPostid}
+                      setUpdateClick={setUpdateClick}
+                      setUpdateData={setUpdateData}
+                      setUpdateIndex={setUpdateIndex}
+                      indexOfCardClicked={indexOfCardClicked}
+                      setindexOfCardClicked={setindexOfCardClicked}
+                      isOwner={isOwner}
+                      setDeleteClick={setDeleteClick}
+                      deleteClick={deleteClick}
+                      likeLength={likeLength}
+                      setLikeLength={setLikeLength}
+                      likeClick={likeClick}
+                      setLikeClick={setLikeClick}
+                      postsLength={result.length}
+                      UserLikedIndex={UserLikedIndex}
+                      setUsersLikedIndex={setUsersLikedIndex}
+                      path={path}
+                    />
+                  );
+                })
+              )}
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 };

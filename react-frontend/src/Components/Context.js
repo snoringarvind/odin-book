@@ -8,6 +8,7 @@ import UserFriend from "./UserDetail/UserFriend";
 const ENDPOINT = "https://odinbook12.herokuapp.com";
 
 // require("dotenv").config();
+console.log("mamamamam");
 
 const OdinBookContext = createContext();
 

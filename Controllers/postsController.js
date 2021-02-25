@@ -4,21 +4,17 @@ const User = require("../models/User");
 //!this is for newsfeed
 exports.newsfeed = async (req, res, next) => {
   //only show post from friends
-  // console.log("hello");
-  // console.log(res.locals.user.sub);
 
   try {
-    console.log(res.locals.user.sub);
     let friend_list = await User.findById(res.locals.user.sub, "friend");
     // console.log(friend_list);
     friend_list = friend_list.friend;
-    console.log(friend_list);
+
     const posts = await Post.find({ user: friend_list }).populate(
       "user",
       "-password -friend"
     );
 
-    console.log("posts=", posts);
     return res.status(200).json(posts);
   } catch (err) {
     return res.status(500).json({ msg: err.message });
@@ -41,7 +37,6 @@ exports.post_detail_get = (req, res, next) => {
 
 //this is for user list posts
 exports.post_list_get = (req, res, next) => {
-  console.log("hello");
   Post.find({ user: req.params.userid })
     .sort({ created_at: -1 })
     .exec((err, result) => {

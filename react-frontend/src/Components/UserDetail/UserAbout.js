@@ -30,8 +30,6 @@ const UserAbout = () => {
     userid = location.state.userid;
   }
 
-  console.log(userid);
-
   const [clickIndex, setClickIndex] = useState(null);
 
   const make_server_request = () => {

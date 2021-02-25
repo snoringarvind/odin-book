@@ -10,7 +10,6 @@ const User = require("../models/User");
 //!no need for this
 exports.myposts_get = (req, res, next) => {
   Post.find({ user: res.locals.user.sub }).exec((err, result) => {
-    console.log(result);
     if (err) return res.status(500).json({ msg: err.message });
     else {
       return res.status(200).json(result);
@@ -81,7 +80,6 @@ exports.myposts_post = [
       user: res.locals.user.sub.toString(),
     });
 
-    console.log(post);
     const comment = new Comment({
       comment_list: [],
       post: post._id.toString(),
@@ -94,16 +92,12 @@ exports.myposts_post = [
         save_comment: (cb) => comment.save(cb),
       },
       (err, result) => {
-        // console.log(result);
-
         if (err) return res.status(500).json({ msg: err.message });
         else {
           User.populate(
             result.save_post,
             { path: "user", model: "User" },
             (err2, result2) => {
-              // console.log("result", result);
-              // console.log("result222", result2);
               if (err2) return res.status(500).json({ msg: err.message });
               else {
                 return res.status(200).json(result.save_post);
@@ -204,7 +198,6 @@ exports.mypost_put = [
           //     }
           //   }
           // }
-          console.log(result);
           return res.status(200).json(result);
         }
       });
@@ -212,7 +205,6 @@ exports.mypost_put = [
 ];
 
 exports.mypost_delete = (req, res, next) => {
-  console.log("hello0000000000");
   async.parallel(
     {
       comment_remove: (cb) =>
@@ -220,7 +212,6 @@ exports.mypost_delete = (req, res, next) => {
       post_remove: (cb) => Post.findByIdAndRemove(req.params.postid).exec(cb),
     },
     (err, result) => {
-      console.log("mann");
       if (err) return res.status(500).json({ msg: err.message });
       else {
         return res.status(200).json({

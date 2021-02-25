@@ -33,7 +33,6 @@ exports.user_signup = [
     .isLength({ max: 30 })
     .withMessage("password is too large"),
   (req, res, next) => {
-    console.log(req.body);
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -103,7 +102,6 @@ exports.user_signup = [
               saved_isread: (cb) => isread.save(cb),
             },
             (err, result) => {
-              console.log(result);
               if (err) return res.status(500).json({ msg: err.message });
               else {
                 const jwtData = utils.issueJwt(user);
@@ -183,10 +181,9 @@ exports.user_get_search_list = (req, res, next) => {
       });
   } else if (y.length == 1) {
     let fname = y[0];
-    console.log("hello");
-    console.log(fname);
+
     const u = [...fname];
-    console.log(u);
+
     if (u[0] === "@") {
       User.find({ username: fname })
         .select("-password")
@@ -250,6 +247,5 @@ exports.user_get_search_list = (req, res, next) => {
 exports.user_get_detail = (req, res, next) => {};
 
 exports.isUserAuth = (req, res, next) => {
-  console.log("hello");
   return res.status(200).json({ msg: "user is authenticated" });
 };

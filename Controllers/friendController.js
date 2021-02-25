@@ -17,9 +17,6 @@ exports.friend_post = [
   body("friend").trim().escape(),
   body("user").trim().escape(),
   async (req, res, next) => {
-    console.log("helllllllllloooooooooo");
-    console.log(req.params.userid);
-    console.log(res.locals.user.sub);
     let msg;
     try {
       if (res.locals.user.sub === req.params.userid) {
@@ -29,7 +26,7 @@ exports.friend_post = [
       }
 
       let query = await User.findById(res.locals.user.sub, "friend");
-      console.log(query);
+
       query = query.friend;
 
       const isContain = query.includes(req.params.userid);
@@ -73,7 +70,3 @@ exports.friend_post = [
     }
   },
 ];
-
-// export const friend_delete = (req, res, next) => {
-//   res.send("unfriend DELETE page not implemented");
-// };

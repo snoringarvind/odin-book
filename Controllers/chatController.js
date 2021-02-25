@@ -18,7 +18,6 @@ exports.chat_get = (req, res, next) => {
       }
 
       if (result.messages.length === 0) {
-        // console.log("true, 24");
         return res.status(200).json([]);
       }
 
@@ -27,8 +26,6 @@ exports.chat_get = (req, res, next) => {
       //in such case we send an empty array meaning no messages have beeen sent from other person to this guy.
       for (let i = 0; i < result.messages.length; i++) {
         if (result.messages[i].user == req.params.userid) {
-          // console.log("29", result);
-          // console.log(req.params.userid, result.messages[i].user);
           notInclude = false;
           return res.status(200).json(result.messages[i]);
         }
@@ -45,16 +42,11 @@ exports.chat_get = (req, res, next) => {
 exports.chat_put = [
   body("messages.*").trim(),
   async (req, res, next) => {
-    // console.log(req.params.userid);
-
-    // console.log(req.body);
     try {
       let query = await Chat.findOne({ sender: res.locals.user.sub });
 
       const message = req.body.message;
       const createdAt = req.body.createdAt;
-
-      // console.log(query);
 
       //if not include then create one
       let notInclude = true;
@@ -62,9 +54,7 @@ exports.chat_put = [
       // return;
       //for now I can't figure out mongoose filters so I am using for loops to manually filter.
       for (let i = 0; i < query.messages.length; i++) {
-        // console.log(req.params.userid, query.messages[i].user);
         if (query.messages[i].user == req.params.userid) {
-          // console.log(i);
           query.messages[i].message_container.push({
             message: message,
             createdAt: createdAt,
@@ -81,8 +71,6 @@ exports.chat_put = [
         });
       }
 
-      // console.log(query.messages[1].message_container);
-      // return;
       Chat.findOneAndUpdate(
         { sender: res.locals.user.sub },
         { messages: query.messages },
@@ -95,7 +83,7 @@ exports.chat_put = [
         }
       );
     } catch (err) {
-      console.log(err);
+      return res.status(500).json({ msg: err.message });
     }
   },
 ];

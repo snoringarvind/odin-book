@@ -5,16 +5,14 @@ exports.comment_get = (req, res, next) => {
   Comment.findOne({ post: req.params.postid })
     .populate("comment_list.user", "-comment_list.user.password")
     .exec((err, result) => {
-      // console.log(err);
       if (err) return res.status(500).json({ msg: err.message });
       else {
-        // console.log(result);
         res.status(200).json(result);
       }
     });
 };
 
-//!looks kind of stupid to do this
+//!not sure if to do this
 // exports.comment_length_get = (req, res, next) => {
 //   Comment.findOne({ post: req.params.postid }).exec((err, result) => {
 //     if (err) return res.status(500).json({ msg: err.message });
@@ -55,7 +53,6 @@ exports.comment_post = [
         )
           .populate("comment_list.user")
           .exec((err, result) => {
-            console.log(result);
             if (err) return res.status(500).json({ msg: err.message });
             else {
               return res.status(200).json(result);
@@ -93,7 +90,6 @@ exports.comment_put = [
               (err) => {
                 if (err) return res.status(500).json({ msg: err.message });
                 else {
-                  // console.log("comemmeme");
                   return res
                     .status(200)
                     .json({ msg: "comment has been updated" });

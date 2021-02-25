@@ -2,6 +2,8 @@ import axios from "axios";
 import React, { createContext, useEffect, useState } from "react";
 
 import socketIOClient from "socket.io-client";
+import Login from "./Login/Login";
+import UserFriend from "./UserDetail/UserFriend";
 
 const ENDPOINT = "https://odinbook12.herokuapp.com/odinbook";
 
@@ -45,9 +47,7 @@ const OdinBookProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
 
   // let jwt = JSON.parse(localStorage.getItem("jwtData"));
-  const [jwtData, setJwtData] = useState(
-    JSON.parse(localStorage.getItem("jwtData"))
-  );
+  const [jwtData, setJwtData] = useState();
 
   let serverUrl = "https://odinbook12.herokuapp.com/odinbook";
 
@@ -108,48 +108,63 @@ const OdinBookProvider = ({ children }) => {
     const route = "/isUserAuth";
     const method = "GET";
 
-    if (jwtData) {
-      try {
-        const token = jwtData.token;
-        headers = { authorization: `Bearer ${token}` };
+    try {
+      const token = jwtData.token;
+      headers = { authorization: `Bearer ${token}` };
 
-        const response = await axios({
-          url: `${serverUrl}${route}`,
-          method: method,
-          data: token,
-          headers: headers,
-        });
+      const response = await axios({
+        url: `${serverUrl}${route}`,
+        method: method,
+        data: token,
+        headers: headers,
+      });
 
-        console.log("response from context login", response);
-        setIsAuth(true);
-        setLoading(false);
-      } catch (err) {
-        console.log("error from context login", err);
-        setLoading(false);
-        if (err.response) {
-          if (err.response.status == 403) {
-            setIsAuth(false);
-          }
+      console.log("response from context login", response);
+      setIsAuth(true);
+      setLoading(false);
+    } catch (err) {
+      console.log("error from context login", err);
+      setLoading(false);
+      if (err.response) {
+        if (err.response.status == 403) {
+          setIsAuth(false);
         }
       }
+    }
+  };
+
+  useEffect(() => {
+    console.log(isAuth);
+
+    const jwt = JSON.parse(localStorage.getItem("jwtData"));
+    if (!isAuth && jwt) {
+      setJwtData(jwt);
     } else {
       setIsAuth(false);
       setLoading(false);
-      console.log("context login no jwt token");
-    }
-  };
-  useEffect(() => {
-    isLogin();
-
-    const socket12 = socketIOClient(ENDPOINT, {
-      withCredentials: true,
-    });
-
-    setSocket(socket12);
-    if (jwtData) {
-      socket12.emit("join", jwtData.user);
     }
   }, []);
+
+  useEffect(() => {
+    if (jwtData && !isAuth) {
+      isLogin();
+    } else {
+      setIsAuth(false);
+      setLoading(false);
+    }
+  }, [jwtData, isAuth]);
+
+  useEffect(() => {
+    if (isAuth) {
+      const socket12 = socketIOClient(ENDPOINT, {
+        withCredentials: true,
+      });
+      setSocket(socket12);
+      if (jwtData) {
+        socket12.emit("join", jwtData.user);
+      }
+    }
+  }, [isAuth]);
 
   return (
     <OdinBookContext.Provider

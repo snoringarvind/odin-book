@@ -114,6 +114,7 @@ const UserPostCard = ({
     }
   }, []);
 
+  console.log(likeLength);
   //this useffect will render the page if the comment icon is clicked or there is change in comments.
   useEffect(() => {
     const element = document.querySelector(`#post-${index}`);
@@ -215,8 +216,8 @@ const UserPostCard = ({
         <div className="post-title">{value.title}</div>
         <div className="post-content">{value.content_text}</div>
       </div>
-      {!cardError && <div className="error">{cardError}</div>}
-      {cardError && (
+      {cardError && <div className="error">{cardError}</div>}
+      {!cardError && (
         <>
           <div
             className="no-like"
@@ -224,12 +225,9 @@ const UserPostCard = ({
               e.preventDefault();
               e.stopPropagation();
               setUsersLikedIndex(index);
-              // setpp(!pp);
             }}
           >
-            {/* <span>{likeLength[index]} </span> */}
             <span>{likeLength[index]} </span>
-            <span> </span>
             <span> {likeLength[index] == 1 ? "like" : "likes"}</span>
           </div>
           {userLikedIndex === index && (
@@ -250,7 +248,6 @@ const UserPostCard = ({
           onClick={(e) => {
             e.preventDefault();
             like_post(value._id);
-            console.log(likeClick[index]);
             if (likeClick[index] == true) {
               likeLength[index] = likeLength[index] - 1;
               setLikeLength(likeLength);

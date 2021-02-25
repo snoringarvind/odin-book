@@ -43,8 +43,6 @@ exports.put_mychat_list = async (req, res, next) => {
       );
 
       const update_query_sent = () => {
-        // console.log(req.body.last_msg, 50);
-        // console.log(check);
         if (check != -1) {
           query.received[check].last_msg = req.body.last_msg;
         } else if (sent_index != -1 && check == -1) {
@@ -55,10 +53,8 @@ exports.put_mychat_list = async (req, res, next) => {
           { sent: query.sent, received: query.received },
           { new: true },
           (err, result) => {
-            // console.log(result, 60);
             if (err) return res.status(500).json({ msg: err.message });
             else {
-              // console.log(result, 70);
               return res.status(200).json(result);
             }
           }
@@ -71,10 +67,8 @@ exports.put_mychat_list = async (req, res, next) => {
             user: req.params.userid,
             last_msg: req.body.last_msg,
           });
-          // console.log(query, 77);
         }
       } else {
-        //sent has that user so we will remove him/her
         if (sent_index != -1) {
           query.sent.splice(sent_index, 1);
         }

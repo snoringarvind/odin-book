@@ -135,8 +135,6 @@ exports.myProfile_post = [
     //   );
     // }
 
-    console.log(req.body);
-
     const profile = {
       // fname: req.body.fname ? req.body.fname.toString() : "",
       // lname: req.body.lname ? req.body.lname.toString() : "",
@@ -166,7 +164,6 @@ exports.myProfile_post = [
       user: res.locals.user.sub.toString(),
     };
 
-    console.log(profile);
     Profile.findOneAndUpdate(
       { user: res.locals.user.sub },
       profile,
@@ -185,21 +182,15 @@ exports.myProfile_post = [
 //!also we have already created a profile a in user so i dont think we need the above post route
 
 exports.myProfile_put = (req, res, next) => {
-  console.log(req.body);
   let key = Object.keys(req.body);
-  // console.log(req.body);
-  // console.log(key);
+
   key = key[0];
-  console.log(key);
-  console.log(req.body[key]);
   if (key == "fname" || key == "lname") {
-    console.log("hello");
     if ([...req.body[key]].length == 0) {
       return res.status(400).json({ msg: key + " " + "cannot be empty" });
     }
   }
 
-  // console.log(req.body);
   Profile.findOneAndUpdate(
     { user: res.locals.user.sub },
     { [key]: req.body[key] ? req.body[key].trim().toString() : "" },

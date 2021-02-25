@@ -10,10 +10,9 @@ exports.newsfeed = async (req, res, next) => {
     // console.log(friend_list);
     friend_list = friend_list.friend;
 
-    const posts = await Post.find({ user: friend_list }).populate(
-      "user",
-      "-password -friend"
-    );
+    const posts = await Post.find({ user: friend_list })
+      .sort({ created_at: -1 })
+      .populate("user", "-password -friend");
 
     return res.status(200).json(posts);
   } catch (err) {

@@ -20,8 +20,9 @@ const odinbookRouter = require("./routes/odinbook");
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "pug");
 
-app.use(cors({ origin: "https://snoringarvind.github.io" }));
-app.use(logger("dev"));
+app.use(cors({ origin: "http://localhost:3000" }));
+
+http: http: app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

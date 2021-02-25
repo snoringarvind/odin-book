@@ -4,8 +4,8 @@ import async from "async";
 // import { response } from "express";
 import { Switch, useLocation } from "react-router-dom";
 import socketIOClient from "socket.io-client";
-import { query } from "express-validator";
-const ENDPOINT = "https://odinbook12.herokuapp.com/";
+
+const ENDPOINT = "https://odinbook12.herokuapp.com/odinbook";
 
 // require("dotenv").config();
 
@@ -52,7 +52,7 @@ const OdinBookProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("jwtData"))
   );
 
-  let serverUrl = "https://odinbook12.herokuapp.com/";
+  let serverUrl = "https://odinbook12.herokuapp.com";
 
   const axios_request = async ({
     route,

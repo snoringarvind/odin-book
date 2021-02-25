@@ -210,8 +210,8 @@ const UserPostCard = ({
                     setUpdateIndex(index);
                   }}
                 >
-                  <span className="far fa-edit icon"></span>
-                  <span className="label">Edit post</span>
+                  <div className="far fa-edit icon"></div>
+                  <div className="label">Edit post</div>
                 </div>
                 <div
                   className="menu-btn delete-btn-container"
@@ -224,8 +224,8 @@ const UserPostCard = ({
                     setUpdateIndex(index);
                   }}
                 >
-                  <span className="far fa-trash-alt icon"></span>
-                  <span className="label">Delete post</span>
+                  <div className="far fa-trash-alt icon"></div>
+                  <div className="label">Delete post</div>
                 </div>
               </div>
             )}

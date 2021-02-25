@@ -61,7 +61,13 @@ const UserLikes = ({ postid, setUsersLikedIndex, userid }) => {
   const get_myfriends = () => {
     const route = `/friend/${jwtData.sub}`;
     const method = "GET";
-    const cb_err = (err) => {};
+    const cb_error = (err) => {
+      if (err.response) {
+        setError(err.response.data);
+      } else {
+        setError(err.message);
+      }
+    };
 
     const cb_response = (response) => {
       setMyFriends(response.data);
@@ -71,7 +77,7 @@ const UserLikes = ({ postid, setUsersLikedIndex, userid }) => {
       route: route,
       data: "",
       method: method,
-      axios_error: cb_err,
+      axios_error: cb_error,
       axios_response: cb_response,
     });
   };

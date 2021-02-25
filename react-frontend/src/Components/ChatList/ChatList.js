@@ -4,7 +4,7 @@ import ChatListCard from "./ChatListCard";
 import uniqid from "uniqid";
 import "./ChatList.css";
 import socketIOClient from "socket.io-client";
-import { response } from "express";
+// import { response } from "express";
 const ENDPOINT = "http://localhost:3000";
 
 const ChatList = () => {

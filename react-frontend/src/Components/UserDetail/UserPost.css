@@ -75,18 +75,19 @@
   font-size: 0.9rem;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   font-weight: 500;
-  width: 20vw;
+  min-width: 200px;
   border-radius: 4px;
   box-shadow: 0.3px 0.3px 4px darkgray, -0.3px -0.3px 4px darkgray;
 }
 
 .UserPost .UserPostCard .head .menu-btn {
-  /* border: 1px solid; */
+  /* border: 1px solid red; */
   /* padding: 10px; */
   /* height: 5vh; */
   display: flex;
   align-items: center;
   padding: 8px;
+  /* width: fit-content; */
 }
 .UserPost .UserPostCard .head .menu-btn .icon {
   /* border: 1px solid; */
@@ -97,6 +98,9 @@
 
 .UserPost .UserPostCard .head .menu-btn .label {
   /* border: 1px solid red; */
+  /* display: block; */
+  /* width: fit-content; */
+  flex-basis: 100%;
 }
 
 .UserPost .UserPostCard .head .option-btn .btn {

@@ -52,7 +52,7 @@ const OdinBookProvider = ({ children }) => {
     JSON.parse(localStorage.getItem("jwtData"))
   );
 
-  let serverUrl = "https://odinbook12.herokuapp.com";
+  let serverUrl = "https://odinbook12.herokuapp.com/odinbook";
 
   const axios_request = async ({
     route,

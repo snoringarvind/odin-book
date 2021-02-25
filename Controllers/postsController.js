@@ -39,6 +39,7 @@ exports.post_detail_get = (req, res, next) => {
 exports.post_list_get = (req, res, next) => {
   Post.find({ user: req.params.userid })
     .sort({ created_at: -1 })
+    .populate("user")
     .exec((err, result) => {
       if (err) return res.status(500).json({ msg: err.message });
       else {

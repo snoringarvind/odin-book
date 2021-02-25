@@ -5,6 +5,7 @@ import {
   Switch,
   useHistory,
   useLocation,
+  useParams,
 } from "react-router-dom";
 import Navigation from "../Navigation/Navigation";
 import Login from "../Login/Login";
@@ -31,6 +32,33 @@ const Home = () => {
 
   const path = location.pathname;
 
+  const params = useParams();
+
+  //doing this if /search/:name;
+  const search_url_params = location.pathname.split("/")[1];
+
+  //doing this if-block, incase if the user refreshes the page the state will vanish so we will store the previous state values in localstorage
+  if (
+    location.pathname !== "/" &&
+    location.pathname !== "/friends" &&
+    location.pathname !== "/mychat" &&
+    search_url_params !== "search"
+  ) {
+    if (location.state) {
+      localStorage.setItem(
+        "local_history",
+        JSON.stringify({
+          userid: location.state.userid,
+          fname: location.state.fname,
+          lname: location.state.lname,
+          username: location.state.username,
+          from: path,
+        })
+      );
+    }
+  }
+
+  console.log(JSON.parse(localStorage.getItem("local_history")));
   useEffect(() => {
     const x = window;
     x.addEventListener("click", (e) => {
@@ -79,7 +107,7 @@ const Home = () => {
         ))}
 
       {isAuth && (path === "/login" || path === "/signup") && (
-        <Redirect to={{ pathname: "/", state: { from: path } }} />
+        <Redirect to="/" />
       )}
 
       {isAuth && (

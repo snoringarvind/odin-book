@@ -27,7 +27,7 @@ var server = http.createServer(app);
 /////
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:3001",
+    origin: "https://odinbook12.herokuapp.com/",
     methods: ["GET", "POST", "PUT"],
     credentials: true,
   },

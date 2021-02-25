@@ -5,8 +5,12 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
 require("./config/database");
+const compression = require("compression");
+const helmet = require("helmet");
 
 const app = express();
+app.use(compression());
+app.use(helmet());
 
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");

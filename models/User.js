@@ -1,5 +1,6 @@
 const connection = require("../config/database");
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const UserSchema = mongoose.Schema({
   //!do this in the profile not here

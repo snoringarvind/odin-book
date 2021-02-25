@@ -1,5 +1,6 @@
 const connection = require("../config/database");
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const PostSchema = mongoose.Schema({
   //! delete this title once you figure out images using s3 bucket

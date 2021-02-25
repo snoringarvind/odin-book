@@ -1,5 +1,6 @@
 const connection = require("../config/database");
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const IsreadSchema = mongoose.Schema({
   sender: { type: mongoose.Schema.Types.ObjectId, ref: "User" },

@@ -1,5 +1,6 @@
 const connection = require("../config/database");
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 //we are making this model to map the conversation list.
 //now from the 'Chat' model we do have the ids of people to whom we have sent the messages.

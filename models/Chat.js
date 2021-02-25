@@ -1,5 +1,6 @@
 const connection = require("../config/database");
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const ChatSchema = mongoose.Schema({
   sender: {

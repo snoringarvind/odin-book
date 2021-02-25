@@ -1,5 +1,6 @@
 const connection = require("../config/database");
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const ProfileSchema = mongoose.Schema({
   // fname: { type: String },

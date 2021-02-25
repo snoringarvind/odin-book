@@ -5,7 +5,7 @@ import async from "async";
 import { Switch, useLocation } from "react-router-dom";
 import socketIOClient from "socket.io-client";
 import { query } from "express-validator";
-const ENDPOINT = "http://localhost:3000";
+const ENDPOINT = "https://odinbook12.herokuapp.com/";
 
 // require("dotenv").config();
 

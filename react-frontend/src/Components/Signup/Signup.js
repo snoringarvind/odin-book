@@ -68,7 +68,7 @@ const Signup = () => {
     <div className="Signup">
       {error && <div className="error">{error}</div>}
       {!error && (
-        <form>
+        <form autoComplete="off">
           <div className="head">Signup</div>
           <div className="form-group">
             <label htmlFor="fname">First Name:</label>
@@ -103,7 +103,7 @@ const Signup = () => {
           <div className="form-group">
             <label htmlFor="password">Password:</label>
             <input
-              type="text"
+              type="password"
               name="password"
               id="password"
               placeholder="Enter your password"

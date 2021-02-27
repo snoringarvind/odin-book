@@ -63,7 +63,7 @@ const Login = () => {
     <div className="Login">
       {error && <div className="error">{error}</div>}
       {!error && (
-        <form>
+        <form autoComplete="off">
           <div className="head"> Login</div>
           <div className="form-group">
             <label htmlFor="username">Username:</label>
@@ -78,7 +78,7 @@ const Login = () => {
           <div className="form-group">
             <label htmlFor="password">Password:</label>
             <input
-              type="text"
+              type="password"
               name="password"
               id="password"
               placeholder="Enter your password"

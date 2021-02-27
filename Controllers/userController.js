@@ -12,26 +12,16 @@ const { body, validationResult } = require("express-validator");
 
 //signup page
 exports.user_signup = [
-  body("fname")
-    .trim()
-    .isLength({ min: 1 })
-    .withMessage("First name cannot be empty"),
-  body("lname")
-    .trim()
-    .isLength({ min: 1 })
-    .withMessage("Last name cannot be empty"),
+  body("fname").trim().notEmpty().withMessage("First name cannot be empty"),
+  body("lname").trim().notEmpty().withMessage("Last name cannot be empty"),
   body("username")
     .trim()
-    .isLength({ min: 1 })
-    .withMessage("username cannot be empty")
     .isLength({ min: 4 })
     .withMessage("username is too small")
     .isLength({ max: 20 })
     .withMessage("username is too large"),
   body("password")
     .trim()
-    .isLength({ min: 1 })
-    .withMessage("password cannot be empty")
     .isLength({ min: 6 })
     .withMessage("password is too short")
     .isLength({ max: 30 })

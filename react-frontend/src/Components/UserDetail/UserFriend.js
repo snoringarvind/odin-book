@@ -130,22 +130,25 @@ const UserFriend = ({ path }) => {
                 )}
               </div>
             ) : (
-              result.map((value, index) => {
-                return (
-                  <UserFriendCard
-                    value={value}
-                    index={index}
-                    setError={setError}
-                    key={uniqid()}
-                    friendBtn={friendBtn}
-                    setFriendBtn={setFriendBtn}
-                    userid={userid}
-                    isChanged={isChanged}
-                    setIsChanged={setIsChanged}
-                    path={path}
-                  />
-                );
-              })
+              <>
+                <h2 className="title-msg">My Friends.</h2>
+                {result.map((value, index) => {
+                  return (
+                    <UserFriendCard
+                      value={value}
+                      index={index}
+                      setError={setError}
+                      key={uniqid()}
+                      friendBtn={friendBtn}
+                      setFriendBtn={setFriendBtn}
+                      userid={userid}
+                      isChanged={isChanged}
+                      setIsChanged={setIsChanged}
+                      path={path}
+                    />
+                  );
+                })}
+              </>
             ))}
         </>
       )}

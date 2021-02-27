@@ -142,7 +142,7 @@ router.get(
 );
 
 //get user-detail
-router.get("/user/:userid", utils.verifyJwt, userController.user_get_detail);
+// router.get("/user/:userid", utils.verifyJwt, userController.user_get_detail);
 
 //*no need to create a new route to update the user details, since you are alreay doing it in the profile PUT route above
 
@@ -180,5 +180,9 @@ router.put(
   isreadController.put_isread_false
 );
 
+//getting list of all users
+router.get("/user_list", utils.verifyJwt, userController.users_list);
+
 router.get("/isread", utils.verifyJwt, isreadController.get_isread);
+
 module.exports = router;

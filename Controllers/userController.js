@@ -248,7 +248,18 @@ exports.user_get_search_list = (req, res, next) => {
   }
 };
 
-exports.user_get_detail = (req, res, next) => {};
+exports.users_list = (req, res, next) => {
+  try {
+    User.find({}).exec((err, result) => {
+      if (err) return res.status(500).json({ msg: err.message });
+      else {
+        return res.status(200).json(result);
+      }
+    });
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 exports.isUserAuth = (req, res, next) => {
   return res.status(200).json({ msg: "user is authenticated" });

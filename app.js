@@ -10,7 +10,7 @@ const helmet = require("helmet");
 
 const app = express();
 
-app.use(cors());
+app.use(cors("https://snoringarvind.github.io"));
 app.use(compression());
 app.use(helmet());
 

@@ -22,12 +22,16 @@ exports.user_signup = [
     .withMessage("Last name cannot be empty"),
   body("username")
     .trim()
+    .isLength({ min: 1 })
+    .withMessage("username cannot be empty")
     .isLength({ min: 4 })
     .withMessage("username is too small")
     .isLength({ max: 20 })
     .withMessage("username is too large"),
   body("password")
     .trim()
+    .isLength({ min: 1 })
+    .withMessage("password cannot be empty")
     .isLength({ min: 6 })
     .withMessage("password is too short")
     .isLength({ max: 30 })

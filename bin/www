@@ -39,7 +39,7 @@ let data12 = {};
 io.sockets.on("connection", (socket) => {
   socket.on("join", (username) => {
     socket.join(username);
-    console.log(username);
+    // console.log(username);
 
     socket.on("send_message", (data) => {
       // io.sockets.in(data.to).emit("new_msg", data);

@@ -32,7 +32,7 @@ const Explore = () => {
     const cb_response = (response) => {
       setResult(response.data);
       setGetLoading(false);
-      console.log(response.data);
+      // console.log(response.data);
     };
 
     axios_request({
@@ -56,7 +56,7 @@ const Explore = () => {
     const cb_response = (response) => {
       setMyFriends(response.data);
       setGet_friends_loading(false);
-      console.log(response.data);
+      // console.log(response.data);
     };
 
     axios_request({
@@ -81,15 +81,15 @@ const Explore = () => {
     }
   }, []);
 
-  console.log(getLoading, get_friends_loading);
+  // console.log(getLoading, get_friends_loading);
 
   return (
     <div className="Explore">
       {error && <div className="error">{error}</div>}
 
+      {!error && <h2 className="title-msg">People you might know.</h2>}
       {!error && !getLoading && !get_friends_loading && (
         <>
-          <h2 className="title-msg">People you might know.</h2>
           {result.map((value, index) => {
             //we will only show users who are not my(logged-in user) friends
 

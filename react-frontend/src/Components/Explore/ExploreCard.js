@@ -30,7 +30,7 @@ const ExploreCard = ({ value, index }) => {
       axios_response: cb_response,
     });
 
-    console.log(friendBtn);
+    // console.log(friendBtn);
     if (friendBtn) {
       const get_index = myFriends.findIndex(
         (x) => x.username == value.username

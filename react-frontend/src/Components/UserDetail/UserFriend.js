@@ -101,6 +101,7 @@ const UserFriend = ({ path }) => {
       className={path === "myfriends" ? "UserFriend" : "UserFriend myaccount"}
     >
       {error && <div className="error">{error}</div>}
+      {!error && <h2 className="title-msg">My Friends.</h2>}
       {!error && (
         <>
           {getLoading && (
@@ -131,7 +132,6 @@ const UserFriend = ({ path }) => {
               </div>
             ) : (
               <>
-                <h2 className="title-msg">My Friends.</h2>
                 {result.map((value, index) => {
                   return (
                     <UserFriendCard

@@ -9,12 +9,14 @@ const compression = require("compression");
 const helmet = require("helmet");
 
 const app = express();
-// {
-//     origin: "https://snoringarvind.github.io",
-//     methods: ["GET", "POST", "PUT", "DELETE"],
-//     credentials: true,
-//   }
-app.use(cors());
+
+app.use(
+  cors({
+    origin: "https://snoringarvind.github.io",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 app.use(compression());
 app.use(helmet());
 
